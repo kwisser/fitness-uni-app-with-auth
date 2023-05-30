@@ -1,0 +1,38 @@
+.exercise-list-container {
+    text-align: center;
+  }
+  
+  .exercise-item {
+    background-color: #f2f2f2;
+    color: black;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .exercise-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .exercise-details {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .detail {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .icon {
+    margin-right: 5px;
+  }
+  
+  .exercise-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
