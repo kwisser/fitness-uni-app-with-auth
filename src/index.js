@@ -8,6 +8,9 @@ import Food from "./pages/Food";
 import NoPage from "./pages/NoPage";
 import Register from "./pages/Register";
 import Logout from "./components/Logout";
+import CalendarOverview from "./pages/CalendarOverview";
+import Day from "./pages/Day";
+import Profiles from "./pages/Profiles";
 
 export default function App() {
 
@@ -19,6 +22,9 @@ export default function App() {
           <Route path="exercises" element={<Blogs />} />
           <Route path="food" element={<Food />} />
           <Route path="login" element={<Login />} />
+          <Route path="calendar" element={<CalendarOverview />} />
+          <Route path="day" element={<Day />} />
+          <Route path="profile" element={<Profiles />} />
           <Route path="register" element={<Register />} />
           <Route path="logout" element={<Logout />} />
           <Route path="*" element={<NoPage />} />

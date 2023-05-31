@@ -1,45 +1,68 @@
 import { Outlet, Link } from "react-router-dom";
 import isLoggedIn from "../tools/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUtensils, faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import "./Layout.css"
+import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import "./Layout.css";
 
 const Layout = () => {
-
-
     return (
         <>
             <nav>
                 <ul>
                     <li>
-                        <Link to="/">Home</Link>
+                        <Link to="/">
+                            <FontAwesomeIcon icon={faHome} className="icon" />
+                            Home
+                        </Link>
                     </li>
                     {isLoggedIn() ? (
                         <>
                             <li>
-                                <FontAwesomeIcon icon={faUtensils} className="icon" />
-                                <Link to="/food">Food</Link>
+                                <Link to="/food">
+                                    <FontAwesomeIcon icon={faUtensils} className="icon" />
+                                    Food
+                                </Link>
                             </li>
                             <li>
-                                <FontAwesomeIcon icon={faDumbbell} fade />
-                                <Link to="/exercises"> Exercises</Link>
+                                <Link to="/exercises">
+                                    <FontAwesomeIcon icon={faDumbbell} className="icon" />
+                                    Exercises
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/logout">Logout</Link>
+                                <Link to="/calendar">
+                                    <FontAwesomeIcon icon={faCalendar} className="icon" />
+                                    Calendar
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/profile">
+                                    <FontAwesomeIcon icon={faUser} className="icon" />
+                                    Profile
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/logout">
+                                    <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
+                                    Logout
+                                </Link>
                             </li>
                         </>
-
                     ) : (
                         <>
                             <li>
-                                <Link to="/login">Login</Link>
+                                <Link to="/login">
+                                    <FontAwesomeIcon icon={faSignInAlt} className="icon" />
+                                    Login
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/Register">Register</Link>
+                                <Link to="/register">
+                                    <FontAwesomeIcon icon={faUserPlus} className="icon" />
+                                    Register
+                                </Link>
                             </li>
                         </>
-
-
                     )}
                 </ul>
             </nav>
