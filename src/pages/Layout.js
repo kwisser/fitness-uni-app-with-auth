@@ -36,7 +36,7 @@ const Layout = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/profile">
+                                <Link to="/profiles">
                                     <FontAwesomeIcon icon={faUser} className="icon" />
                                     Profile
                                 </Link>
