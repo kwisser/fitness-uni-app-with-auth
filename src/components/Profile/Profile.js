@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCalendar, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
 import './Profile.css';
 
 const Profile = ({ profileData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfileData, setEditedProfileData] = useState({ ...profileData });
-  const navigate = useNavigate();
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -44,7 +42,6 @@ const Profile = ({ profileData }) => {
     setIsEditing(false);
     // Update the `profileData` with the new data
     setEditedProfileData(editedProfileData);
-    navigate(0);
   };
 
   const handleInputChange = (e) => {
@@ -88,7 +85,7 @@ const Profile = ({ profileData }) => {
             />
           ) : (
             <p>
-              <span>Name:</span> {profileData.name}
+              <span>Name:</span> {editedProfileData.name}
             </p>
           )}
         </div>
@@ -103,7 +100,7 @@ const Profile = ({ profileData }) => {
             />
           ) : (
             <p>
-              <span>Age:</span> {profileData.age}
+              <span>Age:</span> {editedProfileData.age}
             </p>
           )}
         </div>
@@ -118,7 +115,7 @@ const Profile = ({ profileData }) => {
             />
           ) : (
             <p>
-              <span>Height:</span> {profileData.height}
+              <span>Height:</span> {editedProfileData.height}
             </p>
           )}
         </div>
@@ -133,7 +130,7 @@ const Profile = ({ profileData }) => {
             />
           ) : (
             <p>
-              <span>Weight:</span> {profileData.weight}
+              <span>Weight:</span> {editedProfileData.weight}
             </p>
           )}
         </div>
@@ -150,14 +147,14 @@ const Profile = ({ profileData }) => {
             </select>
           ) : (
             <p>
-              <span>Sex:</span> {profileData.sex}
+              <span>Sex:</span> {editedProfileData.sex}
             </p>
           )}
         </div>
         <div className="profile-item">
           <FontAwesomeIcon icon={faIdCard} />
           <p>
-            <span>User ID:</span> {profileData.userId}
+            <span>User ID:</span> {editedProfileData.userId}
           </p>
         </div>
         {renderEditButton()}
