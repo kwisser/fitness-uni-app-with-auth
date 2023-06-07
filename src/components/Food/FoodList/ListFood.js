@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../api/axios';
-import FoodItem from './FoodItem';
+import axios from '../../../api/axios';
+import FoodItem from '../FoodItem';
+import { Link } from 'react-router-dom';
+import './ListFood.css';
+import './ListFood.css';
 
 const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
@@ -21,14 +24,16 @@ const ListFood = () => {
   }, []);
 
   return (
-    <div>
+    <div className="list-food-container">
       <h2>Food Data:</h2>
+      <Link to="/food/add" className="add-food-button">Add Food</Link>
       <ul>
-      {foodData.map((food) => (
-        <li key={food._id}><FoodItem food={food} /></li>
-      ))}
+        {foodData.map((food) => (
+          <li key={food._id}>
+            <FoodItem food={food} />
+          </li>
+        ))}
       </ul>
-      
     </div>
   );
 };

@@ -1,16 +1,13 @@
-import ListFood from '../components/Food/ListFood';
-import AddFood from '../components/Food/AddFood';
-
+import React from 'react';
+import ListFood from '../components/Food/FoodList/ListFood';
 
 const Food = () => {
-    return (
-        <div>
-            <h1>Food</h1>
-            <ListFood />
-            <AddFood />
-        </div>
-
-    );
+  return (
+    <div>
+      <h1>Food</h1>
+      <ListFood />
+    </div>
+  );
 }
 
 export default Food;
