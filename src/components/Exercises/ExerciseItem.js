@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStopwatch, faFire } from '@fortawesome/free-solid-svg-icons';
+import { faStopwatch, faFire, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../api/axios';
 import './Exercise.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const ExerciseItem = ({ exercise }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedExercise, setEditedExercise] = useState({ ...exercise });
+  const navigate = useNavigate();
 
   const EXERCISE_URL = 'fitness/exercise/';
 
@@ -16,7 +19,6 @@ const ExerciseItem = ({ exercise }) => {
   };
 
   const convertExerciseDataToUpdateJSON = (exerciseData) => {
-    console.log("Exercise Data: "+exerciseData);
     return {
       exerciseId: exerciseData._id,
       name: exerciseData.name,
@@ -26,7 +28,6 @@ const ExerciseItem = ({ exercise }) => {
   };
 
   const handleSave = () => {
-    console.log("Converted ExerviseData: "+convertExerciseDataToUpdateJSON(editedExercise));
     axios.put(EXERCISE_URL, convertExerciseDataToUpdateJSON(editedExercise))
       .then((response) => {
         console.log(JSON.stringify(response.data));
@@ -39,7 +40,20 @@ const ExerciseItem = ({ exercise }) => {
       });
   };
 
-  const handleInputChange = (e) => { 
+  const handleDelete = () => {
+    axios.delete(EXERCISE_URL + exercise._id)
+      .then((response) => {
+        console.log("Exercise deleted:", response.data);
+        // Perform further actions after successful deletion if needed.
+      })
+      .catch((error) => {
+        console.log(error);
+        // Perform error handling if needed.
+      });
+    navigate(0);  
+  };
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedExercise(prevExercise => ({
       ...prevExercise,
@@ -49,7 +63,18 @@ const ExerciseItem = ({ exercise }) => {
 
   return (
     <div className="exercise-item">
-      <h3>{exercise.name}</h3>
+      <h3>
+        {isEditing ? (
+          <input
+            type="text"
+            name="name"
+            value={editedExercise.name}
+            onChange={handleInputChange}
+          />
+        ) : (
+          editedExercise.name
+        )}
+      </h3>
       <div className="exercise-details">
         <div className="detail">
           <FontAwesomeIcon icon={faStopwatch} className="icon" />
@@ -61,7 +86,7 @@ const ExerciseItem = ({ exercise }) => {
               onChange={handleInputChange}
             />
           ) : (
-            <p>{exercise.baseTime} sec</p>
+            <p>{editedExercise.baseTime} sec</p>
           )}
         </div>
         <div className="detail">
@@ -74,7 +99,7 @@ const ExerciseItem = ({ exercise }) => {
               onChange={handleInputChange}
             />
           ) : (
-            <p>{exercise.energyBurned} kcal</p>
+            <p>{editedExercise.energyBurned} kcal</p>
           )}
         </div>
       </div>
@@ -83,9 +108,14 @@ const ExerciseItem = ({ exercise }) => {
           Save
         </button>
       ) : (
-        <button className="edit-btn" onClick={handleEdit}>
-          Edit
-        </button>
+        <>
+          <button className="edit-btn" onClick={handleEdit}>
+            Edit
+          </button>
+          <button className="delete-btn" onClick={handleDelete}>
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </>
       )}
     </div>
   );

@@ -11,6 +11,7 @@ import Logout from "./components/Logout";
 import CalendarOverview from "./pages/CalendarOverview";
 import Day from "./pages/Day";
 import Profiles from "./pages/Profiles";
+import AddExercise from "./components/Exercises/AddExercise";
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="exercises" element={<Exercises />} />
           <Route path="exercises/:id" element={<Exercises />} />
+          <Route path="exercises/add" element={<AddExercise />} />
           <Route path="food" element={<Food />} />
           <Route path="login" element={<Login />} />
           <Route path="calendar" element={<CalendarOverview />} />
