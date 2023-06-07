@@ -3,7 +3,6 @@ import axios from '../../../api/axios';
 import FoodItem from '../FoodItem';
 import { Link } from 'react-router-dom';
 import './ListFood.css';
-import './ListFood.css';
 
 const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
