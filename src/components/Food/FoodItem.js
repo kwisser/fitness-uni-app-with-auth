@@ -6,14 +6,15 @@ import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 const FoodItem = ({ food }) => {
-  const DELETE_FOOT_ITEL_URL = '/fitness/food/';
+  const DELETE_FOOD_ITEM_URL = '/fitness/food/';
   const navigate = useNavigate();
+
   const handleDelete = async () => {
     try {
-      await axios.delete(`${DELETE_FOOT_ITEL_URL}${food._id}`);
+      await axios.delete(`${DELETE_FOOD_ITEM_URL}${food._id}`);
       // Reload the food list or perform any other necessary actions
       navigate('/food');
-        navigate(0);
+      navigate(0);
     } catch (error) {
       console.log(error);
     }
@@ -25,24 +26,36 @@ const FoodItem = ({ food }) => {
       <p className="food-id"><strong>Food Id:</strong> {food._id}</p>
       <div className="food-info">
         <div className="food-info-item">
-          <FontAwesomeIcon icon={faUtensils} className="icon" />
-          <p>{food.category}</p>
-        </div>
-        <div className="food-info-item">
           <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>{food.baseAmount} Calories</p>
+          <p>Base Amount: {food.baseAmount} Calories</p>
         </div>
         <div className="food-info-item">
           <FontAwesomeIcon icon={faDumbbell} className="icon" />
-          <p>{food.protein} Protein</p>
+          <p>Protein: {food.protein}</p>
         </div>
         <div className="food-info-item">
           <FontAwesomeIcon icon={faBullseye} className="icon" />
-          <p>{food.carbohydrates} Carbs</p>
+          <p>Carbs: {food.carbohydrates}</p>
         </div>
         <div className="food-info-item">
           <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>{food.fat} Fat</p>
+          <p>Fat: {food.fat}</p>
+        </div>
+        <div className="food-info-item">
+          <FontAwesomeIcon icon={faFire} className="icon" />
+          <p>Energy: {food.energy}</p>
+        </div>
+        <div className="food-info-item">
+          <FontAwesomeIcon icon={faFire} className="icon" />
+          <p>Salt: {food.salt}</p>
+        </div>
+        <div className="food-info-item">
+          <FontAwesomeIcon icon={faFire} className="icon" />
+          <p>Fiber: {food.fiber}</p>
+        </div>
+        <div className="food-info-item">
+          <FontAwesomeIcon icon={faFire} className="icon" />
+          <p>Drink: {food.drink ? 'Yes' : 'No'}</p>
         </div>
       </div>
       <button className="delete-button" onClick={handleDelete}>

@@ -24,9 +24,13 @@ const ListFood = () => {
 
   return (
     <div className="list-food-container">
-      <h2>Food Data:</h2>
-      <Link to="/food/add" className="add-food-button">Add Food</Link>
-      <ul>
+      <div className="food-header">
+        <h2>Food Data:</h2>
+        <div className="add-food-link">
+          <Link to="/food/add">Add Food</Link>
+        </div>
+      </div>
+      <ul className="food-list">
         {foodData.map((food) => (
           <li key={food._id}>
             <FoodItem food={food} />

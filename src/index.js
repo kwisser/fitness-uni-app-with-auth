@@ -12,6 +12,7 @@ import CalendarOverview from "./pages/CalendarOverview";
 import Day from "./pages/Day";
 import Profiles from "./pages/Profiles";
 import AddExercise from "./components/Exercises/AddExercise";
+import AddFood from "./components/Food/AddFood";
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="exercises/:id" element={<Exercises />} />
           <Route path="exercises/add" element={<AddExercise />} />
           <Route path="food" element={<Food />} />
+          <Route path="food/add" element={<AddFood />} />
           <Route path="login" element={<Login />} />
           <Route path="calendar" element={<CalendarOverview />} />
           <Route path="day" element={<Day />} />

@@ -2,140 +2,101 @@ import React, { useState } from 'react';
 import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 
-const ADD_FOOD_URL = '/fitness/food/';
+const AddFood = () => {
+  const [food, setFood] = useState({
+    name: '',
+    baseAmount: 0,
+    energy: 0,
+    fat: 0,
+    carbohydrates: 0,
+    protein: 0,
+    salt: 0,
+    fiber: 0,
+    drink: false
+  });
 
-const FoodFormComponent = () => {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: '',
-        baseAmount: 0,
-        energy: 0,
-        fat: 0,
-        carbohydrates: 0,
-        protein: 0,
-        salt: 0,
-        fiber: 0,
-        drink: false
-    });
+  const navigate = useNavigate();
+  const FOOD_URL = '/fitness/food/';
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFood((prevFood) => ({
+      ...prevFood,
+      [name]: value
+    }));
+  };
 
-        try {
-            const response = await axios.post(
-                ADD_FOOD_URL, JSON.stringify(formData),
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    maxBodyLength: Infinity
-                }
-            );
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFood((prevFood) => ({
+      ...prevFood,
+      [name]: checked
+    }));
+  };
 
-            console.log(JSON.stringify(response.data));
-            navigate('/food');
-            navigate(0)
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  const handleAddFood = async () => {
+    try {
+      await axios.post(FOOD_URL, food);
+      // Perform any necessary actions after successful addition
+      navigate('/food');
+    } catch (error) {
+      console.log(error);
+      // Perform error handling if needed
+    }
+  };
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        const newValue = type === 'checkbox' ? checked : value;
+  return (
+    <div>
+      <h2>Add Food:</h2>
+      <form>
+        <label>Name:</label>
+        <input type="text" name="name" value={food.name} onChange={handleInputChange} />
 
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: newValue
-        }));
-    };
+        <label>Base Amount (Calories):</label>
+        <input
+          type="number"
+          name="baseAmount"
+          value={food.baseAmount}
+          onChange={handleInputChange}
+        />
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Base Amount:</label>
-                <input
-                    type="number"
-                    name="baseAmount"
-                    value={formData.baseAmount}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Energy:</label>
-                <input
-                    type="number"
-                    name="energy"
-                    value={formData.energy}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Fat:</label>
-                <input
-                    type="number"
-                    name="fat"
-                    value={formData.fat}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Carbohydrates:</label>
-                <input
-                    type="number"
-                    name="carbohydrates"
-                    value={formData.carbohydrates}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Protein:</label>
-                <input
-                    type="number"
-                    name="protein"
-                    value={formData.protein}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Salt:</label>
-                <input
-                    type="number"
-                    name="salt"
-                    value={formData.salt}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Fiber:</label>
-                <input
-                    type="number"
-                    name="fiber"
-                    value={formData.fiber}
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <label>Drink:</label>
-                <input
-                    type="checkbox"
-                    name="drink"
-                    checked={formData.drink}
-                    onChange={handleChange}
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-    );
+        <label>Energy:</label>
+        <input type="number" name="energy" value={food.energy} onChange={handleInputChange} />
+
+        <label>Fat:</label>
+        <input type="number" name="fat" value={food.fat} onChange={handleInputChange} />
+
+        <label>Carbohydrates:</label>
+        <input
+          type="number"
+          name="carbohydrates"
+          value={food.carbohydrates}
+          onChange={handleInputChange}
+        />
+
+        <label>Protein:</label>
+        <input type="number" name="protein" value={food.protein} onChange={handleInputChange} />
+
+        <label>Salt:</label>
+        <input type="number" name="salt" value={food.salt} onChange={handleInputChange} />
+
+        <label>Fiber:</label>
+        <input type="number" name="fiber" value={food.fiber} onChange={handleInputChange} />
+
+        <label>Drink:</label>
+        <input
+          type="checkbox"
+          name="drink"
+          checked={food.drink}
+          onChange={handleCheckboxChange}
+        />
+
+        <button type="button" onClick={handleAddFood}>
+          Add
+        </button>
+      </form>
+    </div>
+  );
 };
 
-export default FoodFormComponent;
+export default AddFood;
