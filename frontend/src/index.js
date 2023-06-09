@@ -13,6 +13,7 @@ import Day from "./pages/Day";
 import Profiles from "./pages/Profiles";
 import AddExercise from "./components/Exercises/AddExercise";
 import AddFood from "./components/Food/AddFood";
+import FoodEdit from "./components/Food/FoodEdit";
 
 export default function App() {
 
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="exercises/add" element={<AddExercise />} />
           <Route path="food" element={<Food />} />
           <Route path="food/add" element={<AddFood />} />
+          <Route path="food/edit/:id" element={<FoodEdit />} />
           <Route path="login" element={<Login />} />
           <Route path="calendar" element={<CalendarOverview />} />
           <Route path="day" element={<Day />} />

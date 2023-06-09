@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUtensils, faBullseye, faFire, faDumbbell, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBullseye, faFire, faDumbbell, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import './FoodItem.css';
 import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom';
 const FoodItem = ({ food }) => {
   const DELETE_FOOD_ITEM_URL = '/fitness/food/';
   const navigate = useNavigate();
+  
+  const handleEdit = () => {
+    navigate(`/food/edit/${food._id}`);
+  };
 
   const handleDelete = async () => {
     try {
@@ -58,6 +62,10 @@ const FoodItem = ({ food }) => {
           <p>Drink: {food.drink ? 'Yes' : 'No'}</p>
         </div>
       </div>
+      <button className="edit-button" onClick={handleEdit}>
+        <FontAwesomeIcon icon={faEdit} className="edit-icon" />
+        Edit
+      </button>
       <button className="delete-button" onClick={handleDelete}>
         <FontAwesomeIcon icon={faTrash} className="delete-icon" />
         Delete
