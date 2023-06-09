@@ -8,7 +8,7 @@ import Food from "./pages/Food";
 import NoPage from "./pages/NoPage";
 import Register from "./pages/Register";
 import Logout from "./components/Logout";
-import CalendarOverview from "./pages/CalendarOverview";
+import CalendarOverview from "./pages/Calendar/CalendarOverview";
 import Day from "./pages/Day";
 import Profiles from "./pages/Profiles";
 import AddExercise from "./components/Exercises/AddExercise";

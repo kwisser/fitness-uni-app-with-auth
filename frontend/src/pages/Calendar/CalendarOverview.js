@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { useNavigate } from 'react-router-dom';
+import './Calendar.css';
 
 const CalendarOverview = () => {
     const navigate = useNavigate();
@@ -23,7 +24,11 @@ const CalendarOverview = () => {
         <div>
             <h1>Days</h1>
             <div>
-                <Calendar onChange={onChange} value={value} onClickDay={handleDayClick} />
+                <Calendar onChange={onChange} value={value} onClickDay={handleDayClick} tileClassName={({date, view}) =>
+            date.getDate() === new Date().getDate() &&
+            date.getMonth() === new Date().getMonth() &&
+            date.getFullYear() === new Date().getFullYear() ? 'highlight' : null
+          }/>
             </div>
         </div>
     )
