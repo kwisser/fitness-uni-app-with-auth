@@ -14,6 +14,7 @@ import Profiles from "./pages/Profiles";
 import AddExercise from "./components/Exercises/AddExercise";
 import AddFood from "./components/Food/AddFood";
 import FoodEdit from "./components/Food/FoodEdit";
+import AddProfile from "./components/Profile/AddProfile";
 
 export default function App() {
 
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="calendar" element={<CalendarOverview />} />
           <Route path="day" element={<Day />} />
           <Route path="profiles" element={<Profiles />} />
+          <Route path="profiles/add" element={<AddProfile />} />
           <Route path="profiles/:id" element={<Profiles />} />
           <Route path="register" element={<Register />} />
           <Route path="logout" element={<Logout />} />

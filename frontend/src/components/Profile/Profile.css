@@ -41,3 +41,14 @@
 .profile-item p:last-child {
   margin-bottom: 0;
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-delete-btn,
+.profile-edit-btn {
+  margin: 0 10px;
+}

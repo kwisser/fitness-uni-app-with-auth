@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCalendar, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTrash, faCalendar, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = ({ profileData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfileData, setEditedProfileData] = useState({ ...profileData });
+  const navigate = useNavigate();
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -24,12 +26,12 @@ const Profile = ({ profileData }) => {
       userId: profileData.userId,
     };
   };
-  
+
 
   const handleSave = () => {
     console.log(editedProfileData);
 
-    axios.put(`/fitness/profile`, convertProfileDataToUpdateJSON( editedProfileData))
+    axios.put(`/fitness/profile`, convertProfileDataToUpdateJSON(editedProfileData))
       .then(response => {
         console.log(response);
         // Perform further actions after successful save if needed.
@@ -50,6 +52,21 @@ const Profile = ({ profileData }) => {
       ...prevData,
       [name]: value
     }));
+  };
+
+  const handleDelete = () => {
+    axios.delete(`/fitness/profile/${profileData._id}`)
+      .then(response => {
+        console.log(response);
+        navigate('/profiles')
+        navigate(0)
+      })
+
+      .catch(error => {
+        console.log(error);
+        // Perform error handling if needed.
+      });
+
   };
 
   const renderEditButton = () => {
@@ -157,7 +174,12 @@ const Profile = ({ profileData }) => {
             <span>User ID:</span> {editedProfileData.userId}
           </p>
         </div>
-        {renderEditButton()}
+        <div className="button-container">
+          {renderEditButton()}
+          <button className="profile-delete-btn" onClick={handleDelete}>
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </div>
       </div>
     </Link>
   );
