@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import isLoggedIn from "../tools/auth";
+import isLoggedIn from "../../tools/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import "./Layout.css";

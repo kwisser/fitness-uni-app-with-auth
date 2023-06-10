@@ -1,12 +1,12 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/Layout";
+import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Exercises from "./pages/Exercises";
 import Food from "./pages/Food";
 import NoPage from "./pages/NoPage";
-import Register from "./pages/Register";
+import Register from "./pages/Register/Register";
 import Logout from "./components/Logout";
 import CalendarOverview from "./pages/Calendar/CalendarOverview";
 import Day from "./pages/Day";
