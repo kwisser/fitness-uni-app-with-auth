@@ -1,9 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullseye, faFire, faDumbbell, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import './FoodItem.css';
+import { Card, CardActions, CardContent, Button, Typography, Box } from '@mui/material';
 import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
+import './FoodItem.css';
 
 const FoodItem = ({ food }) => {
   const DELETE_FOOD_ITEM_URL = '/fitness/food/';
@@ -25,52 +26,61 @@ const FoodItem = ({ food }) => {
   };
 
   return (
-    <div className="food-item">
-      <h3>{food.name}</h3>
-      <p className="food-id"><strong>Food Id:</strong> {food._id}</p>
-      <div className="food-info">
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Base Amount: {food.baseAmount} Calories</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faDumbbell} className="icon" />
-          <p>Protein: {food.protein}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faBullseye} className="icon" />
-          <p>Carbs: {food.carbohydrates}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Fat: {food.fat}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Energy: {food.energy}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Salt: {food.salt}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Fiber: {food.fiber}</p>
-        </div>
-        <div className="food-info-item">
-          <FontAwesomeIcon icon={faFire} className="icon" />
-          <p>Drink: {food.drink ? 'Yes' : 'No'}</p>
-        </div>
-      </div>
-      <button className="edit-button" onClick={handleEdit}>
-        <FontAwesomeIcon icon={faEdit} className="edit-icon" />
-        Edit
-      </button>
-      <button className="delete-button" onClick={handleDelete}>
-        <FontAwesomeIcon icon={faTrash} className="delete-icon" />
-        Delete
-      </button>
-    </div>
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {food.name}
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <div>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Base Amount: {food.baseAmount} Calories
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faDumbbell} className="icon" />
+              Protein: {food.protein}
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faBullseye} className="icon" />
+              Carbs: {food.carbohydrates}
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Fat: {food.fat}
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Energy: {food.energy}
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Salt: {food.salt}
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Fiber: {food.fiber}
+            </Typography>
+            <Typography variant="body2">
+              <FontAwesomeIcon icon={faFire} className="icon" />
+              Drink: {food.drink ? 'Yes' : 'No'}
+            </Typography>
+          </div>
+        </Box>
+      </CardContent>
+      <CardActions>
+        <Button size="small" onClick={handleEdit}>
+          <FontAwesomeIcon icon={faEdit} className="edit-icon" />
+          Edit
+        </Button>
+        <Button size="small" onClick={handleDelete}>
+          <FontAwesomeIcon icon={faTrash} className="delete-icon" />
+          Delete
+        </Button>
+      </CardActions>
+    </Card>
   );
 };
 

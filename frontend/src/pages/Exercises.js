@@ -1,10 +1,20 @@
-import ExerciseList from "../components/Exercises/ListExercises";
+import React from 'react';
+import ExerciseList from '../components/Exercises/ListExercises';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 const Exercises = () => {
-    return (<div>
-        <h1>Exercises</h1>
-        <ExerciseList />
-    </div>)
+    return (
+        <Container>
+            <Box my={4}>
+                <Typography variant="h3" component="h1" gutterBottom>
+                    Exercises
+                </Typography>
+                <ExerciseList />
+            </Box>
+        </Container>
+    );
 };
 
 export default Exercises;

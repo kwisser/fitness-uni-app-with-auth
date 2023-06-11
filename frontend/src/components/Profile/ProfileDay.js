@@ -5,12 +5,13 @@ import ExerciseItem from '../Exercises/ExerciseItem';
 import fetchActivityForDay from '../../api/fitnessDayApi';
 import { fetchAvailableExercises} from '../../actions/availableExercisesActions';
 import { fetchAvailableFood} from '../../actions/availableFoodActions';
+import { Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 
 const ProfileDay = () => {
   const profile = useSelector(state => state.profile);
-  const [dailyActitivyData, setDailyActivityData] = useState({food: [], exercise: []});
-  const [renderedActivityData, setRenderedActivityData] = useState({food: [], exercise: []});
+  const [dailyActitivyData, setDailyActivityData] = useState({ food: [], exercise: [] });
+  const [renderedActivityData, setRenderedActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
   const availableFood = useSelector(state => state.availableFood);
   const [newExercise, setNewExercise] = useState('');
@@ -18,11 +19,11 @@ const ProfileDay = () => {
 
   const dispatch = useDispatch();
 
-    useEffect(() => {
-      dispatch(fetchAvailableExercises());
-      dispatch(fetchAvailableFood());
-   
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchAvailableExercises());
+    dispatch(fetchAvailableFood());
+
+  }, [dispatch]);
 
   const handleAddExercise = () => {
     // Implement this function to add new exercise
@@ -36,20 +37,20 @@ const ProfileDay = () => {
 
   const getCurrentDate = () => {
     const date = new Date();
-  
+
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
-  
+
     return `${day}${month}${year}`;
   };
-  
+
   useEffect(() => {
     fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
-        if (data) {
-            setDailyActivityData(data);
-        }
-        }
+      if (data) {
+        setDailyActivityData(data);
+      }
+    }
     );
   }, [profile._id, availableExercises, availableFood]);
 
@@ -70,10 +71,6 @@ const ProfileDay = () => {
 
     setRenderedActivityData(newDailyActivityData);
   }, [availableExercises, availableFood, dailyActitivyData]);
-  
-  
-  
-
 
   const calculateCalories = (profile) => {
     const { weight, height, age, gender } = profile;
@@ -94,41 +91,53 @@ const ProfileDay = () => {
 
   return (
     <div>
-      <h2>Guten Tag, {profile.name}!</h2>
-      <p>Sie benötigen heute {caloriesNeeded} Kalorien.</p>
-      <p>Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</p>
-      <h3>Heutige Aktivitäten:</h3>
-      <h4>Essen:</h4>
+      <Typography variant="h2">Guten Tag, {profile.name}!</Typography>
+      <Typography>Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
+      <Typography>Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
+      <Typography variant="h3">Heutige Aktivitäten:</Typography>
+      <Typography variant="h4">Essen:</Typography>
+      
       {renderedActivityData.food.map((food, index) => (
-  <FoodItem key={food._id} food={food} />
-))}
-{renderedActivityData.exercise.map((exercise, index) => (
-  <ExerciseItem key={exercise._id} exercise={exercise} />
-))}
-
+        <FoodItem key={food._id} food={food} />
+      ))}
+      {renderedActivityData.exercise.map((exercise, index) => (
+        <ExerciseItem key={exercise._id} exercise={exercise} />
+      ))}
 
       <div>
-      <select value={newExercise} onChange={(e) => setNewExercise(e.target.value)}>
-    <option value="">--Übung auswählen--</option>
-    {availableExercises.map(exercise => (
-  <option key={exercise._id} value={exercise.id}>
-    {exercise.name} - Dauer: {exercise.duration} Minuten, Kalorien: {exercise.calories}
-  </option>
-))}
-  </select>
-  <button onClick={handleAddExercise}>Übung hinzufügen</button>
-</div>
-<div>
-  <select value={newFood} onChange={(e) => setNewFood(e.target.value)}>
-    <option value="">--Essen auswählen--</option>
-    {availableFood.map(food => (
-  <option key={food._id} value={food.id}>
-    {food.name} - Kalorien: {food.energy}, Protein: {food.protein} 
-  </option>
-))}
-  </select>
-  <button onClick={handleAddFood}>Essen hinzufügen</button>
-</div>
+        <FormControl fullWidth>
+          <InputLabel id="exercise-label">Übung auswählen</InputLabel>
+          <Select 
+            labelId="exercise-label"
+            value={newExercise} 
+            onChange={(e) => setNewExercise(e.target.value)}
+          >
+            {availableExercises.map(exercise => (
+              <MenuItem key={exercise._id} value={exercise.id}>
+                {exercise.name} - Dauer: {exercise.duration} Minuten, Kalorien: {exercise.calories}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={handleAddExercise}>Übung hinzufügen</Button>
+      </div>
+      <div>
+        <FormControl fullWidth>
+          <InputLabel id="food-label">Essen auswählen</InputLabel>
+          <Select 
+            labelId="food-label"
+            value={newFood} 
+            onChange={(e) => setNewFood(e.target.value)}
+          >
+            {availableFood.map(food => (
+              <MenuItem key={food._id} value={food.id}>
+                {food.name} - Kalorien: {food.energy}, Protein: {food.protein} 
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={handleAddFood}>Essen hinzufügen</Button>
+      </div>
     </div>
   );
 };

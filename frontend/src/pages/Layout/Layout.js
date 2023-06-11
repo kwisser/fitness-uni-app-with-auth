@@ -1,89 +1,73 @@
-import { Outlet, Link } from "react-router-dom";
-import isLoggedIn from "../../tools/auth";
+import { Outlet, Link as RouterLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import "./Layout.css";
+import { AppBar, Toolbar, Box, Button } from '@mui/material';
 
-import React, { useEffect } from 'react';
+import React, { useEffect,useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchAvailableExercises} from '../../actions/availableExercisesActions';
 import { fetchAvailableFood} from '../../actions/availableFoodActions';
+import { AuthContext } from '../../AuthContext';
+import './Layout.css';
 
 const Layout = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useContext(AuthContext);
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAvailableExercises());
+    dispatch(fetchAvailableFood());
+  }, [dispatch]);
 
-    useEffect(() => {
-      dispatch(fetchAvailableExercises());
-      dispatch(fetchAvailableFood());
-   
-    }, [dispatch]);
+  return (
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Box display="flex" gap={2}>
+            <Button component={RouterLink} to="/" startIcon={<FontAwesomeIcon icon={faHome} className="icon" />}>
+              Home
+            </Button>
 
-    return (
-        <>
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/">
-                            <FontAwesomeIcon icon={faHome} className="icon" />
-                            Home
-                        </Link>
-                    </li>
-                    {isLoggedIn() ? (
-                        <>
-                            <li>
-                                <Link to="/food">
-                                    <FontAwesomeIcon icon={faUtensils} className="icon" />
-                                    Food
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/exercises">
-                                    <FontAwesomeIcon icon={faDumbbell} className="icon" />
-                                    Exercises
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/calendar">
-                                    <FontAwesomeIcon icon={faCalendar} className="icon" />
-                                    Calendar
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/profiles">
-                                    <FontAwesomeIcon icon={faUser} className="icon" />
-                                    Profiles
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/logout">
-                                    <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
-                                    Logout
-                                </Link>
-                            </li>
-                        </>
-                    ) : (
-                        <>
-                            <li>
-                                <Link to="/login">
-                                    <FontAwesomeIcon icon={faSignInAlt} className="icon" />
-                                    Login
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/register">
-                                    <FontAwesomeIcon icon={faUserPlus} className="icon" />
-                                    Register
-                                </Link>
-                            </li>
-                        </>
-                    )}
-                </ul>
-            </nav>
+            {isLoggedIn ? (
+            <>
+              <Button component={RouterLink} to="/food" startIcon={<FontAwesomeIcon icon={faUtensils} className="icon" />}>
+                Food
+              </Button>
 
-            <Outlet />
-        </>
-    )
+              <Button component={RouterLink} to="/exercises" startIcon={<FontAwesomeIcon icon={faDumbbell} className="icon" />}>
+                Exercises
+              </Button>
+
+              <Button component={RouterLink} to="/calendar" startIcon={<FontAwesomeIcon icon={faCalendar} className="icon" />}>
+                Calendar
+              </Button>
+
+              <Button component={RouterLink} to="/profiles" startIcon={<FontAwesomeIcon icon={faUser} className="icon" />}>
+                Profiles
+              </Button>
+
+              <Button component={RouterLink} to="/logout" startIcon={<FontAwesomeIcon icon={faSignOutAlt} className="icon" />}>
+                Logout
+              </Button>
+            </>
+            ) : (
+            <>
+              <Button component={RouterLink} to="/login" startIcon={<FontAwesomeIcon icon={faSignInAlt} className="icon" />}>
+                Login
+              </Button>
+
+              <Button component={RouterLink} to="/register" startIcon={<FontAwesomeIcon icon={faUserPlus} className="icon" />}>
+                Register
+              </Button>
+            </>
+            )}
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Outlet />
+    </>
+  )
 };
 
 export default Layout;

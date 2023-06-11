@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
+import { AuthProvider } from './AuthContext';
 
 import store from './store';
 
@@ -20,6 +21,8 @@ import AddExercise from "./components/Exercises/AddExercise";
 import AddFood from "./components/Food/AddFood";
 import FoodEdit from "./components/Food/FoodEdit";
 import AddProfile from "./components/Profile/AddProfile";
+
+import './index.css';
 
 export default function App() {
 
@@ -50,6 +53,10 @@ export default function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Provider store={store}>
+root.render(
+  <AuthProvider>
+<Provider store={store}>
   <App />
-</Provider>);
+</Provider>
+    </AuthProvider>
+);

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { TextField, Select, MenuItem, Button, IconButton, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faTrash, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTrash, faRuler, faBirthdayCake, faVenusMars, faIdCard, faEdit, faSave, faWeight, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { deleteFitnessProfile, updateFitnessProfile } from '../../api/fitnessProfilesApi';
-import './Profile.css';
 
 const Profile = ({ profileData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -33,22 +33,6 @@ const Profile = ({ profileData, onDelete }) => {
     });
   };
 
-  const renderEditButton = () => {
-    if (isEditing) {
-      return (
-        <button className="profile-edit-btn" onClick={handleSave}>
-          <FontAwesomeIcon icon={faSave} />
-        </button>
-      );
-    } else {
-      return (
-        <button className="profile-edit-btn" onClick={handleEdit}>
-          <FontAwesomeIcon icon={faEdit} />
-        </button>
-      );
-    }
-  };
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(editedProfileData.userId)
       .then(() => {
@@ -62,87 +46,132 @@ const Profile = ({ profileData, onDelete }) => {
   };
 
   return (
-      <div className="profile-container">
-        <h2 className="profile-title">Profile</h2>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faUser} />
-          {isEditing ? (
-            <input
-              type="text"
-              name="name"
-              value={editedProfileData.name}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <p>
-              <span>Name:</span> {editedProfileData.name}
-            </p>
-          )}
-        </div>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faIdCard} />
-          <p>
-            <span>User ID:</span> {editedProfileData.userId}
-            <button onClick={copyToClipboard}>
-              <FontAwesomeIcon icon={faCopy} />
-            </button>
-          </p>
-        </div>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faRulerVertical} />
-          {isEditing ? (
-            <input
-              type="number"
-              name="height"
-              value={editedProfileData.height}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <p>
-              <span>Height:</span> {editedProfileData.height}
-            </p>
-          )}
-        </div>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faWeight} />
-          {isEditing ? (
-            <input
-              type="number"
-              name="weight"
-              value={editedProfileData.weight}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <p>
-              <span>Weight:</span> {editedProfileData.weight}
-            </p>
-          )}
-        </div>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faVenusMars} />
-          {isEditing ? (
-            <select
-              name="sex"
-              value={editedProfileData.sex}
-              onChange={handleInputChange}
-            >
-              <option value="1">Male</option>
-              <option value="0">Female</option>
-            </select>
-          ) : (
-            <p>
-              <span>Sex:</span> {editedProfileData.sex}
-            </p>
-          )}
-        </div>
-        <div className="button-container">
-          {renderEditButton()}
-          <button className="profile-delete-btn" onClick={handleDelete}>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </div>
-      </div>
-  );
+    <Box sx={{ padding: 3, border: '1px solid #ccc', borderRadius: 2, marginBottom: 2 }}>
+      <h2>Profile</h2>
+      <Box sx={{ marginBottom: 2 }}>
+        <FontAwesomeIcon icon={faUser} />
+        {isEditing ? (
+          <TextField
+            name="name"
+            value={editedProfileData.name}
+            onChange={handleInputChange}
+            label="Name"
+          />
+        ) : (
+          <p>Name: {editedProfileData.name}</p>
+        )}
+      </Box>
+      {/* Continue for the rest of the items... */}
+      <Box sx={{ marginBottom: 2 }}>
+        <FontAwesomeIcon icon={faRuler} />
+        {isEditing ? (
+          <TextField
+            type="number"
+            name="height"
+            value={editedProfileData.height}
+            onChange={handleInputChange}
+            label="Height"
+          />
+        ) : (
+          <p>Height: {editedProfileData.height}</p>
+        )}
+      </Box>
+      {/* ... and so on ... */}
+      <Box sx={{ marginBottom: 2 }}>
+        <FontAwesomeIcon icon={faBirthdayCake} />
+        {isEditing ? (
+          <TextField
+            type="number"
+            name="age"
+            value={editedProfileData.age}
+            onChange={handleInputChange}
+            label="Age"
+          />
+        ) : (
+          <p>Age: {editedProfileData.age}</p>
+        )}
+      </Box>
+      <Box sx={{ marginBottom: 2 }}>
+  <FontAwesomeIcon icon={faWeight} />
+  {isEditing ? (
+    <TextField
+      type="number"
+      name="weight"
+      value={editedProfileData.weight}
+      onChange={handleInputChange}
+      label="Weight"
+    />
+  ) : (
+    <p>Weight: {editedProfileData.weight}</p>
+  )}
+</Box>
+
+<Box sx={{ marginBottom: 2 }}>
+  <FontAwesomeIcon icon={faBirthdayCake} />
+  {isEditing ? (
+    <TextField
+      type="number"
+      name="age"
+      value={editedProfileData.age}
+      onChange={handleInputChange}
+      label="Age"
+    />
+  ) : (
+    <p>Age: {editedProfileData.age}</p>
+  )}
+</Box>
+
+<Box sx={{ marginBottom: 2 }}>
+  <FontAwesomeIcon icon={faIdCard} />
+  {isEditing ? (
+    <TextField
+      type="text"
+      name="_id"
+      value={editedProfileData._id}
+      onChange={handleInputChange}
+      label="ID"
+    />
+  ) : (
+    <div>
+      <p>ID: {editedProfileData._id}</p>
+      <IconButton aria-label="copy to clipboard" onClick={copyToClipboard}>
+      <FontAwesomeIcon icon={faCopy} />
+      </IconButton>
+    </div>
+  )}
+</Box>
+
+<Box sx={{ marginBottom: 2 }}>
+  <FontAwesomeIcon icon={faVenusMars} />
+  {isEditing ? (
+    <Select
+      name="sex"
+      value={editedProfileData.sex}
+      onChange={handleInputChange}
+    >
+      <MenuItem value="1">Male</MenuItem>
+      <MenuItem value="0">Female</MenuItem>
+    </Select>
+  ) : (
+    <p>Sex: {editedProfileData.sex === 1 ? 'Male' : 'Female'}</p>
+  )}
+</Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+        {isEditing ? (
+          <Button variant="contained" color="primary" onClick={handleSave}>
+            <FontAwesomeIcon icon={faSave} />
+          </Button>
+        ) : (
+          <Button variant="contained" color="primary" onClick={handleEdit}>
+            <FontAwesomeIcon icon={faEdit} />
+          </Button>
+        )}
+        <IconButton onClick={handleDelete}>
+          <FontAwesomeIcon icon={faTrash} />
+        </IconButton>
+      </Box>
+    </Box>
+);
 };
 
 export default Profile;

@@ -1,26 +1,27 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../api/axios';
 import isLoggedIn from '../tools/auth';
+import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, {} from 'react';
+import { AuthContext } from '../AuthContext';
 
 axios.defaults.withCredentials = true;
 
 const LOGIN_URL = '/login';
 
 const Login = () => {
-    const userRef = useRef();
-    const errRef = useRef();
-
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        userRef.current.focus();
         if (isLoggedIn()) {
-            setSuccess(true);
-        } 
-    }, []);
+            navigate('/');
+        }
+    }, [navigate]);
 
     useEffect(() => {
         setErrMsg('');
@@ -38,13 +39,13 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-
-  
+            console.log(response);
             setEmail('');
             setPwd('');
-            setSuccess(true);
+            login();
+            navigate('/');
         } catch (err) {
-            console.log("ERROR: "+err);
+            console.log("ERROR: " + err);
             if (!err?.response) {
                 console.log(err);
                 setErrMsg('No Server Response');
@@ -55,64 +56,49 @@ const Login = () => {
             } else {
                 setErrMsg('Login Failed');
             }
-            errRef.current.focus();
         }
     };
 
-    const isUserLoggedIn = isLoggedIn();
-    console.log("isUserLoggedIn: "+isUserLoggedIn);
-
     return (
         <>
-            {success ? (
-                <section>
-                    <h1>You are logged in!</h1>
-                    <br />
-
-                    <p>
-                        <a href="/">Go to Home</a>
-                    </p>
-                </section>
-            ) : (
-                <section>
-                    <p
-                        ref={errRef}
-                        className={errMsg ? 'errmsg' : 'offscreen'}
-                        aria-live="assertive"
-                    >
+            <section>
+                <Typography variant="h3">Sign In</Typography>
+                {errMsg && (
+                    <Typography color="error">
                         {errMsg}
-                    </p>
-                    <h1>Sign In</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="username">Username:</label>
-                        <input
-                            type="text"
-                            id="username"
-                            ref={userRef}
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            required
-                        />
-
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            onChange={(e) => setPwd(e.target.value)}
-                            value={pwd}
-                            required
-                        />
-                        <button>Sign In</button>
-                    </form>
-                    <p>
-                        Need an Account?<br />
-                        <span className="line">
-                            {/*put router link here*/}
-                            <a href="/register">Sign Up</a>
-                        </span>
-                    </p>
-                </section>
-            )}
+                    </Typography>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        id="email"
+                        label="Username"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                        required
+                    />
+                    <TextField
+                        id="password"
+                        label="Password"
+                        type="password"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        onChange={(e) => setPwd(e.target.value)}
+                        value={pwd}
+                        required
+                    />
+                    <Button variant="contained" color="primary" type="submit">
+                        Sign In
+                    </Button>
+                </form>
+                <Typography variant="body1">
+                    Need an Account?<br />
+                    <MuiLink component={RouterLink} to="/register">Sign Up</MuiLink>
+                </Typography>
+            </section>
         </>
     );
 };

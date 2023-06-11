@@ -1,4 +1,4 @@
-const isLoggedIn = () => {
+export const userIsLoggedIn = () => {
 
     let d = new Date();
     d.setTime(d.getTime() + (1000));
@@ -8,4 +8,4 @@ const isLoggedIn = () => {
     return document.cookie.indexOf("token" + '=') == -1;
 }
 
-export default isLoggedIn;
+export default userIsLoggedIn;

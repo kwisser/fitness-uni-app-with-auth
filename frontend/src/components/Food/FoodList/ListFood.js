@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Typography, Button, Card, CardContent } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import axios from '../../../api/axios';
 import FoodItem from '../FoodItem';
-import { Link } from 'react-router-dom';
 import './ListFood.css';
 
 const ListFood = () => {
@@ -24,12 +26,16 @@ const ListFood = () => {
 
   return (
     <div className="list-food-container">
-      <div className="food-header">
-        <h2>Food Data:</h2>
-        <div className="add-food-link">
-          <Link to="/food/add">Add Food</Link>
-        </div>
-      </div>
+          <Card sx={{ my: 3 }}>
+        <CardContent>
+          <Typography variant="h5">Food List:</Typography>
+          <Link to="/food/add">
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              Add Food
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
       <ul className="food-list">
         {foodData.map((food) => (
           <li key={food._id}>
