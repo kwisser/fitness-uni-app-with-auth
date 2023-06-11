@@ -17,6 +17,10 @@ const Profiles = () => {
     });
   }, []);
 
+  const handleDelete = (deletedProfileId) => {
+    setProfileData(profileData.filter(profile => profile._id !== deletedProfileId));
+  };
+
   console.log(profileData);
 
   let profileDataToDisplay = profileData;
@@ -37,7 +41,7 @@ const Profiles = () => {
     </button>
       <ul>
       {profileDataToDisplay.map((profile) => (
-        <Profile key={profile._id} profileData={profile} />
+        <Profile key={profile._id} profileData={profile} onDelete={handleDelete} />
       ))}
       </ul>
       

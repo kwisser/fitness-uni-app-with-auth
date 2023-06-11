@@ -1,8 +1,10 @@
 import ReactDOM from "react-dom/client";
 import React from 'react';
-import { Provider } from 'react-redux';
-import store from './store';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from 'react-redux';
+
+import store from './store';
+
 import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";

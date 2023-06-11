@@ -1,46 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faTrash, faCalendar, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import axios from '../../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { faUser, faTrash, faRulerVertical, faWeight, faVenusMars, faIdCard, faEdit, faSave, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { deleteFitnessProfile, updateFitnessProfile } from '../../api/fitnessProfilesApi';
 import './Profile.css';
 
-const Profile = ({ profileData }) => {
+const Profile = ({ profileData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfileData, setEditedProfileData] = useState({ ...profileData });
-  const navigate = useNavigate();
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const convertProfileDataToUpdateJSON = (profileData) => {
-    return {
-      profileId: profileData._id,
-      name: profileData.name,
-      age: profileData.age,
-      height: profileData.height,
-      weight: profileData.weight,
-      sex: profileData.sex,
-      userId: profileData.userId,
-    };
-  };
-
-
   const handleSave = () => {
-    console.log(editedProfileData);
-
-    axios.put(`/fitness/profile`, convertProfileDataToUpdateJSON(editedProfileData))
-      .then(response => {
-        console.log(response);
-        // Perform further actions after successful save if needed.
-      })
-      .catch(error => {
-        console.log(error);
-        // Perform error handling if needed.
-      });
-
+    updateFitnessProfile(editedProfileData);
     setIsEditing(false);
     // Update the `profileData` with the new data
     setEditedProfileData(editedProfileData);
@@ -55,18 +28,9 @@ const Profile = ({ profileData }) => {
   };
 
   const handleDelete = () => {
-    axios.delete(`/fitness/profile/${profileData._id}`)
-      .then(response => {
-        console.log(response);
-        navigate('/profiles')
-        navigate(0)
-      })
-
-      .catch(error => {
-        console.log(error);
-        // Perform error handling if needed.
-      });
-
+    deleteFitnessProfile(profileData._id).then(() => {
+    onDelete(profileData._id);
+    });
   };
 
   const renderEditButton = () => {
@@ -85,10 +49,19 @@ const Profile = ({ profileData }) => {
     }
   };
 
-  const profileLink = `/profiles/${profileData._id}`;
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(editedProfileData.userId)
+      .then(() => {
+        // Success feedback here. For example, show a toast or a tooltip
+        console.log('Copied to clipboard');
+      })
+      .catch(err => {
+        // Failure feedback here. For example, show a toast or a tooltip
+        console.log('Failed to copy text: ', err);
+      });
+  };
 
   return (
-    <Link to={profileLink} className="profile-link">
       <div className="profile-container">
         <h2 className="profile-title">Profile</h2>
         <div className="profile-item">
@@ -107,19 +80,13 @@ const Profile = ({ profileData }) => {
           )}
         </div>
         <div className="profile-item">
-          <FontAwesomeIcon icon={faCalendar} />
-          {isEditing ? (
-            <input
-              type="number"
-              name="age"
-              value={editedProfileData.age}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <p>
-              <span>Age:</span> {editedProfileData.age}
-            </p>
-          )}
+          <FontAwesomeIcon icon={faIdCard} />
+          <p>
+            <span>User ID:</span> {editedProfileData.userId}
+            <button onClick={copyToClipboard}>
+              <FontAwesomeIcon icon={faCopy} />
+            </button>
+          </p>
         </div>
         <div className="profile-item">
           <FontAwesomeIcon icon={faRulerVertical} />
@@ -168,12 +135,6 @@ const Profile = ({ profileData }) => {
             </p>
           )}
         </div>
-        <div className="profile-item">
-          <FontAwesomeIcon icon={faIdCard} />
-          <p>
-            <span>User ID:</span> {editedProfileData.userId}
-          </p>
-        </div>
         <div className="button-container">
           {renderEditButton()}
           <button className="profile-delete-btn" onClick={handleDelete}>
@@ -181,7 +142,6 @@ const Profile = ({ profileData }) => {
           </button>
         </div>
       </div>
-    </Link>
   );
 };
 
