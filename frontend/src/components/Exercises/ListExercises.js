@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../api/axios';
 import { Link } from 'react-router-dom';
 import ExerciseItem from './ExerciseItem';
+import fetchAviableFitnessExercises from '../../api/fitnessExercisesApi';
 
 const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
-  const EXERCISE_URL = 'fitness/exercises/';
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(EXERCISE_URL);
-        setExercises(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
+    fetchAviableFitnessExercises().then(data => {
+      setExercises(data);
+    });
   }, []);
 
   return (

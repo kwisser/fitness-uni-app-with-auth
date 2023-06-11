@@ -1,4 +1,7 @@
 import ReactDOM from "react-dom/client";
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home";
@@ -45,4 +48,6 @@ export default function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<Provider store={store}>
+  <App />
+</Provider>);

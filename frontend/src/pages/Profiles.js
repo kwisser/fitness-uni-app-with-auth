@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';  
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import axios from '../api/axios';
 import Profile from '../components/Profile/Profile';
+import fetchProfileData from '../api/fitnessProfilesApi';
 import { useParams, useNavigate } from "react-router-dom";
 
 const Profiles = () => {
@@ -11,21 +11,10 @@ const Profiles = () => {
   const navigate = useNavigate();
   console.log(params.id)
 
-  const GET_PROFILES_URL = '/fitness/profiles';
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(GET_PROFILES_URL, {
-        });
-        console.log(response);
-        setProfileData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
+    fetchProfileData().then(data => {
+      setProfileData(data);
+    });
   }, []);
 
   console.log(profileData);
