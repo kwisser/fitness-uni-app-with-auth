@@ -4,7 +4,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import "./Layout.css";
 
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchAvailableExercises} from '../../actions/availableExercisesActions';
+import { fetchAvailableFood} from '../../actions/availableFoodActions';
+
 const Layout = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(fetchAvailableExercises());
+      dispatch(fetchAvailableFood());
+   
+    }, [dispatch]);
+
     return (
         <>
             <nav>

@@ -2,7 +2,7 @@ import axios from '../api/axios';
 
 const EXERCISE_URL = 'fitness/exercises/';
 
-const fetchAviableFitnessExercises = async () => {
+const fetchAvailableFitnessExercises = async () => {
     try {
       const response = await axios.get(EXERCISE_URL);
       return response.data;
@@ -11,4 +11,4 @@ const fetchAviableFitnessExercises = async () => {
     }
   };
 
-export default fetchAviableFitnessExercises;
+export default fetchAvailableFitnessExercises;
