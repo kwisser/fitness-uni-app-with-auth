@@ -9,9 +9,7 @@ export const getCurrentDate = () => {
 };
 
 const calculateBurnedCalories = (exercise, duration) => {
-    console.log("exercise", exercise);
     const caloriesBurnedPerMinute = exercise.energyBurned / exercise.baseTime;
-    console.log(duration)
     const totalBurnedCalories = caloriesBurnedPerMinute * duration;
 
     return totalBurnedCalories;
@@ -45,19 +43,33 @@ export const calculateCalories = (profile, activityData, listOfExecises) => {
 };
 
 export const calculateReachedCalories = (activityData, listOfFood) => {
-    console.log("activityData", activityData);
-    console.log("listOfFood", listOfFood);
+
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
     let caloriesEaten = 0;
     for (let foodActivity of activityData.food) {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
-        console.log("foodItem", foodItem);
         if (foodItem) {
             caloriesEaten += foodItem.baseAmount * foodActivity.amount / 100;
         }
     }
     return caloriesEaten;
+};
+
+export const calculateReachedProtein = (activityData, listOfFood) => {
+
+    // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
+    let proteinEaten = 0;
+    if (!activityData.food) return 0;
+    for (let foodActivity of activityData.food) {
+        // Finden Sie das entsprechende Lebensmittel im Store
+        const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
+        if (foodItem) {
+            console.log("foodItem: " + foodItem);
+            proteinEaten += foodItem.protein;
+        }
+    }
+    return proteinEaten;
 };
 
 
