@@ -11,7 +11,6 @@ import { fetchAvailableExercises } from '../../actions/availableExercisesActions
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories, calculateReachedProtein } from '../../tools/tools';
 import CaloriesPieChart from '../CaloriesPieChart';
-import { deleteFitnessExercise, updateFitnessExercise } from '../../api/fitnessExercisesApi';
 
 const ProfileDay = () => {
   const profile = useSelector(state => state.profile);
