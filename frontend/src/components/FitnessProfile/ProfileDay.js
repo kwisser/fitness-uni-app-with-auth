@@ -75,7 +75,7 @@ const ProfileDay = () => {
         exercise: [...prevState.exercise, extractExerciseData(newExercise)],
       }));
 
-      updateFitnessDayForProfile(profile._id, getCurrentDate(), dailyActivityData);
+      updateFitnessDayForProfile(dailyActivityData);
       setShowExerciseOptions(false);
       console.log("Updated dailyActivityData:", dailyActivityData);
     }
@@ -91,7 +91,7 @@ const ProfileDay = () => {
         ...prevState,
         food: [...prevState.food, extractFoodIdAndAmount(newFood)],
       }));
-      updateFitnessDayForProfile(profile._id, getCurrentDate(), dailyActivityData);
+      updateFitnessDayForProfile(dailyActivityData);
       setShowFoodOptions(false);
       console.log("Updated dailyActivityData:", dailyActivityData);
     }

@@ -1,6 +1,6 @@
 import axios from "./axios";
 
-const GET_FITNESS_DAY_URL = "fitness/day";
+const GET_FITNESS_DAY_URL = "/fitness/day";
 
 export const fetchActivityForDay = async (profileId, date) => {
   try {
@@ -8,6 +8,7 @@ export const fetchActivityForDay = async (profileId, date) => {
 
     // Prüfen, ob Daten in der Antwort vorhanden sind
     if (response.data && response.data.length > 0) {
+      console.log("fetchActivityForDay: ", response.data[0]);
       return response.data[0];
     } else {
       // Setzen Sie die Zustände auf leere Arrays, wenn keine Daten vorhanden sind
@@ -20,6 +21,7 @@ export const fetchActivityForDay = async (profileId, date) => {
 };
 
 export const updateFitnessDayForProfile = async (data) => {
+  console.log("updateFitnessDayForProfile: ", data);
   try {
     data = renameIdField(data);
     axios.put(`fitness/day/`, data)
@@ -37,5 +39,6 @@ export const updateFitnessDayForProfile = async (data) => {
 
 const renameIdField = (object) => {
   const { _id: dayId, ...rest } = object;
+  console.log("renameIdField: ", { dayId, ...rest })
   return { dayId, ...rest };
 };
