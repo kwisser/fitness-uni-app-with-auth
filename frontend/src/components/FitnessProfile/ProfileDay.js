@@ -77,7 +77,7 @@ const ProfileDay = () => {
         ...prevState,
         exercise: [...prevState.exercise, extractExerciseData(newExercise)],
       }));
-
+      console.log("Updated dailyActivityData:", dailyActivityData);
       updateFitnessDayForProfile(dailyActivityData);
       setShowExerciseOptions(false);
       console.log("Updated dailyActivityData:", dailyActivityData);

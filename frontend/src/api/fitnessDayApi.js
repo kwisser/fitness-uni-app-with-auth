@@ -24,7 +24,7 @@ export const updateFitnessDayForProfile = async (data) => {
   console.log("updateFitnessDayForProfile: ", data);
   try {
     data = renameIdField(data);
-    axios.put(`fitness/day/`, data)
+    axios.put(GET_FITNESS_DAY_URL, data)
       .then(function (response) {
         console.log(response);
       })
