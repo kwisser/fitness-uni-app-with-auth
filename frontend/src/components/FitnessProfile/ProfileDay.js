@@ -5,10 +5,11 @@ import { Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@
 
 import FoodItem from '../Food/FoodItem';
 import ExerciseItem from '../FitnessExercises/ExerciseItem';
-import fetchActivityForDay from '../../api/fitnessDayApi';
+import { fetchActivityForDay, updateFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { getCurrentDate, calculateCalories, calculateProtein } from '../../tools/tools';
+import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories } from '../../tools/tools';
+import CaloriesPieChart from '../CaloriesPieChart';
 
 const ProfileDay = () => {
   const profile = useSelector(state => state.profile);
@@ -20,13 +21,35 @@ const ProfileDay = () => {
   const [newFood, setNewFood] = useState('');
   const [showExerciseOptions, setShowExerciseOptions] = useState(false);
   const [showFoodOptions, setShowFoodOptions] = useState(false);
+  const [caloriesNeeded, setCaloriesNeeded] = useState(calculateCalories({ ...profile }, dailyActivityData, availableExercises));
+  const [caloriesReached, setCaloriesReached] = useState(calculateCalories({ ...profile }, dailyActivityData, availableFood));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAvailableExercises());
     dispatch(fetchAvailableFood());
-  }, [dispatch]);
+  }, [dispatch, setDailyActivityData]);
+
+
+  useEffect(() => {
+    console.log("Updated dailyActivityData:", dailyActivityData);
+    setCaloriesNeeded(calculateCalories({ ...profile }, dailyActivityData, availableExercises));
+    setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
+  }, [dailyActivityData, profile, availableExercises]);
+
+  const extractExerciseData = (exercise) => {
+    return {
+      _id: exercise._id,
+      exerciseId: exercise._id,
+      timeInMinutes: exercise.baseTime
+    };
+  };
+
+  const extractFoodIdAndAmount = (object) => {
+    const { _id: foodId, baseAmount: amount } = object;
+    return { foodId, amount };
+  };
 
   const handleAddExercise = () => {
     setShowExerciseOptions(true);
@@ -46,6 +69,15 @@ const ProfileDay = () => {
     if (newExercise) {
       // Führen Sie hier den entsprechenden Speichervorgang durch
       console.log("Selected Exercise:", newExercise);
+
+      setDailyActivityData(prevState => ({
+        ...prevState,
+        exercise: [...prevState.exercise, extractExerciseData(newExercise)],
+      }));
+
+      updateFitnessDayForProfile(profile._id, getCurrentDate(), dailyActivityData);
+      setShowExerciseOptions(false);
+      console.log("Updated dailyActivityData:", dailyActivityData);
     }
   };
 
@@ -54,6 +86,14 @@ const ProfileDay = () => {
     if (newFood) {
       // Führen Sie hier den entsprechenden Speichervorgang durch
       console.log("Selected Food:", newFood);
+
+      setDailyActivityData(prevState => ({
+        ...prevState,
+        food: [...prevState.food, extractFoodIdAndAmount(newFood)],
+      }));
+      updateFitnessDayForProfile(profile._id, getCurrentDate(), dailyActivityData);
+      setShowFoodOptions(false);
+      console.log("Updated dailyActivityData:", dailyActivityData);
     }
   };
 
@@ -83,13 +123,16 @@ const ProfileDay = () => {
     setRenderedActivityData(newDailyActivityData);
   }, [availableExercises, availableFood, dailyActivityData]);
 
-  const caloriesNeeded = calculateCalories({ ...profile, activityData: dailyActivityData });
   const proteinNeeded = calculateProtein(profile);
 
   return (
     <div>
       <Typography variant="h4" style={{ marginBottom: '1rem' }}>Guten Tag, {profile.name}!</Typography>
       <Typography variant="body1" style={{ marginBottom: '0.5rem' }}>Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
+      <Typography variant="body1" style={{ marginBottom: '0.5rem' }}>Bisher gegessene Kalorien {caloriesReached} Kalorien.</Typography>
+      <div style={{ width: '200px', height: '200px' }}>
+        <CaloriesPieChart consumed={caloriesReached} total={caloriesNeeded} />
+      </div>
       <Typography variant="body1" style={{ marginBottom: '2rem' }}>Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
       <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
@@ -139,12 +182,12 @@ const ProfileDay = () => {
 
       <Typography variant="subtitle1">Essen:</Typography>
       {renderedActivityData.food.map((food, index) => (
-        <FoodItem key={food._id} food={food} />
+        <FoodItem key={index} food={food} />
       ))}
 
       <Typography variant="subtitle1">Übungen:</Typography>
       {renderedActivityData.exercise.map((exercise, index) => (
-        <ExerciseItem key={exercise._id} exercise={exercise} />
+        <ExerciseItem key={index} exercise={exercise} />
       ))}
     </div>
   );

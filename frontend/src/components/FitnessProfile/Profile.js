@@ -34,7 +34,7 @@ const Profile = ({ profileData, onDelete }) => {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(editedProfileData.userId)
+    navigator.clipboard.writeText(editedProfileData._id)
       .then(() => {
       })
       .catch(err => {

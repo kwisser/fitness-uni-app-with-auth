@@ -2,12 +2,15 @@ import axios from "./axios";
 
 const GET_FITNESS_DAY_URL = "fitness/day";
 
-const fetchActivityForDay = async (profileId, date) => {
+export const fetchActivityForDay = async (profileId, date) => {
   try {
     const response = await axios.get(`${GET_FITNESS_DAY_URL}/${profileId}/${date}`);
 
     // Prüfen, ob Daten in der Antwort vorhanden sind
     if (response.data && response.data.length > 0) {
+      console.log("############fetch day data############")
+      console.log(response.data[0]);
+      console.log("############fetch day data############")
       return response.data[0];
     } else {
       // Setzen Sie die Zustände auf leere Arrays, wenn keine Daten vorhanden sind
@@ -19,27 +22,13 @@ const fetchActivityForDay = async (profileId, date) => {
   }
 };
 
-const updateFitnessDay = async (profileId, date, data) => {
+export const updateFitnessDayForProfile = async (profileId, date, data) => {
   try {
-    var raw = JSON.stringify({
-      "dayId": "60618014853a921edccb8fc3",
-      "date": "2932021",
-      "food": [
-        {
-          "foodId": "60617e76853a921edccb8fbd",
-          "amount": 500
-        }
-      ],
-      "exercise": [
-        {
-          "exerciseId": "60617ef3853a921edccb8fbe",
-          "timeInMinutes": 120
-        }
-      ],
-      "profileId": "60617f5a853a921edccb8fbf"
-    });
-
-    axios.put(`fitness/day/${profileId}/${date}`, raw)
+    data = renameIdField(data);
+    console.log("############renamed data############")
+    console.log(data);
+    console.log("############renamed data############")
+    axios.put(`fitness/day/`, data)
       .then(function (response) {
         console.log(response);
       })
@@ -52,4 +41,7 @@ const updateFitnessDay = async (profileId, date, data) => {
   }
 };
 
-export default fetchActivityForDay;
+const renameIdField = (object) => {
+  const { _id: dayId, ...rest } = object;
+  return { dayId, ...rest };
+};

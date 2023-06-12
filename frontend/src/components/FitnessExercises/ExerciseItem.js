@@ -50,6 +50,9 @@ const ExerciseItem = ({ exercise, onDelete }) => {
             editedExercise.name
           )}
         </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {editedExercise._id}
+        </Typography>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FontAwesomeIcon icon={faStopwatch} className="icon" />

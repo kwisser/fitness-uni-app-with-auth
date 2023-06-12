@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
 import './register.css'
-import axios from '../../api/axios';
+import axios from '../../../api/axios';
 
 const USER_REGEX = /^\S+@\S+\.\S+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -41,8 +41,8 @@ const Register = () => {
 
     useEffect(() => {
         if (success) {
-          navigate('/');
-          navigate(0);
+            navigate('/');
+            navigate(0);
         }
     }, [success, navigate]);
 
