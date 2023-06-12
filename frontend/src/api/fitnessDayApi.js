@@ -8,9 +8,6 @@ export const fetchActivityForDay = async (profileId, date) => {
 
     // Prüfen, ob Daten in der Antwort vorhanden sind
     if (response.data && response.data.length > 0) {
-      console.log("############fetch day data############")
-      console.log(response.data[0]);
-      console.log("############fetch day data############")
       return response.data[0];
     } else {
       // Setzen Sie die Zustände auf leere Arrays, wenn keine Daten vorhanden sind
@@ -22,12 +19,9 @@ export const fetchActivityForDay = async (profileId, date) => {
   }
 };
 
-export const updateFitnessDayForProfile = async (profileId, date, data) => {
+export const updateFitnessDayForProfile = async (data) => {
   try {
     data = renameIdField(data);
-    console.log("############renamed data############")
-    console.log(data);
-    console.log("############renamed data############")
     axios.put(`fitness/day/`, data)
       .then(function (response) {
         console.log(response);
