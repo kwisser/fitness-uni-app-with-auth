@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faFire, faTrash, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import { deleteFitnessExercise, updateFitnessExercise } from '../../api/fitnessExercisesApi';
+import { updateFitnessExercise } from '../../api/fitnessExercisesApi';
 
 const ExerciseItem = ({ exercise, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -22,7 +22,6 @@ const ExerciseItem = ({ exercise, onDelete }) => {
   };
 
   const handleDelete = () => {
-    deleteFitnessExercise(editedExercise._id);
     onDelete(exercise._id);
   };
 

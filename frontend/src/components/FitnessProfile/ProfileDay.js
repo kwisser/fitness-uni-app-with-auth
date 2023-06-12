@@ -11,6 +11,7 @@ import { fetchAvailableExercises } from '../../actions/availableExercisesActions
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories, calculateReachedProtein } from '../../tools/tools';
 import CaloriesPieChart from '../CaloriesPieChart';
+import { deleteFitnessExercise, updateFitnessExercise } from '../../api/fitnessExercisesApi';
 
 const ProfileDay = () => {
   const profile = useSelector(state => state.profile);
@@ -25,6 +26,7 @@ const ProfileDay = () => {
   const [caloriesNeeded, setCaloriesNeeded] = useState(calculateCalories({ ...profile }, dailyActivityData, availableExercises));
   const [caloriesReached, setCaloriesReached] = useState(calculateCalories({ ...profile }, dailyActivityData, availableFood));
   const [proteinReached, setProteinReached] = useState(calculateReachedProtein(dailyActivityData, availableFood));
+
 
   const dispatch = useDispatch();
 
@@ -42,8 +44,12 @@ const ProfileDay = () => {
   }, [dailyActivityData, profile, availableExercises]);
 
   const extractExerciseData = (exercise) => {
+    console.log("extractExerciseData: ", exercise);
+    console.log({
+      exerciseId: exercise._id,
+      timeInMinutes: exercise.baseTime
+    });
     return {
-      _id: exercise._id,
       exerciseId: exercise._id,
       timeInMinutes: exercise.baseTime
     };
@@ -99,6 +105,28 @@ const ProfileDay = () => {
       console.log("Updated dailyActivityData:", dailyActivityData);
     }
   };
+
+  const handleDeleteExercise = (exerciseId) => {
+    // Löschen Sie die Übung mit der übergebenen ID
+    console.log("handleDeleteExercise: ", exerciseId);
+    setDailyActivityData(prevState => ({
+      ...prevState,
+      exercise: prevState.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
+    }));
+    updateFitnessDayForProfile(dailyActivityData);
+    console.log("Updated dailyActivityData:", dailyActivityData);
+  }
+
+  const handleDeleteEatenFood = (foodId) => {
+    // Löschen Sie die Übung mit der übergebenen ID
+    console.log("handleDeleteExercise: ", foodId);
+    setDailyActivityData(prevState => ({
+      ...prevState,
+      food: prevState.exercise.filter(food => food._id !== foodId),
+    }));
+    updateFitnessDayForProfile(dailyActivityData);
+    console.log("Updated dailyActivityData:", dailyActivityData);
+  }
 
   useEffect(() => {
     fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
@@ -188,12 +216,12 @@ const ProfileDay = () => {
 
           <Typography variant="subtitle1">Essen:</Typography>
           {renderedActivityData.food.map((food, index) => (
-            <FoodItem key={index} food={food} />
+            <FoodItem key={index} food={food} onDelete={handleDeleteEatenFood} />
           ))}
 
           <Typography variant="subtitle1">Übungen:</Typography>
           {renderedActivityData.exercise.map((exercise, index) => (
-            <ExerciseItem key={index} exercise={exercise} />
+            <ExerciseItem key={index} exercise={exercise} onDelete={handleDeleteExercise} />
           ))}
         </div>
       </Grid>

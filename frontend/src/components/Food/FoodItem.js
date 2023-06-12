@@ -2,12 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire, faDumbbell, faBullseye, faUtensils, faTint, faLeaf, faMugHot, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Card, CardActions, CardContent, Button, Typography, Box } from '@mui/material';
-import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
 import './FoodItem.css';
 
-const FoodItem = ({ food }) => {
-  const DELETE_FOOD_ITEM_URL = '/fitness/food/';
+const FoodItem = ({ food, onDelete }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -15,14 +13,7 @@ const FoodItem = ({ food }) => {
   };
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`${DELETE_FOOD_ITEM_URL}${food._id}`);
-      // Reload the food list or perform any other necessary actions
-      navigate('/food');
-      navigate(0);
-    } catch (error) {
-      console.log(error);
-    }
+    onDelete(food._id);
   };
 
   return (

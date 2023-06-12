@@ -11,4 +11,14 @@ const fetchAvailableFitnessFood = async () => {
   }
 };
 
+export const deleteFoodItem = async (foodId) => {
+  try {
+    await axios.delete(`${FOOD_URL}${foodId}`);
+    console.log("deleteFoodItem: ", foodId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 export default fetchAvailableFitnessFood;
