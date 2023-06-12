@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 import { selectProfile } from '../../actions/profileActions';
 import fetchProfileData from '../../api/fitnessProfilesApi';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+
 
 const ProfileSelector = () => {
   const [profiles, setProfiles] = useState([]);
@@ -25,7 +28,7 @@ const ProfileSelector = () => {
           }
         }
       })
-  }, [dispatch, selectedProfile, navigate]);
+  }, []);
 
   const handleSelectChange = (event) => {
     const selectedProfile = profiles.find(profile => profile._id === event.target.value);

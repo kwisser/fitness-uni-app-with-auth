@@ -4,25 +4,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { AuthProvider } from './AuthContext';
 
-import store from './store';
-
-import Layout from "./pages/Layout/Layout";
+import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./pages/Auth/Login";
 import Exercises from "./pages/Exercises";
 import Food from "./pages/Food";
 import NoPage from "./pages/NoPage";
 import Register from "./pages/Register/Register";
-import Logout from "./components/Logout";
+import Logout from "./pages/Auth/Logout";
 import CalendarOverview from "./pages/Calendar/CalendarOverview";
 import Day from "./pages/Day";
 import Profiles from "./pages/Profiles";
-import AddExercise from "./components/Exercises/AddExercise";
+import AddExercise from "./components/FitnessExercises/AddExercise";
 import AddFood from "./components/Food/AddFood";
 import FoodEdit from "./components/Food/FoodEdit";
-import AddProfile from "./components/Profile/AddProfile";
+import AddProfile from "./components/FitnessProfile/AddProfile";
 
-import './index.css';
+import store from './store';
 
 export default function App() {
 
@@ -55,8 +53,8 @@ export default function App() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-<Provider store={store}>
-  <App />
-</Provider>
-    </AuthProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </AuthProvider>
 );

@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import axios from '../api/axios';
-import isLoggedIn from '../tools/auth';
+import axios from '../../api/axios';
+import isLoggedIn from '../../tools/auth';
 import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import React, {} from 'react';
-import { AuthContext } from '../AuthContext';
+import React, { } from 'react';
+import { AuthContext } from '../../AuthContext';
 
 axios.defaults.withCredentials = true;
 

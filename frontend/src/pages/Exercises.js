@@ -1,5 +1,5 @@
 import React from 'react';
-import ExerciseList from '../components/Exercises/ListExercises';
+import ExerciseList from '../components/FitnessExercises/ListExercises';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';

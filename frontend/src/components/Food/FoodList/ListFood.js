@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, Button, Card, CardContent } from '@mui/material';
+import { Typography, Button, Card, CardContent, Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axios from '../../../api/axios';
 import FoodItem from '../FoodItem';
+import Container from '@mui/material/Container';
+import { styled } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom';
 import './ListFood.css';
+
+const StyledRouterLink = styled(RouterLink)({
+  textDecoration: 'none',
+});
 
 const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
@@ -25,25 +32,29 @@ const ListFood = () => {
   }, []);
 
   return (
-    <div className="list-food-container">
+    <Container>
           <Card sx={{ my: 3 }}>
         <CardContent>
           <Typography variant="h5">Food List:</Typography>
-          <Link to="/food/add">
-            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+          <StyledRouterLink to="/food/add">
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+            >
               Add Food
             </Button>
-          </Link>
+          </StyledRouterLink>
         </CardContent>
-      </Card>
-      <ul className="food-list">
+         </Card>
+        <Grid container spacing={3}>
         {foodData.map((food) => (
-          <li key={food._id}>
-            <FoodItem food={food} />
-          </li>
+          <Grid item xs={12} sm={6} md={4} key={food._id}>
+            <FoodItem food={food}  />
+          </Grid>
         ))}
-      </ul>
-    </div>
+      </Grid>
+    </Container>
   );
 };
 

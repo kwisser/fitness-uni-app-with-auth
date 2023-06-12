@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ProfileSelector from '../components/Profile/ProfileSelector';
-import ProfileDay from '../components/Profile/ProfileDay';
+import ProfileSelector from '../components/FitnessProfile/ProfileSelector';
+import ProfileDay from '../components/FitnessProfile/ProfileDay';
 
 const Home = () => {
   const selectedProfile = useSelector(state => state.profile);
