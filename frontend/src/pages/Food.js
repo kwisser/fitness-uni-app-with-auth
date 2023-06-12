@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Container, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import ListFood from '../components/Food/FoodList/ListFood';
 
 const Food = () => {

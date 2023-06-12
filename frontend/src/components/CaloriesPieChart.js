@@ -1,13 +1,14 @@
 import React from 'react';
-import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer, Legend } from 'recharts';
 
 const CaloriesPieChart = ({ consumed, total }) => {
+    const remaining = total - consumed;
     const data = [
         { name: 'Consumed', value: consumed },
-        { name: 'Remaining', value: total - consumed },
+        { name: 'Remaining', value: Math.abs(remaining) },
     ];
 
-    const COLORS = ['#0088FE', '#00C49F'];
+    const COLORS = remaining < 0 ? ['#0088FE', '#FF0000'] : ['#0088FE', '#00C49F'];  // Red when negative
 
     return (
         <ResponsiveContainer width="100%" height="100%">
@@ -25,7 +26,8 @@ const CaloriesPieChart = ({ consumed, total }) => {
                         data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
                     }
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value, name) => [value, name === 'Remaining' && remaining < 0 ? 'Exceeded' : name]} />
+                <Legend />
             </PieChart>
         </ResponsiveContainer>
     );

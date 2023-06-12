@@ -9,7 +9,6 @@ const Profiles = () => {
   const [profileData, setProfileData] = useState([]);
   const params = useParams();
   const navigate = useNavigate();
-  console.log(params.id)
 
   useEffect(() => {
     fetchProfileData().then(data => {
@@ -20,8 +19,6 @@ const Profiles = () => {
   const handleDelete = (deletedProfileId) => {
     setProfileData(profileData.filter(profile => profile._id !== deletedProfileId));
   };
-
-  console.log(profileData);
 
   let profileDataToDisplay = profileData;
 
