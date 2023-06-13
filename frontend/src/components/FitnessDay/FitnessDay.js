@@ -56,8 +56,13 @@ const ProfileDay = () => {
     dispatch(fetchAvailableFood());
 
     fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
-      setDailyActivityData(data);
-      setDailyActivityDataExisting(true);
+      if (data && Object.keys(data).length > 0) {
+        setDailyActivityData(data);
+        setDailyActivityDataExisting(true);
+      } else {
+        setDailyActivityData({ food: [], exercise: [] });
+        setDailyActivityDataExisting(false);
+      }
       console.log("Fetched dailyActivityData:", data);
     }).catch(error => {
       console.log("Error fetching dailyActivityData:", error);
