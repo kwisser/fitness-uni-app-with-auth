@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ProfileSelector from '../components/FitnessProfile/ProfileSelector';
-import FitnessDay from '../components/FitnessDay/FitnessDay';
+import CurrentFitnessDay from '../components/FitnessDay/CurrentFitnessDay';
 
 const Home = () => {
   const selectedProfile = useSelector(state => state.profile);
@@ -12,7 +12,7 @@ const Home = () => {
       <ProfileSelector />
       {selectedProfile ? (
         <div>
-          <FitnessDay key={selectedProfile._id} profileData={selectedProfile} />
+          <CurrentFitnessDay key={selectedProfile._id} profileData={selectedProfile} />
         </div>
       ) : (
         <p>Kein Profil ausgewählt.</p>

@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import CaloriesPieChart from '../CaloriesPieChart';
 import { Grid, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { duration, useTheme } from '@mui/material/styles';
 
-import ItemSelector from '../ItemSelector/ItemSelector';
+import FitnessActivityItemSelector from './FitnessDayActivities/FitnessActivityItemSelector/FitnessActivityItemSelector';
 import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
 
 import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
@@ -48,6 +48,8 @@ const ProfileDay = () => {
   const [caloriesReached, setCaloriesReached] = useState(0);
   const [proteinReached, setProteinReached] = useState(0);
   const [dailyActivityDataExisting, setDailyActivityDataExisting] = useState(false);
+  const [exerciseDuration, setExerciseDuration] = useState('');
+  const [foodQuantity, setFoodQuantity] = useState('');
 
   const dispatch = useDispatch();
 
@@ -90,28 +92,32 @@ const ProfileDay = () => {
 
   const handleExerciseSubmit = async () => {
     // Save selected exercise
-    if (!newExercise) return;
+    if (!newExercise || !exerciseDuration) return;
 
-    console.log("New Exercise: ", newExercise);
+    const newExerciseData = extractExerciseData(newExercise, exerciseDuration);
 
-    if (dailyActivityData?.exercise.find(exercise => exercise.exerciseId === newExercise._id)) {
+    console.log("newExerciseData: ", newExerciseData);
+
+    if (dailyActivityData?.exercise?.find(exercise => exercise.exerciseId === newExerciseData._id)) {
       alert("This exercise has already been added!");
       return;
     }
 
-    console.log("Selected Exercise: ", newExercise);
+    console.log("dailyActivityData: ", dailyActivityData);
 
     const newDailyActivityData = {
       ...dailyActivityData,
-      exercise: [...dailyActivityData?.exercise || [], extractExerciseData(newExercise)],
+      exercise: [...(dailyActivityData?.exercise || []), newExerciseData],
     };
+
+    console.log("Selected Exercise: ", newExerciseData);
 
     setDailyActivityData(newDailyActivityData);
 
     try {
       const operationSuccess = dailyActivityDataExisting
         ? await updateFitnessDayForProfile(newDailyActivityData)
-        : await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, profile._id, getCurrentDate()));
+        : await insertFitnessDayForProfile(createFitnessDayJSON(newDailyActivityData), false, profile._id, getCurrentDate());
 
       if (operationSuccess) {
         console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);
@@ -123,21 +129,20 @@ const ProfileDay = () => {
       setDailyActivityData({ food: [], exercise: [] });
     }
     setShowExerciseOptions(false);
+    setExerciseDuration('');
   };
+
 
 
   const handleFoodSubmit = async () => {
     // Saving selected food item
-    if (!newFood) return;
+    if (!newFood || !foodQuantity) return;
 
-    console.log("New food item: ", newFood);
-    // Check if the food already exists in the dailyActivityData
-    if (dailyActivityData?.food?.find(food => food._id === newFood._id)) {
-      alert("This food item has already been added!");
-      return;
-    }
+    // Extracting food data should now also include the quantity
+    const newFoodData = extractFoodIdAndAmount(newFood);
+    newFoodData.quantity = foodQuantity;
 
-    const updatedFoodList = [...(dailyActivityData?.food || []), extractFoodIdAndAmount(newFood)];
+    const updatedFoodList = [...(dailyActivityData?.food || []), newFoodData];
     console.log("Updated food list: ", updatedFoodList);
     const updatedDailyActivityData = { ...dailyActivityData, food: updatedFoodList };
 
@@ -159,6 +164,7 @@ const ProfileDay = () => {
       setDailyActivityData({ food: [], exercise: [] });
     } finally {
       setShowFoodOptions(false);
+      setFoodQuantity('');
     }
   };
 
@@ -206,21 +212,25 @@ const ProfileDay = () => {
           <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
           <>
-            <ItemSelector
+            <FitnessActivityItemSelector
               items={availableFood.filter(food => !dailyActivityData?.food?.find(f => f.foodId === food._id))}
               label='Essen auswählen'
               newItem={newFood}
               setNewItem={setNewFood}
+              quantity={foodQuantity}  // new prop
+              setQuantity={setFoodQuantity}  // new prop
               onSubmit={handleFoodSubmit}
               onAddItem={handleAddFood}
               showOptions={showFoodOptions}
             />
 
-            <ItemSelector
+            <FitnessActivityItemSelector
               items={availableExercises.filter(exercise => !dailyActivityData?.exercise?.find(e => e.exerciseId === exercise._id))}
               label='Übung auswählen'
               newItem={newExercise}
               setNewItem={setNewExercise}
+              quantity={exerciseDuration}  // new prop
+              setQuantity={setExerciseDuration}  // new prop
               onSubmit={handleExerciseSubmit}
               onAddItem={handleAddExercise}
               showOptions={showExerciseOptions}
