@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
 import { postRegisterUser } from '../../../api/authApi';
-import './register.css'
+import './Register.css'
 
 const USER_REGEX = /^\S+@\S+\.\S+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;

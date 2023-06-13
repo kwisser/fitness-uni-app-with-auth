@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Box } from '@mui/material';
-import ListFood from '../components/Food/FoodList/ListFood';
+import ListFood from '../components/FitnessFood/FoodList/ListFood';
 
 const Food = () => {
   return (

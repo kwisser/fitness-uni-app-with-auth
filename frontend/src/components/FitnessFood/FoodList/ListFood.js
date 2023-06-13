@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Button, Card, CardContent, Grid, Checkbox, FormControlLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import FoodItem from '../FoodItem';
+import FoodItem from '../FoodItem/FoodItem';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';

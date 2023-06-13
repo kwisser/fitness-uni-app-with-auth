@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Grid } from '@mui/material';
 
-import FoodItem from '../Food/FoodItem';
+import FoodItem from '../FitnessFood/FoodItem/FoodItem';
 import ExerciseItem from '../FitnessExercises/ExerciseItem';
-import { fetchActivityForDay, updateFitnessDayForProfile } from '../../api/fitnessDayApi';
+import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories, calculateReachedProtein } from '../../tools/tools';
+import { createFitnessDayJSON } from '../../tools/fitnessDayHelper';
 import CaloriesPieChart from '../CaloriesPieChart';
 import { useTheme } from '@mui/material/styles';
 
@@ -75,6 +76,7 @@ const ProfileDay = () => {
 
   const extractFoodIdAndAmount = (object) => {
     const { _id: foodId, baseAmount: amount } = object;
+    console.log("extractFoodIdAndAmount: ", { foodId, amount });
     return { foodId, amount };
   };
 
@@ -91,7 +93,7 @@ const ProfileDay = () => {
     setNewFood('');
   };
 
-  const handleExerciseSubmit = () => {
+  const handleExerciseSubmit = async () => {
     // Speichern der ausgewählten Übung
     if (newExercise) {
       // Führen Sie hier den entsprechenden Speichervorgang durch
@@ -101,14 +103,32 @@ const ProfileDay = () => {
         ...prevState,
         exercise: [...prevState.exercise, extractExerciseData(newExercise)],
       }));
-      console.log("Updated dailyActivityData:", dailyActivityData);
-      updateFitnessDayForProfile(dailyActivityData);
-      setShowExerciseOptions(false);
-      console.log("Updated dailyActivityData:", dailyActivityData);
+
+      if (dailyActivityData.exercise.length > 0) {
+
+        if (await updateFitnessDayForProfile(dailyActivityData)) {
+          console.log("Updated dailyActivityData:", dailyActivityData);
+        }
+        else {
+          console.log("Error updating dailyActivityData:", dailyActivityData);
+          setDailyActivityData({ food: [], exercise: [] });
+        }
+        setShowExerciseOptions(false);
+      }
+      else {
+        if (await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, profile._id, getCurrentDate()))) {
+          console.log("Inserted dailyActivityData:", dailyActivityData);
+        }
+        else {
+          console.log("Error inserting dailyActivityData:", dailyActivityData);
+          setDailyActivityData({ food: [], exercise: [] });
+        }
+        setShowExerciseOptions(false);
+      }
     }
   };
 
-  const handleFoodSubmit = () => {
+  const handleFoodSubmit = async () => {
     // Speichern des ausgewählten Lebensmittels
     if (newFood) {
       // Führen Sie hier den entsprechenden Speichervorgang durch
@@ -118,21 +138,45 @@ const ProfileDay = () => {
         ...prevState,
         food: [...prevState.food, extractFoodIdAndAmount(newFood)],
       }));
-      updateFitnessDayForProfile(dailyActivityData);
-      setShowFoodOptions(false);
-      console.log("Updated dailyActivityData:", dailyActivityData);
+
+      if (dailyActivityData.food.length > 0) {
+        if (await updateFitnessDayForProfile(dailyActivityData)) {
+          console.log("Updated dailyActivityData:", dailyActivityData);
+        }
+        else {
+          console.log("Error updating dailyActivityData:", dailyActivityData);
+          return false
+        }
+      }
+
+      else {
+        if (await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, getCurrentDate()))) {
+          console.log("Inserted dailyActivityData:", dailyActivityData);
+        }
+        else {
+          console.log("Error inserting dailyActivityData:", dailyActivityData);
+          setDailyActivityData({ food: [], exercise: [] });
+          return false
+        }
+        setShowFoodOptions(false);
+      }
     }
   };
 
-  const handleDeleteExercise = (exerciseId) => {
+  const handleDeleteExercise = async (exerciseId) => {
     // Löschen Sie die Übung mit der übergebenen ID
     console.log("handleDeleteExercise: ", exerciseId);
     setDailyActivityData(prevState => ({
       ...prevState,
       exercise: prevState.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
     }));
-    updateFitnessDayForProfile(dailyActivityData);
-    console.log("Updated dailyActivityData:", dailyActivityData);
+    if (updateFitnessDayForProfile(dailyActivityData)) {
+      console.log("Updated dailyActivityData:", dailyActivityData);
+    }
+    else {
+      console.log("Error updating dailyActivityData:", dailyActivityData);
+      setDailyActivityData({ food: [], exercise: [] });
+    }
   }
 
   const handleDeleteEatenFood = (foodId) => {
@@ -149,7 +193,13 @@ const ProfileDay = () => {
   useEffect(() => {
     fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
       if (data) {
+        console.log("Daily Acitivity Data vorhanden: " + data);
         setDailyActivityData(data);
+      }
+      else {
+        console.log("Daily Acitivity Data nicht vorhanden");
+        setDailyActivityData({ food: [], exercise: [] });
+        console.log(dailyActivityData);
       }
     });
   }, [profile._id, availableExercises, availableFood]);

@@ -15,8 +15,8 @@
 - [x] Profile hinzufügen
 - [x] Profile löschen
 - [x] Profile bearbeiten
-- [ ] Profile anzeigen
-- [ ] Essen für einen bestimmten Tag hinzufügen
+- [x] Profile anzeigen
+- [x] Essen für einen bestimmten Tag hinzufügen
 - [ ] Übungen für einen bestimmten Tag hinzufügen
 - [ ] Menge / Zeit von Essen und Übungen anpassen
 - [ ] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
@@ -25,4 +25,4 @@
 - [ ] Einen Tag bearbeiten und Werte wie Essen und Übungen aktualisieren
 - [ ] Essen/Übungen für einen Tag löschen
 - [ ] Registrierungsfunktion hinzufügen
-- [ ] Anmeldefunktion hinzufügen
+- [x] Anmeldefunktion hinzufügen

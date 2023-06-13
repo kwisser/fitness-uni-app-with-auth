@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Outlet, Link as RouterLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
-import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { AuthContext } from '../../AuthContext';
-import './Layout.css';
+import { fetchAvailableExercises } from './actions/availableExercisesActions';
+import { fetchAvailableFood } from './actions/availableFoodActions';
+import { AuthContext } from './AuthContext';
+import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { AppBar, Toolbar, Box, Button, Drawer, List, ListItem } from '@mui/material';
-import { Outlet, Link as RouterLink } from 'react-router-dom';
-import { IconButton } from '@mui/material';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { AppBar, Toolbar, Box, Button, Drawer, List, ListItem, IconButton } from '@mui/material';
 
-const Layout = () => {
+
+const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useContext(AuthContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -112,4 +111,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default App;

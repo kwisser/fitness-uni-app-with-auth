@@ -19,13 +19,20 @@ const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetchAviableFitnessExercises().then(data => {
+    fetchAviableFitnessExercises().then((data) => {
       setExercises(data);
     });
   }, []);
 
   const handleDelete = (id) => {
-    setExercises(exercises.filter(exercise => exercise._id !== id));
+    setExercises(exercises.filter((exercise) => exercise._id !== id));
+  };
+
+  const handleEdit = (id, updatedExercise) => {
+    const updatedExercises = exercises.map((exercise) =>
+      exercise._id === id ? updatedExercise : exercise
+    );
+    setExercises(updatedExercises);
   };
 
   return (
@@ -34,11 +41,7 @@ const ExerciseList = () => {
         <CardContent>
           <Typography variant="h5">Exercise List:</Typography>
           <StyledRouterLink to="/exercises/add">
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-            >
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
               Add Exercise
             </Button>
           </StyledRouterLink>
@@ -47,7 +50,11 @@ const ExerciseList = () => {
       <Grid container spacing={3}>
         {exercises.map((exercise) => (
           <Grid item xs={12} sm={6} md={4} key={exercise._id}>
-            <ExerciseItem exercise={exercise} onDelete={handleDelete} />
+            <ExerciseItem
+              exercise={exercise}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
           </Grid>
         ))}
       </Grid>
