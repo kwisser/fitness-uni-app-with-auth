@@ -2,9 +2,15 @@ import axios from '../api/axios';
 
 const FOOD_URL = 'fitness/food/';
 
-const fetchAvailableFitnessFood = async () => {
+const fetchAvailableFitnessFood = async (filter) => {
+  let url = FOOD_URL;
+  if (filter === "drinks") {
+    url += "drink";
+  } else if (filter === "food") {
+    url += "food";
+  }
   try {
-    const response = await axios.get(FOOD_URL);
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     console.log(error);

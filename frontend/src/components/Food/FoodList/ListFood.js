@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Button, Card, CardContent, Grid } from '@mui/material';
+import { Typography, Button, Card, CardContent, Grid, Checkbox, FormControlLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import FoodItem from '../FoodItem';
 import Container from '@mui/material/Container';
@@ -15,19 +15,49 @@ const StyledRouterLink = styled(RouterLink)({
 
 const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
+  const [onlyDrinks, setOnlyDrinks] = useState(false);
+  const [onlyFood, setOnlyFood] = useState(false);
 
   useEffect(() => {
-    fetchAvailableFitnessFood().then((data) => {
-      setFoodData(data);
+    if (onlyDrinks) {
+      fetchAvailableFitnessFood("drinks").then((data) => {
+        setFoodData(data);
+      });
+    } else if (onlyFood) {
+      fetchAvailableFitnessFood("food").then((data) => {
+        setFoodData(data);
+      });
+    } else {
+      fetchAvailableFitnessFood().then((data) => {
+        setFoodData(data);
+      });
     }
-    );
-  }, []);
+  }, [onlyDrinks, onlyFood]);
+
 
   return (
     <Container>
       <Card sx={{ my: 3 }}>
         <CardContent>
           <Typography variant="h5">Food List:</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox checked={onlyDrinks} onChange={(e) => {
+                setOnlyDrinks(e.target.checked);
+                setOnlyFood(false);
+              }} />
+            }
+            label="Only Drinks"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={onlyFood} onChange={(e) => {
+                setOnlyFood(e.target.checked);
+                setOnlyDrinks(false);
+              }} />
+            }
+            label="Only Food"
+          />
           <StyledRouterLink to="/food/add">
             <Button
               variant="contained"
