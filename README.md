@@ -12,7 +12,7 @@
 - [x] Übungen löschen
 - [x] Übungen bearbeiten
 - [x] Übungen anzeigen
-- [ ] Profile hinzufügen
+- [x] Profile hinzufügen
 - [x] Profile löschen
 - [x] Profile bearbeiten
 - [ ] Profile anzeigen

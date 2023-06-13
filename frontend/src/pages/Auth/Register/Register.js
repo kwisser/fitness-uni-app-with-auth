@@ -3,12 +3,12 @@ import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
+import { postRegisterUser } from '../../../api/authApi';
 import './register.css'
-import axios from '../../../api/axios';
 
 const USER_REGEX = /^\S+@\S+\.\S+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/signup';
+
 
 const Register = () => {
     const userRef = useRef();
@@ -48,6 +48,7 @@ const Register = () => {
 
     useEffect(() => {
         userRef.current.focus();
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
@@ -75,14 +76,7 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post(
-                REGISTER_URL,
-                JSON.stringify({ email, pwd, firstname, lastname, phone, country, city, postcode, street }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            const response = postRegisterUser(email, pwd, firstname, lastname, phone, country, city, postcode, street);
             console.log(response?.data);
             console.log(response?.accessToken);
             console.log(JSON.stringify(response));
