@@ -5,16 +5,16 @@
 ### To Dos
 
 - [x] Essen hinzufügen
-- [ ] Essen löschen
-- [ ] Essen bearbeiten
-- [ ] Essen anzeigen
-- [ ] Übungen hinzufügen
-- [ ] Übungen löschen
-- [ ] Übungen bearbeiten
-- [ ] Übungen anzeigen
+- [x] Essen löschen
+- [x] Essen bearbeiten
+- [x] Essen anzeigen
+- [x] Übungen hinzufügen
+- [x] Übungen löschen
+- [x] Übungen bearbeiten
+- [x] Übungen anzeigen
 - [ ] Profile hinzufügen
-- [ ] Profile löschen
-- [ ] Profile bearbeiten
+- [x] Profile löschen
+- [x] Profile bearbeiten
 - [ ] Profile anzeigen
 - [ ] Essen für einen bestimmten Tag hinzufügen
 - [ ] Übungen für einen bestimmten Tag hinzufügen

@@ -10,10 +10,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     setIsLoggedIn(userIsLoggedIn());
   }, []);
-  
 
-  const login = () => setIsLoggedIn(true); // Update beim Einloggen
-  const logout = () => setIsLoggedIn(false); // Update beim Ausloggen
+
+  const login = () => setIsLoggedIn(true); // Update bei Login
+  const logout = () => setIsLoggedIn(false); // Update bei Logout
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
