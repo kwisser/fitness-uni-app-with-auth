@@ -5,9 +5,8 @@ import CaloriesPieChart from '../CaloriesPieChart';
 import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import FoodItem from '../FitnessFood/FoodItem/FoodItem';
-import ExerciseItem from '../FitnessExercises/ExerciseItem';
 import ItemSelector from '../ItemSelector/ItemSelector';
+import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
 
 import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
@@ -123,7 +122,6 @@ const ProfileDay = () => {
       console.log(`Error ${dailyActivityDataExisting ? "updating" : "inserting"} dailyActivityData: `, newDailyActivityData);
       setDailyActivityData({ food: [], exercise: [] });
     }
-
     setShowExerciseOptions(false);
   };
 
@@ -163,54 +161,6 @@ const ProfileDay = () => {
       setShowFoodOptions(false);
     }
   };
-
-
-  const handleDeleteExercise = async (exerciseId) => {
-    // Löschen Sie die Übung mit der übergebenen ID
-    console.log("handleDeleteExercise: ", exerciseId);
-
-    const updatedDailyActivityData = {
-      ...dailyActivityData,
-      exercise: dailyActivityData.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
-    };
-
-    setDailyActivityData(updatedDailyActivityData);
-
-    try {
-      await updateFitnessDayForProfile(updatedDailyActivityData);
-      console.log("Updated dailyActivityData:", updatedDailyActivityData);
-    } catch (error) {
-      console.log("Error updating dailyActivityData:", updatedDailyActivityData);
-      setDailyActivityData({ food: [], exercise: [] });
-    }
-  }
-
-
-  const handleDeleteEatenFood = async (foodId) => {
-    // Delete the food with the passed ID
-    console.log("handleDeleteEatenFood: ", foodId);
-
-    const updatedDailyActivityData = {
-      ...dailyActivityData,
-      food: dailyActivityData.food.filter(food => food.foodId !== foodId),
-    };
-
-    console.log("DailyActivityData: ", updatedDailyActivityData);
-    console.log("Updated dailyActivityData: ", updatedDailyActivityData);
-
-    try {
-      await updateFitnessDayForProfile(updatedDailyActivityData)
-      console.log("Updated dailyActivityData:", updatedDailyActivityData);
-      // After a successful update, set the local state.
-      setDailyActivityData(updatedDailyActivityData);
-    }
-    catch (error) {
-      console.log("Error updating dailyActivityData:", updatedDailyActivityData);
-      setDailyActivityData({ food: [], exercise: [] });
-    }
-  };
-
-
 
   useEffect(() => {
     const newDailyActivityData = JSON.parse(JSON.stringify(dailyActivityData));
@@ -277,15 +227,8 @@ const ProfileDay = () => {
             />
           </>
 
-          <Typography variant="subtitle1">Essen:</Typography>
-          {renderedActivityData.food && renderedActivityData.food.map((food) => (
-            <FoodItem key={food._id} food={food} onDelete={handleDeleteEatenFood} />
-          ))}
+          <FitnessDayActivities renderedActivityData={renderedActivityData} dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
 
-          <Typography variant="subtitle1">Übungen:</Typography>
-          {renderedActivityData.exercise && renderedActivityData.exercise.map((exercise) => (
-            <ExerciseItem key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} />
-          ))}
         </div>
       </Grid>
     </Grid>

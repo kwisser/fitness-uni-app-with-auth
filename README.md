@@ -17,7 +17,7 @@
 - [x] Profile bearbeiten
 - [x] Profile anzeigen
 - [x] Essen für einen bestimmten Tag hinzufügen
-- [ ] Übungen für einen bestimmten Tag hinzufügen
+- [] Übungen für einen bestimmten Tag hinzufügen
 - [ ] Menge / Zeit von Essen und Übungen anpassen
 - [ ] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
 - [ ] Kalorien, Eiweiß, Kohlenhydrate und Fett für den Tag berechnen

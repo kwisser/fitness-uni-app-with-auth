@@ -5,18 +5,20 @@ import FoodItem from '../FoodItem/FoodItem';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import fetchAvailableFitnessFood from '../../../api/fitnessFoodApi';
+import { fetchAvailableFitnessFood, deleteFoodItem } from '../../../api/fitnessFoodApi';
 import './ListFood.css';
 
 const StyledRouterLink = styled(RouterLink)({
   textDecoration: 'none',
 });
 
-const ListFood = () => {
+const ListFood = (onDelete, onEdit) => {
   const [foodData, setFoodData] = useState([]);
   const [onlyDrinks, setOnlyDrinks] = useState(false);
   const [onlyFood, setOnlyFood] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (onlyDrinks) {
@@ -33,6 +35,15 @@ const ListFood = () => {
       });
     }
   }, [onlyDrinks, onlyFood]);
+
+  const handleDelete = async (id) => {
+    await deleteFoodItem(id);
+    setFoodData(foodData.filter((food) => food._id !== id));
+  };
+
+  const handleEdit = async (food_id) => {
+    navigate(`/food/edit/${food_id}`);
+  };
 
 
   return (
@@ -72,7 +83,7 @@ const ListFood = () => {
       <Grid container spacing={3}>
         {foodData.map((food) => (
           <Grid item xs={12} sm={6} md={4} key={food._id}>
-            <FoodItem food={food} />
+            <FoodItem food={food} onDelete={handleDelete} onEdit={handleEdit} />
           </Grid>
         ))}
       </Grid>
