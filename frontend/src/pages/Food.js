@@ -1,12 +1,14 @@
 import React from 'react';
-import ListFood from '../components/Food/FoodList/ListFood';
+import { Container, Box } from '@mui/material';
+import ListFood from '../components/FitnessFood/FoodList/ListFood';
 
 const Food = () => {
   return (
-    <div>
-      <h1>Food</h1>
-      <ListFood />
-    </div>
+    <Container>
+      <Box my={4}>
+        <ListFood />
+      </Box>
+    </Container>
   );
 }
 
