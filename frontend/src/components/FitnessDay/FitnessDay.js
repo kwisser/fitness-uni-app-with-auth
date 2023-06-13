@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Grid } from '@mui/material';
+import CaloriesPieChart from '../CaloriesPieChart';
+import { Grid, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import FoodItem from '../FitnessFood/FoodItem/FoodItem';
 import ExerciseItem from '../FitnessExercises/ExerciseItem';
+import ItemSelector from '../ItemSelector/ItemSelector';
 import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories, calculateReachedProtein } from '../../tools/tools';
-import { createFitnessDayJSON } from '../../tools/fitnessDayHelper';
-import CaloriesPieChart from '../CaloriesPieChart';
-import { useTheme } from '@mui/material/styles';
+import { getCurrentDate } from '../../utils/DateHelper';
+import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein } from './utils/nutritionCalculations';
+import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
+
 
 import styled from '@emotion/styled';
 
@@ -34,7 +36,7 @@ const Box = styled('div')`
 const ProfileDay = () => {
   const theme = useTheme();
   const profile = useSelector(state => state.profile);
-  const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
+  const [dailyActivityData, setDailyActivityData] = useState({ food: null, exercise: null });
   const [renderedActivityData, setRenderedActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
   const availableFood = useSelector(state => state.availableFood);
@@ -42,43 +44,33 @@ const ProfileDay = () => {
   const [newFood, setNewFood] = useState('');
   const [showExerciseOptions, setShowExerciseOptions] = useState(false);
   const [showFoodOptions, setShowFoodOptions] = useState(false);
-  const [caloriesNeeded, setCaloriesNeeded] = useState(calculateCalories({ ...profile }, dailyActivityData, availableExercises));
-  const [caloriesReached, setCaloriesReached] = useState(calculateCalories({ ...profile }, dailyActivityData, availableFood));
-  const [proteinReached, setProteinReached] = useState(calculateReachedProtein(dailyActivityData, availableFood));
-
+  const [caloriesNeeded, setCaloriesNeeded] = useState(0);
+  const [caloriesReached, setCaloriesReached] = useState(0);
+  const [proteinReached, setProteinReached] = useState(0);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAvailableExercises());
     dispatch(fetchAvailableFood());
-  }, [dispatch, setDailyActivityData]);
+
+    fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
+      setDailyActivityData(data);
+    }).catch(error => {
+      console.log("Error fetching dailyActivityData:", error);
+    });
+
+  }, [dispatch, profile._id]);
 
 
   useEffect(() => {
-    console.log("Updated dailyActivityData:", dailyActivityData);
-    setCaloriesNeeded(calculateCalories({ ...profile }, dailyActivityData, availableExercises));
-    setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
-    setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
-  }, [dailyActivityData, profile, availableExercises]);
+    if (dailyActivityData?.exercise && dailyActivityData?.food) {
+      setCaloriesNeeded(calculateBurnedExtraCaloriesTroughExercises({ ...profile }, dailyActivityData, availableExercises));
+      setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
+      setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
+    }
+  }, [dailyActivityData, profile, availableExercises, availableFood]);
 
-  const extractExerciseData = (exercise) => {
-    console.log("extractExerciseData: ", exercise);
-    console.log({
-      exerciseId: exercise._id,
-      timeInMinutes: exercise.baseTime
-    });
-    return {
-      exerciseId: exercise._id,
-      timeInMinutes: exercise.baseTime
-    };
-  };
-
-  const extractFoodIdAndAmount = (object) => {
-    const { _id: foodId, baseAmount: amount } = object;
-    console.log("extractFoodIdAndAmount: ", { foodId, amount });
-    return { foodId, amount };
-  };
 
   const handleAddExercise = () => {
     setShowExerciseOptions(true);
@@ -96,6 +88,10 @@ const ProfileDay = () => {
   const handleExerciseSubmit = async () => {
     // Speichern der ausgewählten Übung
     if (newExercise) {
+      if (dailyActivityData.exercise.find(exercise => exercise.exerciseId === newExercise._id)) {
+        alert("Diese Übung wurde bereits hinzugefügt!");
+        return;
+      }
       // Führen Sie hier den entsprechenden Speichervorgang durch
       console.log("Selected Exercise:", newExercise);
 
@@ -131,6 +127,11 @@ const ProfileDay = () => {
   const handleFoodSubmit = async () => {
     // Speichern des ausgewählten Lebensmittels
     if (newFood) {
+      // Check if the food already exists in the dailyActivityData
+      if (dailyActivityData.food.find(food => food.foodId === newFood._id)) {
+        alert("Dieses Lebensmittel wurde bereits hinzugefügt!");
+        return;
+      }
       // Führen Sie hier den entsprechenden Speichervorgang durch
       console.log("Selected Food:", newFood);
 
@@ -170,7 +171,7 @@ const ProfileDay = () => {
       ...prevState,
       exercise: prevState.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
     }));
-    if (updateFitnessDayForProfile(dailyActivityData)) {
+    if (await updateFitnessDayForProfile(dailyActivityData)) {
       console.log("Updated dailyActivityData:", dailyActivityData);
     }
     else {
@@ -179,41 +180,39 @@ const ProfileDay = () => {
     }
   }
 
-  const handleDeleteEatenFood = (foodId) => {
-    // Löschen Sie die Übung mit der übergebenen ID
-    console.log("handleDeleteExercise: ", foodId);
-    setDailyActivityData(prevState => ({
-      ...prevState,
-      food: prevState.exercise.filter(food => food._id !== foodId),
-    }));
-    updateFitnessDayForProfile(dailyActivityData);
-    console.log("Updated dailyActivityData:", dailyActivityData);
+  const handleDeleteEatenFood = async (foodId) => {
+    // Delete the food with the passed ID
+    console.log("handleDeleteEatenFood: ", foodId);
+
+    const updatedDailyActivityData = {
+      ...dailyActivityData,
+      food: dailyActivityData.food.filter(food => food._id !== foodId),
+    };
+
+    setDailyActivityData(updatedDailyActivityData);
+
+    if (await updateFitnessDayForProfile(updatedDailyActivityData)) {
+      console.log("Updated dailyActivityData:", updatedDailyActivityData);
+    }
+    else {
+      console.log("Error updating dailyActivityData:", updatedDailyActivityData);
+      setDailyActivityData({ food: [], exercise: [] });
+    }
   }
 
-  useEffect(() => {
-    fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
-      if (data) {
-        console.log("Daily Acitivity Data vorhanden: " + data);
-        setDailyActivityData(data);
-      }
-      else {
-        console.log("Daily Acitivity Data nicht vorhanden");
-        setDailyActivityData({ food: [], exercise: [] });
-        console.log(dailyActivityData);
-      }
-    });
-  }, [profile._id, availableExercises, availableFood]);
+
+
 
   useEffect(() => {
     const newDailyActivityData = JSON.parse(JSON.stringify(dailyActivityData));
 
-    if (newDailyActivityData.food.length > 0 && availableFood) {
+    if (dailyActivityData.food && availableFood) {
       newDailyActivityData.food = newDailyActivityData.food
         .map(foodItem => availableFood.find(food => food._id === foodItem.foodId))
         .filter(Boolean);  // This will remove any undefined elements
     }
 
-    if (newDailyActivityData.exercise.length > 0 && availableExercises) {
+    if (dailyActivityData.exercise && availableExercises) {
       newDailyActivityData.exercise = newDailyActivityData.exercise
         .map(exerciseItem => availableExercises.find(exercise => exercise._id === exerciseItem.exerciseId))
         .filter(Boolean);  // This will remove any undefined elements
@@ -247,58 +246,39 @@ const ProfileDay = () => {
           </Container>
           <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
-          {showExerciseOptions ? (
-            <div style={{ marginBottom: '1rem' }}>
-              <FormControl fullWidth>
-                <InputLabel id="exercise-label">Übung auswählen</InputLabel>
-                <Select
-                  labelId="exercise-label"
-                  value={newExercise}
-                  onChange={(e) => setNewExercise(e.target.value)}
-                >
-                  {availableExercises.map(exercise => (
-                    <MenuItem key={exercise._id} value={exercise}>
-                      {exercise.name} - Dauer: {exercise.baseTime} Minuten, Kalorien: {exercise.energyBurned}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Button variant="contained" color="primary" onClick={handleExerciseSubmit}>Speichern</Button>
-            </div>
-          ) : (
-            <Button variant="contained" color="primary" onClick={handleAddExercise}>Übung hinzufügen</Button>
+          {dailyActivityData.food && dailyActivityData.exercise && (
+            <>
+              <ItemSelector
+                items={availableFood.filter(food => !dailyActivityData.food.find(f => f.foodId === food._id))}
+                label='Essen auswählen'
+                newItem={newFood}
+                setNewItem={setNewFood}
+                onSubmit={handleFoodSubmit}
+                onAddItem={handleAddFood}
+                showOptions={showFoodOptions}
+              />
+
+              <ItemSelector
+                items={availableExercises.filter(exercise => !dailyActivityData.exercise.find(e => e.exerciseId === exercise._id))}
+                label='Übung auswählen'
+                newItem={newExercise}
+                setNewItem={setNewExercise}
+                onSubmit={handleExerciseSubmit}
+                onAddItem={handleAddExercise}
+                showOptions={showExerciseOptions}
+              />
+            </>
           )}
 
-          {showFoodOptions ? (
-            <div>
-              <FormControl fullWidth>
-                <InputLabel id="food-label">Essen auswählen</InputLabel>
-                <Select
-                  labelId="food-label"
-                  value={newFood}
-                  onChange={(e) => setNewFood(e.target.value)}
-                >
-                  {availableFood.map(food => (
-                    <MenuItem key={food._id} value={food}>
-                      {food.name} - Kalorien: {food.energy}, Protein: {food.protein}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Button variant="contained" color="primary" onClick={handleFoodSubmit}>Speichern</Button>
-            </div>
-          ) : (
-            <Button variant="contained" color="primary" onClick={handleAddFood}>Essen hinzufügen</Button>
-          )}
 
           <Typography variant="subtitle1">Essen:</Typography>
-          {renderedActivityData.food.map((food, index) => (
-            <FoodItem key={index} food={food} onDelete={handleDeleteEatenFood} />
+          {renderedActivityData.food && renderedActivityData.food.map((food) => (
+            <FoodItem key={food._id} food={food} onDelete={handleDeleteEatenFood} />
           ))}
 
           <Typography variant="subtitle1">Übungen:</Typography>
-          {renderedActivityData.exercise.map((exercise, index) => (
-            <ExerciseItem key={index} exercise={exercise} onDelete={handleDeleteExercise} />
+          {renderedActivityData.exercise && renderedActivityData.exercise.map((exercise) => (
+            <ExerciseItem key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} />
           ))}
         </div>
       </Grid>

@@ -1,13 +1,3 @@
-export const getCurrentDate = () => {
-    const date = new Date();
-
-    const day = ("0" + date.getDate()).slice(-2);
-    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    const year = date.getFullYear();
-
-    return `${day}${month}${year}`;
-};
-
 const calculateBurnedCalories = (exercise, duration) => {
     const caloriesBurnedPerMinute = exercise.energyBurned / exercise.baseTime;
     const totalBurnedCalories = caloriesBurnedPerMinute * duration;
@@ -16,7 +6,7 @@ const calculateBurnedCalories = (exercise, duration) => {
 };
 
 
-export const calculateCalories = (profile, activityData, listOfExecises) => {
+export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityData, listOfExecises) => {
     const { weight, height, age, gender } = profile;
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
     let extraCaloriesforExercises = 0;
