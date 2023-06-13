@@ -11,8 +11,27 @@ import { fetchAvailableExercises } from '../../actions/availableExercisesActions
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { getCurrentDate, calculateCalories, calculateProtein, calculateReachedCalories, calculateReachedProtein } from '../../tools/tools';
 import CaloriesPieChart from '../CaloriesPieChart';
+import { useTheme } from '@mui/material/styles';
+
+import styled from '@emotion/styled';
+
+const Container = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.values.md}px) {
+    flex-direction: row;
+  }
+`;
+
+const Box = styled('div')`
+  margin-bottom: 2rem;
+`;
+
 
 const ProfileDay = () => {
+  const theme = useTheme();
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
   const [renderedActivityData, setRenderedActivityData] = useState({ food: [], exercise: [] });
@@ -160,13 +179,22 @@ const ProfileDay = () => {
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <div>
           <Typography variant="h4" style={{ marginBottom: '1rem' }}>Guten Tag, {profile.name}!</Typography>
-          <Typography variant="body1" style={{ marginBottom: '0.5rem' }}>Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
-          <Typography variant="body1" style={{ marginBottom: '0.5rem' }}>Bisher gegessene {caloriesReached} Kalorien.</Typography>
-          <div style={{ width: '200px', height: '200px' }}>
-            <CaloriesPieChart consumed={caloriesReached} total={caloriesNeeded} />
-          </div>
-          <Typography variant="body1" style={{ marginBottom: '2rem' }}>Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
-          <Typography variant="body1" style={{ marginBottom: '2rem' }}>Protein/Eiweiß heute bisher gegessen: {proteinReached.toFixed(2)}g</Typography>
+          <Container theme={theme}>
+            <Box>
+              <Typography variant="body1">Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
+              <Typography variant="body1">Bisher gegessene {caloriesReached} Kalorien.</Typography>
+              <div style={{ width: '200px', height: '200px' }}>
+                <CaloriesPieChart consumed={caloriesReached} total={caloriesNeeded} />
+              </div>
+            </Box>
+            <Box>
+              <Typography variant="body1">Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
+              <Typography variant="body1">Protein/Eiweiß heute bisher gegessen: {proteinReached.toFixed(2)}g</Typography>
+              <div style={{ width: '200px', height: '200px' }}>
+                <CaloriesPieChart consumed={proteinReached} total={proteinNeeded} />
+              </div>
+            </Box>
+          </Container>
           <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
           {showExerciseOptions ? (
