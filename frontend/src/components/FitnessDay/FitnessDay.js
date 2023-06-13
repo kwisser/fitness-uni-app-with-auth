@@ -8,6 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import FoodItem from '../FitnessFood/FoodItem/FoodItem';
 import ExerciseItem from '../FitnessExercises/ExerciseItem';
 import ItemSelector from '../ItemSelector/ItemSelector';
+
 import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
@@ -36,7 +37,7 @@ const Box = styled('div')`
 const ProfileDay = () => {
   const theme = useTheme();
   const profile = useSelector(state => state.profile);
-  const [dailyActivityData, setDailyActivityData] = useState({ food: null, exercise: null });
+  const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
   const [renderedActivityData, setRenderedActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
   const availableFood = useSelector(state => state.availableFood);
@@ -47,6 +48,7 @@ const ProfileDay = () => {
   const [caloriesNeeded, setCaloriesNeeded] = useState(0);
   const [caloriesReached, setCaloriesReached] = useState(0);
   const [proteinReached, setProteinReached] = useState(0);
+  const [dailyActivityDataExisting, setDailyActivityDataExisting] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -56,6 +58,8 @@ const ProfileDay = () => {
 
     fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
       setDailyActivityData(data);
+      setDailyActivityDataExisting(true);
+      console.log("Fetched dailyActivityData:", data);
     }).catch(error => {
       console.log("Error fetching dailyActivityData:", error);
     });
@@ -86,99 +90,101 @@ const ProfileDay = () => {
   };
 
   const handleExerciseSubmit = async () => {
-    // Speichern der ausgewählten Übung
-    if (newExercise) {
-      if (dailyActivityData.exercise.find(exercise => exercise.exerciseId === newExercise._id)) {
-        alert("Diese Übung wurde bereits hinzugefügt!");
-        return;
-      }
-      // Führen Sie hier den entsprechenden Speichervorgang durch
-      console.log("Selected Exercise:", newExercise);
+    // Save selected exercise
+    if (!newExercise) return;
 
-      setDailyActivityData(prevState => ({
-        ...prevState,
-        exercise: [...prevState.exercise, extractExerciseData(newExercise)],
-      }));
+    console.log("New Exercise: ", newExercise);
 
-      if (dailyActivityData.exercise.length > 0) {
-
-        if (await updateFitnessDayForProfile(dailyActivityData)) {
-          console.log("Updated dailyActivityData:", dailyActivityData);
-        }
-        else {
-          console.log("Error updating dailyActivityData:", dailyActivityData);
-          setDailyActivityData({ food: [], exercise: [] });
-        }
-        setShowExerciseOptions(false);
-      }
-      else {
-        if (await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, profile._id, getCurrentDate()))) {
-          console.log("Inserted dailyActivityData:", dailyActivityData);
-        }
-        else {
-          console.log("Error inserting dailyActivityData:", dailyActivityData);
-          setDailyActivityData({ food: [], exercise: [] });
-        }
-        setShowExerciseOptions(false);
-      }
+    if (dailyActivityData?.exercise.find(exercise => exercise.exerciseId === newExercise._id)) {
+      alert("This exercise has already been added!");
+      return;
     }
+
+    console.log("Selected Exercise: ", newExercise);
+
+    const newDailyActivityData = {
+      ...dailyActivityData,
+      exercise: [...dailyActivityData?.exercise || [], extractExerciseData(newExercise)],
+    };
+
+    setDailyActivityData(newDailyActivityData);
+
+    try {
+      const operationSuccess = dailyActivityDataExisting
+        ? await updateFitnessDayForProfile(newDailyActivityData)
+        : await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, profile._id, getCurrentDate()));
+
+      if (operationSuccess) {
+        console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);
+      } else {
+        throw new Error(`${dailyActivityDataExisting ? "Updating" : "Inserting"} dailyActivityData failed`);
+      }
+    } catch (error) {
+      console.log(`Error ${dailyActivityDataExisting ? "updating" : "inserting"} dailyActivityData: `, newDailyActivityData);
+      setDailyActivityData({ food: [], exercise: [] });
+    }
+
+    setShowExerciseOptions(false);
   };
+
 
   const handleFoodSubmit = async () => {
-    // Speichern des ausgewählten Lebensmittels
-    if (newFood) {
-      // Check if the food already exists in the dailyActivityData
-      if (dailyActivityData.food.find(food => food.foodId === newFood._id)) {
-        alert("Dieses Lebensmittel wurde bereits hinzugefügt!");
-        return;
-      }
-      // Führen Sie hier den entsprechenden Speichervorgang durch
-      console.log("Selected Food:", newFood);
+    // Saving selected food item
+    if (!newFood) return;
 
-      setDailyActivityData(prevState => ({
-        ...prevState,
-        food: [...prevState.food, extractFoodIdAndAmount(newFood)],
-      }));
+    console.log("New food item: ", newFood);
+    // Check if the food already exists in the dailyActivityData
+    if (dailyActivityData?.food?.find(food => food._id === newFood._id)) {
+      alert("This food item has already been added!");
+      return;
+    }
 
-      if (dailyActivityData.food.length > 0) {
-        if (await updateFitnessDayForProfile(dailyActivityData)) {
-          console.log("Updated dailyActivityData:", dailyActivityData);
-        }
-        else {
-          console.log("Error updating dailyActivityData:", dailyActivityData);
-          return false
-        }
-      }
+    const updatedFoodList = [...(dailyActivityData?.food || []), extractFoodIdAndAmount(newFood)];
+    console.log("Updated food list: ", updatedFoodList);
+    const updatedDailyActivityData = { ...dailyActivityData, food: updatedFoodList };
 
-      else {
-        if (await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, getCurrentDate()))) {
-          console.log("Inserted dailyActivityData:", dailyActivityData);
-        }
-        else {
-          console.log("Error inserting dailyActivityData:", dailyActivityData);
-          setDailyActivityData({ food: [], exercise: [] });
-          return false
-        }
-        setShowFoodOptions(false);
+    setDailyActivityData(updatedDailyActivityData);
+
+    try {
+      if (dailyActivityDataExisting) {
+        console.log("Existing daily activity data: ", dailyActivityDataExisting);
+        const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
+        console.log("Updated dailyActivityData: ", updatedDailyActivityData);
+        return updateResult;
+      } else {
+        const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, getCurrentDate()));
+        console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
+        return insertResult;
       }
+    } catch (error) {
+      console.error("Error updating or inserting dailyActivityData: ", error);
+      setDailyActivityData({ food: [], exercise: [] });
+    } finally {
+      setShowFoodOptions(false);
     }
   };
+
 
   const handleDeleteExercise = async (exerciseId) => {
     // Löschen Sie die Übung mit der übergebenen ID
     console.log("handleDeleteExercise: ", exerciseId);
-    setDailyActivityData(prevState => ({
-      ...prevState,
-      exercise: prevState.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
-    }));
-    if (await updateFitnessDayForProfile(dailyActivityData)) {
-      console.log("Updated dailyActivityData:", dailyActivityData);
-    }
-    else {
-      console.log("Error updating dailyActivityData:", dailyActivityData);
+
+    const updatedDailyActivityData = {
+      ...dailyActivityData,
+      exercise: dailyActivityData.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
+    };
+
+    setDailyActivityData(updatedDailyActivityData);
+
+    try {
+      await updateFitnessDayForProfile(updatedDailyActivityData);
+      console.log("Updated dailyActivityData:", updatedDailyActivityData);
+    } catch (error) {
+      console.log("Error updating dailyActivityData:", updatedDailyActivityData);
       setDailyActivityData({ food: [], exercise: [] });
     }
   }
+
 
   const handleDeleteEatenFood = async (foodId) => {
     // Delete the food with the passed ID
@@ -186,20 +192,23 @@ const ProfileDay = () => {
 
     const updatedDailyActivityData = {
       ...dailyActivityData,
-      food: dailyActivityData.food.filter(food => food._id !== foodId),
+      food: dailyActivityData.food.filter(food => food.foodId !== foodId),
     };
 
-    setDailyActivityData(updatedDailyActivityData);
+    console.log("DailyActivityData: ", updatedDailyActivityData);
+    console.log("Updated dailyActivityData: ", updatedDailyActivityData);
 
-    if (await updateFitnessDayForProfile(updatedDailyActivityData)) {
+    try {
+      await updateFitnessDayForProfile(updatedDailyActivityData)
       console.log("Updated dailyActivityData:", updatedDailyActivityData);
+      // After a successful update, set the local state.
+      setDailyActivityData(updatedDailyActivityData);
     }
-    else {
+    catch (error) {
       console.log("Error updating dailyActivityData:", updatedDailyActivityData);
       setDailyActivityData({ food: [], exercise: [] });
     }
-  }
-
+  };
 
 
 
@@ -246,30 +255,27 @@ const ProfileDay = () => {
           </Container>
           <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
-          {dailyActivityData.food && dailyActivityData.exercise && (
-            <>
-              <ItemSelector
-                items={availableFood.filter(food => !dailyActivityData.food.find(f => f.foodId === food._id))}
-                label='Essen auswählen'
-                newItem={newFood}
-                setNewItem={setNewFood}
-                onSubmit={handleFoodSubmit}
-                onAddItem={handleAddFood}
-                showOptions={showFoodOptions}
-              />
+          <>
+            <ItemSelector
+              items={availableFood.filter(food => !dailyActivityData?.food?.find(f => f.foodId === food._id))}
+              label='Essen auswählen'
+              newItem={newFood}
+              setNewItem={setNewFood}
+              onSubmit={handleFoodSubmit}
+              onAddItem={handleAddFood}
+              showOptions={showFoodOptions}
+            />
 
-              <ItemSelector
-                items={availableExercises.filter(exercise => !dailyActivityData.exercise.find(e => e.exerciseId === exercise._id))}
-                label='Übung auswählen'
-                newItem={newExercise}
-                setNewItem={setNewExercise}
-                onSubmit={handleExerciseSubmit}
-                onAddItem={handleAddExercise}
-                showOptions={showExerciseOptions}
-              />
-            </>
-          )}
-
+            <ItemSelector
+              items={availableExercises.filter(exercise => !dailyActivityData?.exercise?.find(e => e.exerciseId === exercise._id))}
+              label='Übung auswählen'
+              newItem={newExercise}
+              setNewItem={setNewExercise}
+              onSubmit={handleExerciseSubmit}
+              onAddItem={handleAddExercise}
+              showOptions={showExerciseOptions}
+            />
+          </>
 
           <Typography variant="subtitle1">Essen:</Typography>
           {renderedActivityData.food && renderedActivityData.food.map((food) => (

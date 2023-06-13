@@ -1,6 +1,13 @@
 import { Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 const ItemSelector = ({ items, label, newItem, setNewItem, onSubmit, onAddItem, showOptions }) => {
+
+    const onSubmitItemChoosen = (e) => {
+        e.preventDefault();
+        console.log(e.target.value);
+        onSubmit(e.target.value);
+    };
+
     return (
         <>
             {showOptions ? (
@@ -22,7 +29,7 @@ const ItemSelector = ({ items, label, newItem, setNewItem, onSubmit, onAddItem, 
                             ))}
                         </Select>
                     </FormControl>
-                    <Button variant="contained" color="primary" onClick={onSubmit}>Speichern</Button>
+                    <Button variant="contained" color="primary" onClick={onSubmitItemChoosen}>Speichern</Button>
                 </div>
             ) : (
                 <Button variant="contained" color="primary" onClick={onAddItem}>{`${label.split(' ')[0]} hinzufügen`}</Button>
