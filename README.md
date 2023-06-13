@@ -4,7 +4,7 @@
 
 ### To Dos
 
-- [ ] Essen hinzufügen
+- [x] Essen hinzufügen
 - [ ] Essen löschen
 - [ ] Essen bearbeiten
 - [ ] Essen anzeigen
