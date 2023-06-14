@@ -1,10 +1,24 @@
 import axios from "./axios";
 
 const GET_FITNESS_DAY_URL = "/fitness/day";
+const GET_FITNESS_DAYS_URL = "/fitness/days";
 
 export const fetchActivityForDayForProfileId = async (profileId, date) => {
   try {
     const { data } = await axios.get(`${GET_FITNESS_DAY_URL}/${profileId}/${date}`);
+    // Prüfen, ob Daten in der Antwort vorhanden sind
+    if (data && data.length > 0) {
+      return data[0];
+    }
+    return [];
+  } catch (error) {
+    console.error("Es gab einen Fehler beim Abrufen der täglichen Aktivitäten: ", error);
+  }
+};
+
+export const fetchAllActivitysForProfileId = async (profileId) => {
+  try {
+    const { data } = await axios.get(`${GET_FITNESS_DAYS_URL}/${profileId}`);
     // Prüfen, ob Daten in der Antwort vorhanden sind
     if (data && data.length > 0) {
       return data[0];
