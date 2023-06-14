@@ -9,7 +9,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Auth/Login";
 import Exercises from "./pages/Exercises";
 import Food from "./pages/Food";
-import NoPage from "./pages/NoPage";
 import Register from "./pages/Auth/Register/Register";
 import Logout from "./pages/Auth/Logout";
 import CalendarOverview from "./pages/Calendar/CalendarOverview";
@@ -44,7 +43,7 @@ root.render(
             <Route path="profiles/:id" element={<Profiles />} />
             <Route path="register" element={<Register />} />
             <Route path="logout" element={<Logout />} />
-            <Route path="*" element={<NoPage />} />
+            <Route path="*" element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>

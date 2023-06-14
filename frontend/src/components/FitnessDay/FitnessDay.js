@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import CaloriesPieChart from '../CaloriesPieChart';
+import CaloriesPieChart from './FitnessDayActivities/CaloriesPieChart';
 import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
