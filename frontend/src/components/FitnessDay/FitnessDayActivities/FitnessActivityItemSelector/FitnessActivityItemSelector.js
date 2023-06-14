@@ -2,8 +2,6 @@ import { Button, Select, MenuItem, FormControl, InputLabel, TextField } from '@m
 
 const FitnessActivityItemSelector = ({ items, label, newItem, setNewItem, quantity, setQuantity, onSubmit, onAddItem, showOptions }) => {
 
-    console.log("items:" + items);
-
     return (
         <>
             {showOptions ? (

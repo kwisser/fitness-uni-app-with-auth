@@ -4,7 +4,7 @@ import FoodItem from '../../../FitnessFood/FoodItem/FoodItem';
 
 import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
 
-const FoodActivities = ({ renderedActivityData, dailyActivityData, setDailyActivityData }) => {
+const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
     const handleDeleteEatenFood = async (foodId) => {
         // Delete the food with the passed ID
@@ -34,7 +34,7 @@ const FoodActivities = ({ renderedActivityData, dailyActivityData, setDailyActiv
         <div className="food-activities">
 
             <Typography variant="subtitle1">Essen:</Typography>
-            {renderedActivityData.food && renderedActivityData.food.map((food) => (
+            {dailyActivityData.food && dailyActivityData.food.map((food) => (
                 <FoodItem key={food._id} food={food} onDelete={handleDeleteEatenFood} />
             ))}
 

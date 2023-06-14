@@ -1,14 +1,16 @@
 import ExerciseActivities from './ExerciseActivities/ExerciseActivities';
 import FoodActivities from './FoodActivities/FoodActivities';
 
-const FitnessDayActivities = ({ renderedActivityData, dailyActivityData, setDailyActivityData }) => {
+const FitnessDayActivities = ({ dailyActivityData, setDailyActivityData }) => {
+
+    console.log('FitnessDayActivities dailyActivityData: ', dailyActivityData);
 
     return (
         <div className="fitness-day-activities">
 
-            <FoodActivities renderedActivityData={renderedActivityData} dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
+            <FoodActivities dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
 
-            <ExerciseActivities renderedActivityData={renderedActivityData} dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
+            <ExerciseActivities dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
 
         </div>
     );

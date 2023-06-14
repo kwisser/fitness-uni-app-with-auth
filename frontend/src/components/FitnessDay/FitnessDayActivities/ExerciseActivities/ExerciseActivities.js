@@ -4,7 +4,7 @@ import ExerciseItem from '../../../FitnessExercises/ExerciseItem';
 
 import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
 
-const ExerciseActivities = ({ renderedActivityData, dailyActivityData, setDailyActivityData }) => {
+const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
     const handleDeleteExercise = async (exerciseId) => {
         // Löschen Sie die Übung mit der übergebenen ID
@@ -30,7 +30,7 @@ const ExerciseActivities = ({ renderedActivityData, dailyActivityData, setDailyA
         <div className="exercise-activities">
 
             <Typography variant="subtitle1">Übungen:</Typography>
-            {renderedActivityData.exercise && renderedActivityData.exercise.map((exercise) => (
+            {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise) => (
                 <ExerciseItem key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} />
             ))}
 

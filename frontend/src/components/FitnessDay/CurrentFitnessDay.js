@@ -145,7 +145,7 @@ const ProfileDay = () => {
 
     // Extracting food data should now also include the quantity
     const newFoodData = extractFoodIdAndAmount(newFood);
-    newFoodData.quantity = foodQuantity;
+    newFoodData.amount = foodQuantity;
 
     const updatedFoodList = [...(dailyActivityData?.food || []), newFoodData];
     console.log("Updated food list: ", updatedFoodList);
