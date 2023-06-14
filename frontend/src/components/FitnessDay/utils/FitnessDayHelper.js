@@ -1,5 +1,4 @@
 export function createFitnessDayJSON(input, isFood, profileId, date) {
-    console.log("createFitnessDayJSON Input: ", input);
     const result = {
         "date": date,
         "profileId": profileId,
@@ -20,20 +19,17 @@ export function createFitnessDayJSON(input, isFood, profileId, date) {
             },
         ];
     }
-    console.log("createdFitnessDayJSON: ", result);
     return result;
 }
 
 export const extractExerciseData = (exercise, exerciseDuration = exercise.baseTime) => {
-    const extractedExercise = {
+    return {
         exerciseId: exercise._id,
         timeInMinutes: parseInt(exerciseDuration)
     }
-    return extractedExercise;
 };
 
 export const extractFoodIdAndAmount = (object) => {
     const { _id: foodId, baseAmount: amount } = object;
-    console.log("extractFoodIdAndAmount: ", { foodId, amount });
     return { foodId, amount };
 };
