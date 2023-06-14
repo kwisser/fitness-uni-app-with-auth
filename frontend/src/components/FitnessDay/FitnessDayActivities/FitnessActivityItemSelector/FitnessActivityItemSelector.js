@@ -1,8 +1,6 @@
-import { Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Button, Select, MenuItem, FormControl, InputLabel, TextField } from '@mui/material';
 
-const ItemSelector = ({ items, label, newItem, setNewItem, onSubmit, onAddItem, showOptions }) => {
-
-    console.log("items:" + items);
+const FitnessActivityItemSelector = ({ items, label, newItem, setNewItem, quantity, setQuantity, onSubmit, onAddItem, showOptions }) => {
 
     return (
         <>
@@ -25,6 +23,12 @@ const ItemSelector = ({ items, label, newItem, setNewItem, onSubmit, onAddItem, 
                                 </MenuItem>
                             ))}
                         </Select>
+                        <TextField
+                            label={label === 'Übung auswählen' ? "Dauer (in Minuten)" : "Menge"}
+                            value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}
+                            style={{ marginTop: '1rem' }}
+                        />
                     </FormControl>
                     <Button variant="contained" color="primary" onClick={onSubmit}>Speichern</Button>
                 </div>
@@ -35,4 +39,4 @@ const ItemSelector = ({ items, label, newItem, setNewItem, onSubmit, onAddItem, 
     );
 };
 
-export default ItemSelector;
+export default FitnessActivityItemSelector;

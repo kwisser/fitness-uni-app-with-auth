@@ -24,16 +24,12 @@ export function createFitnessDayJSON(input, isFood, profileId, date) {
     return result;
 }
 
-export const extractExerciseData = (exercise) => {
-    console.log("extractExerciseData: ", exercise);
-    console.log({
+export const extractExerciseData = (exercise, exerciseDuration = exercise.baseTime) => {
+    const extractedExercise = {
         exerciseId: exercise._id,
-        timeInMinutes: exercise.baseTime
-    });
-    return {
-        exerciseId: exercise._id,
-        timeInMinutes: exercise.baseTime
-    };
+        timeInMinutes: parseInt(exerciseDuration)
+    }
+    return extractedExercise;
 };
 
 export const extractFoodIdAndAmount = (object) => {

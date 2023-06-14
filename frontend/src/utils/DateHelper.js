@@ -7,3 +7,12 @@ export const getCurrentDate = () => {
 
     return `${day}${month}${year}`;
 };
+
+export const formatDate = (date) => {
+
+    const parts = date.split("-");  // Teilt den String an den '-' Zeichen
+
+    // parts[0] ist das Jahr, parts[1] ist der Monat, parts[2] ist der Tag
+    const output = parts[2] + parts[1] + parts[0];
+    return output;
+}
