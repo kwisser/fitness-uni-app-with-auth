@@ -2,14 +2,12 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire, faDumbbell, faBullseye, faUtensils, faTint, faLeaf, faMugHot, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Card, CardActions, CardContent, Button, Typography, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import './FoodItem.css';
 
-const FoodItem = ({ food, onDelete }) => {
-  const navigate = useNavigate();
+const FoodItem = ({ food, onDelete, onEdit }) => {
 
   const handleEdit = () => {
-    navigate(`/food/edit/${food._id}`);
+    onEdit(food._id);
   };
 
   const handleDelete = async () => {

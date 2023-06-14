@@ -2,7 +2,7 @@ import axios from '../api/axios';
 
 const FOOD_URL = 'fitness/food/';
 
-const fetchAvailableFitnessFood = async (filter) => {
+export const fetchAvailableFitnessFood = async (filter) => {
   let url = FOOD_URL;
   if (filter === "drinks") {
     url += "drink";
@@ -25,6 +25,3 @@ export const deleteFoodItem = async (foodId) => {
     console.log(error);
   }
 };
-
-
-export default fetchAvailableFitnessFood;

@@ -4,15 +4,15 @@ const GET_FITNESS_DAY_URL = "/fitness/day";
 
 export const fetchActivityForDay = async (profileId, date) => {
   try {
-    const response = await axios.get(`${GET_FITNESS_DAY_URL}/${profileId}/${date}`);
+    const { data } = await axios.get(`${GET_FITNESS_DAY_URL}/${profileId}/${date}`);
 
     // Prüfen, ob Daten in der Antwort vorhanden sind
-    if (response.data && response.data.length > 0) {
-      console.log("fetchActivityForDay: ", response.data[0]);
-      return response.data[0];
+    if (data && data.length > 0) {
+      console.log("fetchActivityForDay: ", data[0]);
+      return data[0];
     } else {
-      // Setzen Sie die Zustände auf leere Arrays, wenn keine Daten vorhanden sind
-      return null;
+      console.log("fetchActivityForDay: ", null);
+      return [];
     }
   } catch (error) {
     // Fehler beim Abrufen der Daten
@@ -20,22 +20,34 @@ export const fetchActivityForDay = async (profileId, date) => {
   }
 };
 
-export const updateFitnessDayForProfile = async (data) => {
-  console.log("updateFitnessDayForProfile: ", data);
+export const insertFitnessDayForProfile = async (data) => {
+  console.log("Inserting FitnessDayForProfile: ", data);
   try {
     data = renameIdField(data);
-    axios.put(GET_FITNESS_DAY_URL, data)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    delete data.dayId;
+    const response = await axios.post(GET_FITNESS_DAY_URL, data);
+    console.log(response);
+    return true;
   } catch (error) {
-    // Fehler beim Abrufen der Daten
-    console.error("Es gab einen Fehler beim Abrufen der täglichen Aktivitäten: ", error);
+    console.error("Error posting FitnessDay Profile Data: ", error);
+    throw error; // Throw the error so the calling function can handle it
   }
 };
+
+export const updateFitnessDayForProfile = async (data) => {
+  console.log("Updating FitnessDayForProfile: ", data);
+  try {
+    data = renameIdField(data);
+    const response = await axios.put(GET_FITNESS_DAY_URL, data);
+    console.log(response);
+    return true;
+  } catch (error) {
+    console.error("Error updating daily activities: ", error);
+    throw error; // Throw the error so the calling function can handle it
+  }
+};
+
+
 
 const renameIdField = (object) => {
   const { _id: dayId, ...rest } = object;

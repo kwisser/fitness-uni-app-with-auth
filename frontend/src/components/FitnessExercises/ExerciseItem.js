@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faFire, faTrash, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 import { updateFitnessExercise } from '../../api/fitnessExercisesApi';
 
-const ExerciseItem = ({ exercise, onDelete }) => {
+const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedExercise, setEditedExercise] = useState({ ...exercise });
 
@@ -19,6 +19,7 @@ const ExerciseItem = ({ exercise, onDelete }) => {
   const handleSave = () => {
     updateFitnessExercise(editedExercise);
     setIsEditing(false);
+    onEdit(exercise._id, editedExercise); // Aufruf der onEdit-Funktion in der übergeordneten Komponente
   };
 
   const handleDelete = () => {
