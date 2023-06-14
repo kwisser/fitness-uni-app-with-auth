@@ -32,7 +32,7 @@ const Box = styled('div')`
 `;
 
 
-const FitnessDay = ({ userId, date = false }) => {
+const FitnessDay = ({ userid, date = false }) => {
   const theme = useTheme();
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
@@ -50,6 +50,7 @@ const FitnessDay = ({ userId, date = false }) => {
   const [exerciseDuration, setExerciseDuration] = useState('');
   const [foodQuantity, setFoodQuantity] = useState('');
 
+  const userId = userid || profile._id;
   const dispatch = useDispatch();
 
   useEffect(() => {
