@@ -11,7 +11,6 @@ import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
 import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { getCurrentDate } from '../../utils/DateHelper';
 import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein } from './utils/nutritionCalculations';
 import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
 
@@ -33,7 +32,7 @@ const Box = styled('div')`
 `;
 
 
-const FitnessDay = () => {
+const FitnessDay = ({ userId, date }) => {
   const theme = useTheme();
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
@@ -57,7 +56,7 @@ const FitnessDay = () => {
     dispatch(fetchAvailableExercises());
     dispatch(fetchAvailableFood());
 
-    fetchActivityForDay(profile._id, getCurrentDate()).then(data => {
+    fetchActivityForDay(userId, date).then(data => {
       if (data && Object.keys(data).length > 0) {
         setDailyActivityData(data);
         setDailyActivityDataExisting(true);
@@ -70,7 +69,7 @@ const FitnessDay = () => {
       console.log("Error fetching dailyActivityData:", error);
     });
 
-  }, [dispatch, profile._id]);
+  }, [dispatch, userId, date]);
 
 
   useEffect(() => {
@@ -123,7 +122,7 @@ const FitnessDay = () => {
     try {
       const operationSuccess = dailyActivityDataExisting
         ? await updateFitnessDayForProfile(newDailyActivityData)
-        : await insertFitnessDayForProfile(createFitnessDayJSON(newDailyActivityData), false, profile._id, getCurrentDate());
+        : await insertFitnessDayForProfile(createFitnessDayJSON(newDailyActivityData), false, profile._id, date);
 
       if (operationSuccess) {
         console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);
@@ -161,7 +160,7 @@ const FitnessDay = () => {
         console.log("Updated dailyActivityData: ", updatedDailyActivityData);
         return updateResult;
       } else {
-        const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, getCurrentDate()));
+        const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, date));
         console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
         return insertResult;
       }
