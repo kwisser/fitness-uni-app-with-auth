@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material';
 
-import FoodItem from '../../../FitnessFood/FoodItem/FoodItem';
 
 import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
+import FoodItemActivity from '../../../FitnessFood/FoodItem/FoodItemActivity';
 
 const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
@@ -35,7 +35,7 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
             <Typography variant="subtitle1">Essen:</Typography>
             {dailyActivityData.food && dailyActivityData.food.map((food) => (
-                <FoodItem key={food._id} food={food} onDelete={handleDeleteEatenFood} />
+                <FoodItemActivity key={food._id} food={food} onDelete={handleDeleteEatenFood} />
             ))}
 
         </div>
