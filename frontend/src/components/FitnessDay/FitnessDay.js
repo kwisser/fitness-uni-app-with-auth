@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import FitnessActivityItemSelector from './FitnessDayActivities/FitnessActivityItemSelector/FitnessActivityItemSelector';
 import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
 
-import { fetchActivityForDay, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
+import { fetchActivityForDayForProfileId, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein } from './utils/nutritionCalculations';
@@ -56,7 +56,7 @@ const FitnessDay = ({ userId, date }) => {
     dispatch(fetchAvailableExercises());
     dispatch(fetchAvailableFood());
 
-    fetchActivityForDay(userId, date).then(data => {
+    fetchActivityForDayForProfileId(userId, date).then(data => {
       if (data && Object.keys(data).length > 0) {
         setDailyActivityData(data);
         setDailyActivityDataExisting(true);
