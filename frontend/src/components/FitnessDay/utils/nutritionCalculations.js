@@ -50,18 +50,28 @@ export const calculateReachedCalories = (activityData, listOfFood) => {
 };
 
 export const calculateReachedProtein = (activityData, listOfFood) => {
-
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
+    console.log("base amount: ", listOfFood[0].baseAmount)
     let proteinEaten = 0;
     if (!activityData.food) return 0;
     for (let foodActivity of activityData.food) {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            proteinEaten += foodItem.protein;
+            const amountOfFoodEeaten = foodActivity.amount;
+            console.log("food item: " + foodItem.name + " protein: " + foodItem.protein + " amount: " + amountOfFoodEeaten)
+            const protein = parseInt(foodItem.protein);
+            const baseAmount = foodItem.baseAmount;
+            const nutrientPer100g = calculateNutrientPer100g(protein, baseAmount);
+            proteinEaten += (nutrientPer100g * amountOfFoodEeaten) / 100;
         }
     }
+    console.log("proteinEaten: ", proteinEaten)
     return proteinEaten;
+};
+
+const calculateNutrientPer100g = (nutrientAmount, baseAmount) => {
+    return (nutrientAmount / baseAmount) * 100;
 };
 
 
