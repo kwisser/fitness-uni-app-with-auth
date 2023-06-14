@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import CaloriesPieChart from '../CaloriesPieChart';
 import { Grid, Typography } from '@mui/material';
-import { duration, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
 import FitnessActivityItemSelector from './FitnessDayActivities/FitnessActivityItemSelector/FitnessActivityItemSelector';
 import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
@@ -75,6 +75,7 @@ const ProfileDay = () => {
 
   useEffect(() => {
     if (dailyActivityData?.exercise && dailyActivityData?.food) {
+      console.log("in use effect for setting calories/protein")
       setCaloriesNeeded(calculateBurnedExtraCaloriesTroughExercises({ ...profile }, dailyActivityData, availableExercises));
       setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
       setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
@@ -203,14 +204,14 @@ const ProfileDay = () => {
               <Typography variant="body1">Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
               <Typography variant="body1">Bisher gegessene {caloriesReached} Kalorien.</Typography>
               <div style={{ width: '200px', height: '200px' }}>
-                <CaloriesPieChart consumed={caloriesReached} total={caloriesNeeded} />
+                <CaloriesPieChart key={caloriesReached} consumed={caloriesReached} total={caloriesNeeded} />
               </div>
             </Box>
             <Box>
               <Typography variant="body1">Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
               <Typography variant="body1">Protein/Eiweiß heute bisher gegessen: {proteinReached.toFixed(2)}g</Typography>
               <div style={{ width: '200px', height: '200px' }}>
-                <CaloriesPieChart consumed={proteinReached} total={proteinNeeded} />
+                <CaloriesPieChart key={proteinReached} consumed={proteinReached} total={proteinNeeded} />
               </div>
             </Box>
           </Container>
@@ -242,7 +243,7 @@ const ProfileDay = () => {
             />
           </>
 
-          <FitnessDayActivities renderedActivityData={renderedActivityData} dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
+          <FitnessDayActivities dailyActivityData={dailyActivityData} setDailyActivityData={setDailyActivityData} />
 
         </div>
       </Grid>

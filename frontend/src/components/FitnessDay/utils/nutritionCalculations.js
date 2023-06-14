@@ -1,4 +1,5 @@
 const calculateBurnedCalories = (exercise, duration) => {
+    console.log("calculateBurnedCalories: ", exercise, duration)
     const caloriesBurnedPerMinute = exercise.energyBurned / exercise.baseTime;
     const totalBurnedCalories = caloriesBurnedPerMinute * duration;
 
@@ -7,7 +8,9 @@ const calculateBurnedCalories = (exercise, duration) => {
 
 
 export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityData, listOfExecises) => {
-    const { weight, height, age, gender } = profile;
+    console.log("calculateBurnedExtraCaloriesTroughExercises: ", profile, activityData, listOfExecises)
+    console.log(profile)
+    const { weight, height, age, sex } = profile;
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
     let extraCaloriesforExercises = 0;
     for (let exerciseActivity of activityData.exercise) {
@@ -20,7 +23,7 @@ export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityDat
 
     // Berechnen Sie die Basiskalorien basierend auf dem Profil
     let baseCalories;
-    if (gender === 'male') {
+    if (sex === 0 || 'male') {
         baseCalories = (10 * weight) + (6.25 * height) - (5 * age) + 5;
     } else {
         baseCalories = (10 * weight) + (6.25 * height) - (5 * age) - 161;
@@ -55,7 +58,6 @@ export const calculateReachedProtein = (activityData, listOfFood) => {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            console.log("foodItem: " + foodItem);
             proteinEaten += foodItem.protein;
         }
     }

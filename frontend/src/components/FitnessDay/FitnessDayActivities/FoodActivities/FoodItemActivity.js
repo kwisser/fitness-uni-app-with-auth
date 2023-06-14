@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFire, faDumbbell, faBullseye, faUtensils, faTint, faLeaf, faEdit, faTrash, faAd } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faSave, faDumbbell, faBullseye, faUtensils, faTint, faLeaf, faEdit, faTrash, faAd } from '@fortawesome/free-solid-svg-icons';
 import { Card, CardActions, CardContent, Button, Typography, Box } from '@mui/material';
-import './FoodItem.css';
+import '../../../FitnessFood/FoodItem/FoodItem.css';
 
 const FoodItemActivity = ({ food, onDelete, onEdit }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedFood, setEditedFood] = useState({ ...food });
 
     const availableFood = useSelector(state => state.availableFood);
     const [fullFoodData, setFullFoodData] = useState(food);
@@ -14,10 +16,25 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
         const foodData = availableFood.find(item => item._id === food.foodId);
         if (foodData) {
             setFullFoodData({ ...food, ...foodData });
+            setEditedFood({ ...food, ...foodData }); // set editedFood when fullFoodData is set
         }
     }, [availableFood, food]);
+
+    const handleInputChange = (e) => {
+        const { value } = e.target;
+        setEditedFood((prevFood) => ({
+            ...prevFood,
+            amount: value
+        }));
+    };
+
     const handleEdit = () => {
-        onEdit(food._id);
+        setIsEditing(true);
+    };
+
+    const handleSave = () => {
+        onEdit(editedFood._id, editedFood); // Aufruf der onEdit-Funktion in der übergeordneten Komponente
+        setIsEditing(false);
     };
 
     const handleDelete = async () => {
@@ -25,10 +42,10 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
     };
 
     const displayAmount = (value) => {
-        return value * fullFoodData.amount;
+        return value * editedFood.amount;
     };
 
-    console.log("fullFoodData: ", fullFoodData);
+
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -75,12 +92,26 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faAd} className="faAd" /> Amount
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {fullFoodData.amount}
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                name="amount"
+                                value={editedFood.amount}
+                                onChange={handleInputChange}
+                                className="food-input"
+                            />
+                        ) : (
+                            editedFood.amount
+                        )}
                     </Box>
                 </Typography>
             </CardContent>
             <CardActions>
-                {fullFoodData.amount && (
+                {isEditing ? (
+                    <Button size="small" onClick={handleSave}>
+                        <FontAwesomeIcon icon={faSave} />
+                    </Button>
+                ) : (
                     <>
                         <Button size="small" onClick={handleEdit}>
                             <FontAwesomeIcon icon={faEdit} />

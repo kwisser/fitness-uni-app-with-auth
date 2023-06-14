@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import ExerciseItem from '../../../FitnessExercises/ExerciseItem';
+import ExerciseItemActivity from './ExerciseItemActivity';
 
 import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
 
@@ -12,7 +12,7 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
-            exercise: dailyActivityData.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
+            exercise: dailyActivityData.exercise.filter(exercise => exercise._id !== exerciseId),
         };
 
         setDailyActivityData(updatedDailyActivityData);
@@ -26,13 +26,41 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
         }
     }
 
+    const handleSaveExercise = async (exerciseId, editedExercise) => {
+        // Update the exercise with the passed in editedExercise
+        console.log("handleSaveExercise: ", exerciseId, editedExercise);
+
+        // Prepare the updated daily activity data but don't set it in the state yet
+        const updatedExercises = dailyActivityData.exercise.map((exercise) =>
+            exercise._id === exerciseId ? editedExercise : exercise
+        );
+
+        const updatedDailyActivityData = {
+            ...dailyActivityData,
+            exercise: updatedExercises,
+        };
+        try {
+            // Then, update the daily activity in the backend using the API
+            const response = await updateFitnessDayForProfile(updatedDailyActivityData);
+            console.log(response);
+
+            // If successful, set the daily activity data in the local state
+            setDailyActivityData(updatedDailyActivityData);
+            console.log("Updated dailyActivityData:", updatedDailyActivityData);
+        } catch (error) {
+            console.log("Error updating daily activity data:", error);
+        }
+    };
+
+
     return (
         <div className="exercise-activities">
 
             <Typography variant="subtitle1">Übungen:</Typography>
             {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise) => (
-                <ExerciseItem key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} />
+                <ExerciseItemActivity key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
             ))}
+
 
         </div>
     );
