@@ -17,12 +17,12 @@
 - [x] Profile bearbeiten
 - [x] Profile anzeigen
 - [x] Essen für einen bestimmten Tag hinzufügen
-- [] Übungen für einen bestimmten Tag hinzufügen
-- [ ] Menge / Zeit von Essen und Übungen anpassen
+- [x] Übungen für einen bestimmten Tag hinzufügen
+- [x] Menge / Zeit von Essen und Übungen anpassen
 - [ ] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
 - [ ] Kalorien, Eiweiß, Kohlenhydrate und Fett für den Tag berechnen
 - [ ] Maximale Kalorien, Eiweiß, Kohlenhydrate und Fett berechnen
-- [ ] Einen Tag bearbeiten und Werte wie Essen und Übungen aktualisieren
-- [ ] Essen/Übungen für einen Tag löschen
-- [ ] Registrierungsfunktion hinzufügen
+- [x] Einen Tag bearbeiten und Werte wie Essen und Übungen aktualisieren
+- [x] Essen/Übungen für einen Tag löschen
+- [x] Registrierungsfunktion hinzufügen
 - [x] Anmeldefunktion hinzufügen
