@@ -57,6 +57,7 @@ const FitnessDay = ({ userId, date }) => {
     dispatch(fetchAvailableFood());
 
     fetchActivityForDayForProfileId(userId, date).then(data => {
+
       if (data && Object.keys(data).length > 0) {
         setDailyActivityData(data);
         setDailyActivityDataExisting(true);

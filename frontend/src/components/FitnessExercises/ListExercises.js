@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import ExerciseItem from './ExerciseItem';
-import fetchAviableFitnessExercises from '../../api/fitnessExercisesApi';
+import fetchAvailableFitnessExercises from '../../api/fitnessExercisesApi';
+import { deleteFitnessExercise } from '../../api/fitnessExercisesApi';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -19,13 +20,14 @@ const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    fetchAviableFitnessExercises().then((data) => {
+    fetchAvailableFitnessExercises().then((data) => {
       setExercises(data);
     });
   }, []);
 
-  const handleDelete = (id) => {
-    setExercises(exercises.filter((exercise) => exercise._id !== id));
+  const handleDelete = async (id) => {
+    await deleteFitnessExercise(id)
+    setExercises(exercises.filter((exercise) => exercise._id !== id))
   };
 
   const handleEdit = (id, updatedExercise) => {
