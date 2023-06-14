@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-import axios from '../api/axios';
+import axios from '../../api/axios';
 import { useNavigate } from 'react-router-dom';
-
-axios.defaults.withCredentials = true;
 
 const LOGOUT_URL = '/logout';
 
@@ -24,14 +22,13 @@ const Logout = () => {
                 navigate(0)
             } catch (err) {
                 console.log("Error during logout: ", err);
-                // Fehlerbehandlung bei Logout-Fehler
             }
         };
 
         logout();
     }, [navigate]);
 
-    return null; // Keine Inhalte in der Logout-Komponente, daher wird null zurückgegeben
+    return null;
 };
 
 export default Logout;

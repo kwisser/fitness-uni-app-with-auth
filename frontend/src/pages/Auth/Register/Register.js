@@ -2,16 +2,18 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from 'react-router-dom';
-import './register.css'
-import axios from '../../api/axios';
+import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
+import { postRegisterUser } from '../../../api/authApi';
+import './Register.css'
 
 const USER_REGEX = /^\S+@\S+\.\S+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/signup';
+
 
 const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
+    const navigate = useNavigate();
 
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
@@ -36,61 +38,50 @@ const Register = () => {
     const [street, setStreet] = useState("");
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (success) {
-          navigate('/');
-          navigate(0);
+            navigate('/');
+            navigate(0);
         }
-      }, [success, navigate]);
+    }, [success, navigate]);
 
     useEffect(() => {
         userRef.current.focus();
-    }, [])
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         setValidName(USER_REGEX.test(email));
-    }, [email])
+    }, [email]);
 
     useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
         setValidMatch(pwd === matchPwd);
-    }, [pwd, matchPwd])
-
-    if(USER_REGEX.test(email)){
-        console.log("email valid")
-    }
-    
+    }, [pwd, matchPwd]);
 
     useEffect(() => {
         setErrMsg('');
-    }, [email, pwd, matchPwd])
+    }, [email, pwd, matchPwd]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if button enabled with JS hack
-        const v1 = USER_REGEX.test(email);
-        console.log("email valid")
-        const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+
+        const isValidName = USER_REGEX.test(email);
+        const isValidPwd = PWD_REGEX.test(pwd);
+
+        if (!isValidName || !isValidPwd) {
             setErrMsg("Invalid Entry");
             return;
         }
+
         try {
-            const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ email, pwd, firstname, lastname, phone, country, city, postcode, street }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            const response = postRegisterUser(email, pwd, firstname, lastname, phone, country, city, postcode, street);
             console.log(response?.data);
             console.log(response?.accessToken);
-            console.log(JSON.stringify(response))
+            console.log(JSON.stringify(response));
             setSuccess(true);
-            //clear state and controlled inputs
-            //need value attrib on inputs for this
+            // Clear state and controlled inputs
             setUser('');
             setPwd('');
             setMatchPwd('');
@@ -100,7 +91,7 @@ const Register = () => {
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');
             } else {
-                setErrMsg('Registration Failed')
+                setErrMsg('Registration Failed');
             }
             errRef.current.focus();
         }
@@ -110,104 +101,111 @@ const Register = () => {
         <>
             {success ? (
                 <section>
-                    <h1>Success!</h1>
-                    <p>
-                        <a href="/login">Sign In</a>
-                    </p>
+                    <Typography variant="h1">Success!</Typography>
+                    <Typography variant="body1">
+                        <MuiLink href="/login">Sign In</MuiLink>
+                    </Typography>
                 </section>
             ) : (
                 <section>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Register</h1>
+                    <Typography
+                        variant="body1"
+                        ref={errRef}
+                        className={errMsg ? "errmsg" : "offscreen"}
+                        aria-live="assertive"
+                    >
+                        {errMsg}
+                    </Typography>
+                    <Typography variant="h1">Register</Typography>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="email">
                             E-Mail:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="email"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
+                            error={!validName}
+                            helperText={!validName && "Invalid email format"}
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
                         />
-                        <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            4 to 24 characters.<br />
-                            Must begin with a letter.<br />
-                            Letters, numbers, underscores, hyphens allowed.
-                        </p>
-
+                        {userFocus && user && !validName && (
+                            <Typography variant="caption">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                4 to 24 characters.<br />
+                                Must begin with a letter.<br />
+                                Letters, numbers, underscores, hyphens allowed.
+                            </Typography>
+                        )}
 
                         <label htmlFor="password">
                             Password:
                             <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="password"
                             id="password"
                             onChange={(e) => setPwd(e.target.value)}
                             value={pwd}
                             required
-                            aria-invalid={validPwd ? "false" : "true"}
-                            aria-describedby="pwdnote"
+                            error={!validPwd}
+                            helperText={!validPwd && "Invalid password format"}
                             onFocus={() => setPwdFocus(true)}
                             onBlur={() => setPwdFocus(false)}
                         />
-                        <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            8 to 24 characters.<br />
-                            Must include uppercase and lowercase letters, a number and a special character.<br />
-                            Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                        </p>
-
+                        {pwdFocus && !validPwd && (
+                            <Typography variant="caption">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                8 to 24 characters.<br />
+                                Must include uppercase and lowercase letters, a number, and a special character.<br />
+                                Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+                            </Typography>
+                        )}
 
                         <label htmlFor="confirm_pwd">
                             Confirm Password:
                             <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="password"
                             id="confirm_pwd"
                             onChange={(e) => setMatchPwd(e.target.value)}
                             value={matchPwd}
                             required
-                            aria-invalid={validMatch ? "false" : "true"}
-                            aria-describedby="confirmnote"
+                            error={!validMatch}
+                            helperText={!validMatch && "Passwords do not match"}
                             onFocus={() => setMatchFocus(true)}
                             onBlur={() => setMatchFocus(false)}
                         />
-                        <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                            Must match the first password input field.
-                        </p>
+                        {matchFocus && !validMatch && (
+                            <Typography variant="caption">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                Must match the first password input field.
+                            </Typography>
+                        )}
 
                         <label htmlFor="firstname">
                             Firstname:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="firstname"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setFirstname(e.target.value)}
                             value={firstname}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
                         <label htmlFor="lastname">
@@ -215,18 +213,14 @@ const Register = () => {
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="lastname"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setLastname(e.target.value)}
                             value={lastname}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
                         <label htmlFor="street">
@@ -234,18 +228,14 @@ const Register = () => {
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="street"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setStreet(e.target.value)}
                             value={street}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
                         <label htmlFor="postcode">
@@ -253,18 +243,14 @@ const Register = () => {
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="postcode"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setPostcode(e.target.value)}
                             value={postcode}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
                         <label htmlFor="city">
@@ -272,18 +258,14 @@ const Register = () => {
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="city"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setCity(e.target.value)}
                             value={city}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
                         <label htmlFor="phone">
@@ -291,49 +273,45 @@ const Register = () => {
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="phone"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setPhone(e.target.value)}
                             value={phone}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
-
 
                         <label htmlFor="country">
                             Country:
                             <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
-                        <input
+                        <TextField
                             type="text"
                             id="country"
-                            ref={userRef}
+                            inputRef={userRef}
                             autoComplete="off"
                             onChange={(e) => setCountry(e.target.value)}
                             value={country}
                             required
-                            aria-invalid={validName ? "false" : "true"}
-                            aria-describedby="uidnote"
-                            onFocus={() => setUserFocus(true)}
-                            onBlur={() => setUserFocus(false)}
                         />
 
-                        <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+                        <Button
+                            variant="contained"
+                            disabled={!validName || !validPwd || !validMatch}
+                            type="submit"
+                        >
+                            Sign Up
+                        </Button>
                     </form>
-                    <p>
+                    <Typography variant="body1">
                         Already registered?<br />
                         <span className="line">
-                            {/*put router link here*/}
-                            <a href="/login">Sign In</a>
+                            <MuiLink href="/login">Sign In</MuiLink>
                         </span>
-                    </p>
+                    </Typography>
                 </section>
             )}
         </>
