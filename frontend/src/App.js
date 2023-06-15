@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Outlet, Link as RouterLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchAvailableExercises } from './actions/availableExercisesActions';
-import { fetchAvailableFood } from './actions/availableFoodActions';
-import { AuthContext } from './AuthContext';
-import './App.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faDumbbell, faCalendar, faSignOutAlt, faHome, faUser, faSignInAlt, faUserPlus, faBars } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AppBar, Toolbar, Box, Button, Drawer, List, ListItem, IconButton } from '@mui/material';
+
+import { fetchAvailableExercises } from './actions/availableExercisesActions';
+import { fetchAvailableFood } from './actions/availableFoodActions';
+import { AuthContext } from './AuthContext';
+import './App.css';
 
 
 const App = () => {
