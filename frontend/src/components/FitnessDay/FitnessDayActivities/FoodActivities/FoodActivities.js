@@ -31,7 +31,7 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
     };
 
     const handleEditEatenFood = async (foodId, editedFood) => {
-        // Delete the food with the passed ID
+        // Edit the food with the passed ID
         console.log("handleEatenFood: ", foodId, editedFood);
 
         const updatedFoodItems = dailyActivityData.food.map((food) =>

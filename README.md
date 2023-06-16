@@ -19,7 +19,7 @@
 - [x] Essen für einen bestimmten Tag hinzufügen
 - [x] Übungen für einen bestimmten Tag hinzufügen
 - [x] Menge / Zeit von Essen und Übungen anpassen
-- [ ] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
+- [x] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
 - [ ] Kalorien, Eiweiß, Kohlenhydrate und Fett für den Tag berechnen
 - [ ] Maximale Kalorien, Eiweiß, Kohlenhydrate und Fett berechnen
 - [x] Einen Tag bearbeiten und Werte wie Essen und Übungen aktualisieren
