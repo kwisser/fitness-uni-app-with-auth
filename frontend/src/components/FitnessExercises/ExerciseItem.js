@@ -66,7 +66,7 @@ const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
                   className="exercise-input"
                 />
               ) : (
-                `${editedExercise.baseTime} sec`
+                `${editedExercise.baseTime} min`
               )}
             </Typography>
           </div>
