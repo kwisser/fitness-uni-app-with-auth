@@ -23,6 +23,7 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
     }
   }, [availableExercises, exercise]);
 
+
   console.log("exercise: ", exercise);
 
   const handleEdit = () => {
@@ -80,14 +81,14 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
                   className="exercise-input"
                 />
               ) : (
-                `${editedExercise.timeInMinutes} sec`
+                `${editedExercise.timeInMinutes} min`
               )}
             </Typography>
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FontAwesomeIcon icon={faFire} className="icon" />
             <Typography variant="body2" style={{ marginLeft: '0.5rem' }}>
-              Energy Burned: {`${fullExerciseData.energyBurned * editedExercise.timeInMinutes} kcal`}
+              Energy Burned: {`${editedExercise.timeInMinutes} kcal`}
             </Typography>
           </div>
         </div>

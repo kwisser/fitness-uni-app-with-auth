@@ -57,7 +57,7 @@ const FitnessDay = ({ userid, date = false }) => {
         setDailyActivityDataExisting(false);
       }
     }).catch(error => {
-      console.err("Error fetching dailyActivityData:", error);
+      console.error("Error fetching dailyActivityData:", error);
     });
 
   }, [dispatch, userId, date]);
@@ -69,13 +69,13 @@ const FitnessDay = ({ userid, date = false }) => {
       setCaloriesNeeded(calculateBurnedExtraCaloriesTroughExercises({ ...profile }, dailyActivityData, availableExercises));
       setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
 
-      setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
       setProteinNeeded(calculateProtein(profile));
+      setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
 
       setCarbsNeeded((caloriesNeeded / 2) / 4);
       setCarbsReached(calculateReachedCarbs(dailyActivityData, availableFood));
 
-      setFatNeeded(caloriesNeeded * 0.3);
+      setFatNeeded(caloriesNeeded * 0.03);
       setFatReached(calculateReachedFat(dailyActivityData, availableFood));
 
     }
@@ -83,8 +83,8 @@ const FitnessDay = ({ userid, date = false }) => {
 
 
   const handleAddExercise = () => {
-    setShowExerciseOptions(true);
     setShowFoodOptions(false); // Hide food options
+    setShowExerciseOptions(true);
     setNewExercise('');
   };
 
@@ -96,26 +96,32 @@ const FitnessDay = ({ userid, date = false }) => {
 
   const handleExerciseSubmit = async () => {
     // Save selected exercise
-    if (!newExercise || !exerciseDuration) return;
+    if (!newExercise || !exerciseDuration) {
+      console.error("No exercise or duration selected!")
+      return;
+    }
 
     const newExerciseData = extractExerciseData(newExercise, exerciseDuration);
+    newExerciseData.timeInMinutes = exerciseDuration;
+    console.log("newExerciseData: ", newExerciseData);
 
-    if (dailyActivityData?.exercise?.find(exercise => exercise.exerciseId === newExerciseData._id)) {
+    if (dailyActivityData?.exercise?.find(exercise => exercise._id === newExerciseData._id)) {
       alert("This exercise has already been added!");
       return;
     }
 
-    const newDailyActivityData = {
-      ...dailyActivityData,
-      exercise: [...(dailyActivityData?.exercise || []), newExerciseData],
-    };
+    const updatedExerciseList = [...(dailyActivityData?.exercise || []), newExerciseData];
+    const newDailyActivityData = { ...dailyActivityData, exercise: updatedExerciseList };
+
+    console.log("newDailyActivityData: ####### exercise ", newDailyActivityData);
 
     setDailyActivityData(newDailyActivityData);
+
 
     try {
       const operationSuccess = dailyActivityDataExisting
         ? await updateFitnessDayForProfile(newDailyActivityData)
-        : await insertFitnessDayForProfile(createFitnessDayJSON(newDailyActivityData), false, userId, date);
+        : await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, userId, date));
 
       if (operationSuccess) {
         console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);

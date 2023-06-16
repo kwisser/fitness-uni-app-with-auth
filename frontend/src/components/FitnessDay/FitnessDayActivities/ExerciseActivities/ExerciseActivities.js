@@ -15,13 +15,12 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
             exercise: dailyActivityData.exercise.filter(exercise => exercise._id !== exerciseId),
         };
 
-        setDailyActivityData(updatedDailyActivityData);
-
         try {
             await updateFitnessDayForProfile(updatedDailyActivityData);
+            setDailyActivityData(updatedDailyActivityData);
             console.log("Updated dailyActivityData:", updatedDailyActivityData);
         } catch (error) {
-            console.log("Error updating dailyActivityData:", updatedDailyActivityData);
+            console.error("Error updating dailyActivityData:", updatedDailyActivityData);
             setDailyActivityData({ food: [], exercise: [] });
         }
     }
@@ -34,6 +33,9 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
         const updatedExercises = dailyActivityData.exercise.map((exercise) =>
             exercise._id === exerciseId ? editedExercise : exercise
         );
+
+        console.log("Updated exercise #########: ", updatedExercises);
+
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
