@@ -88,7 +88,7 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FontAwesomeIcon icon={faFire} className="icon" />
             <Typography variant="body2" style={{ marginLeft: '0.5rem' }}>
-              Energy Burned: {`${editedExercise.timeInMinutes} kcal`}
+              Energy Burned: {`${(editedExercise.energyBurned / editedExercise.baseTime * editedExercise.timeInMinutes)} kcal`}
             </Typography>
           </div>
         </div>

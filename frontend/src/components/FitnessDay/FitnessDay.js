@@ -145,6 +145,8 @@ const FitnessDay = ({ userid, date = false }) => {
     const newFoodData = extractFoodIdAndAmount(newFood);
     newFoodData.amount = foodQuantity;
 
+    console.log("newFoodData: ", newFoodData);
+
     const updatedFoodList = [...(dailyActivityData?.food || []), newFoodData];
     const updatedDailyActivityData = { ...dailyActivityData, food: updatedFoodList };
 
@@ -155,7 +157,7 @@ const FitnessDay = ({ userid, date = false }) => {
         const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
         return updateResult;
       }
-      const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, date));
+      const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFoodData, true, profile._id, date));
       console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
       return insertResult;
 
