@@ -42,7 +42,7 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
     };
 
     const displayAmount = (value) => {
-        return (editedFood.amount / editedFood.baseAmount) * value;
+        return ((editedFood.amount / editedFood.baseAmount) * value).toFixed(2);
     };
 
 
