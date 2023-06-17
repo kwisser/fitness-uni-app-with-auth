@@ -38,15 +38,19 @@ export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityDat
 export const calculateReachedCalories = (activityData, listOfFood) => {
 
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
-    let caloriesEaten = 0;
+    let energyEaten = 0;
     for (let foodActivity of activityData.food) {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            caloriesEaten += foodItem.baseAmount * foodActivity.amount;
+            const amountOfFoodEeaten = foodActivity.amount;
+            const energy = parseInt(foodItem.energy);
+            const baseAmount = foodItem.baseAmount;
+            const nutrientPer100g = calculateNutrientPer100g(energy, baseAmount);
+            energyEaten += (nutrientPer100g * amountOfFoodEeaten);
         }
     }
-    return caloriesEaten;
+    return energyEaten;
 };
 
 export const calculateReachedProtein = (activityData, listOfFood) => {
@@ -113,7 +117,7 @@ export const calculateReachedFat = (activityData, listOfFood) => {
 };
 
 const calculateNutrientPer100g = (nutrientAmount, baseAmount) => {
-    return (nutrientAmount / baseAmount) * 100;
+    return (nutrientAmount / baseAmount);
 };
 
 

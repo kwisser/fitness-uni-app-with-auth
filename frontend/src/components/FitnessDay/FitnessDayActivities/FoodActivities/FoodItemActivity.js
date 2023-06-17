@@ -56,7 +56,7 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faFire} className="fire-icon" />
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.carbohydrates)} Calories
+                        {displayAmount(fullFoodData.carbohydrates)} Carbs
                     </Box>
                 </Typography>
                 <Typography variant="body2">
