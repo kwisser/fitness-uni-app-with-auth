@@ -60,7 +60,7 @@ const FitnessDay = ({ userid, date = false }) => {
       console.error("Error fetching dailyActivityData:", error);
     });
 
-  }, [dispatch, userId, date]);
+  }, [dispatch, userId, date, setNewExercise, setNewFood]);
 
 
   useEffect(() => {
@@ -98,6 +98,8 @@ const FitnessDay = ({ userid, date = false }) => {
     // Save selected exercise
     if (!newExercise || !exerciseDuration) {
       console.error("No exercise or duration selected!")
+      setShowExerciseOptions(false);
+      setExerciseDuration('');
       return;
     }
 
@@ -105,10 +107,6 @@ const FitnessDay = ({ userid, date = false }) => {
     newExerciseData.timeInMinutes = exerciseDuration;
     console.log("newExerciseData: ", newExerciseData);
 
-    if (dailyActivityData?.exercise?.find(exercise => exercise._id === newExerciseData._id)) {
-      alert("This exercise has already been added!");
-      return;
-    }
 
     const updatedExerciseList = [...(dailyActivityData?.exercise || []), newExerciseData];
     const newDailyActivityData = { ...dailyActivityData, exercise: updatedExerciseList };
