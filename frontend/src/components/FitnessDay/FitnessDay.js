@@ -107,6 +107,13 @@ const FitnessDay = ({ userid, date = false }) => {
     newExerciseData.timeInMinutes = exerciseDuration;
     console.log("newExerciseData: ", newExerciseData);
 
+    // Geprüft - ID namen waren richtig
+    if (dailyActivityData?.exercise?.find(exercise => exercise._id === newExerciseData.exerciseId)) {
+      alert("This exercise has already been added!");
+      setShowExerciseOptions(false);
+      setExerciseDuration('');
+      return;
+    }
 
     const updatedExerciseList = [...(dailyActivityData?.exercise || []), newExerciseData];
     const newDailyActivityData = { ...dailyActivityData, exercise: updatedExerciseList };
