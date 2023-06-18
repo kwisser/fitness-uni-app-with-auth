@@ -36,11 +36,17 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
         console.log("Updated exercise #########: ", updatedExercises);
 
+        console.log("blaa dailiyActivityData: ", dailyActivityData)
+
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
             exercise: updatedExercises,
         };
+
+        updatedDailyActivityData.dayId = dailyActivityData._id;
+        updatedDailyActivityData.date = dailyActivityData.date;
+
         try {
             // Then, update the daily activity in the backend using the API
             const response = await updateFitnessDayForProfile(updatedDailyActivityData);

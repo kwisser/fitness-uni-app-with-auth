@@ -141,10 +141,12 @@ const FitnessDay = ({ userid, date = false }) => {
         return updateResult;
       } else {
         const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newExerciseData, false, profile._id, date));
-        if (insertResult) setDailyActivityData(newDailyActivityData)
-        console.log("Inserted dailyActivityData: ", newDailyActivityData);
-        setDailyActivityData(newDailyActivityData);
-        setDailyActivityDataExisting(true);
+        if (insertResult) {
+          console.log("Inserted dailyActivityData: ", newDailyActivityData);
+          setDailyActivityData(newDailyActivityData);
+          setDailyActivityDataExisting(true);
+        }
+
         setShowExerciseOptions(false);
         setExerciseDuration('');
         return insertResult;
@@ -172,7 +174,6 @@ const FitnessDay = ({ userid, date = false }) => {
     const updatedFoodList = [...(dailyActivityData?.food || []), newFoodData];
     const updatedDailyActivityData = { ...dailyActivityData, food: updatedFoodList };
 
-    setDailyActivityData(updatedDailyActivityData);
 
     try {
       if (dailyActivityDataExisting) {
@@ -180,12 +181,16 @@ const FitnessDay = ({ userid, date = false }) => {
         const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
         if (updateResult) {
           console.log("Updated dailyActivityData: ", updatedDailyActivityData);
+          setDailyActivityData(updatedDailyActivityData);
           setDailyActivityDataExisting(true);
+
         }
         return updateResult;
       }
       else {
         const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFoodData, true, profile._id, date));
+
+
         console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
         setDailyActivityDataExisting(true);
         return insertResult;
