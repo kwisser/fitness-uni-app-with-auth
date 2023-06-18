@@ -8,7 +8,7 @@ export function createFitnessDayJSON(input, isFood, profileId, date) {
     if (isFood) {
         result.food = [
             {
-                "foodId": input._id,
+                "foodId": input.foodId,
                 "amount": input.amount,
             },
         ];
