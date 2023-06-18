@@ -130,9 +130,9 @@ const FitnessDay = ({ userid, date = false }) => {
         newDailyActivityData.date = dailyFetchData.date;
         const updateResult = await updateFitnessDayForProfile(newDailyActivityData);
         if (updateResult) {
-          console.log("Updated dailyActivityData: ", newDailyActivityData);
-          delete newDailyActivityData.dayId;
-          delete newDailyActivityData.date;
+          console.log("Updated dailyActidvgdfge345345345345vityData: ", newDailyActivityData);
+          await delete newDailyActivityData.dayId;
+          await delete newDailyActivityData.date;
           setDailyActivityData(newDailyActivityData);
           setDailyActivityDataExisting(true);
           setShowExerciseOptions(false);

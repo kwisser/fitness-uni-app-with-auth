@@ -15,7 +15,7 @@ export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityDat
     let extraCaloriesforExercises = 0;
     for (let exerciseActivity of activityData.exercise) {
         // Finden Sie das entsprechende Lebensmittel im Store
-        const exerciseItem = listOfExecises.find(exercise => exercise._id === exerciseActivity._id);
+        const exerciseItem = listOfExecises.find(exercise => exercise._id === exerciseActivity._id || exerciseActivity.exerciseId);
         if (exerciseItem) {
             extraCaloriesforExercises += calculateBurnedCalories(exerciseItem, exerciseActivity.timeInMinutes);
         }

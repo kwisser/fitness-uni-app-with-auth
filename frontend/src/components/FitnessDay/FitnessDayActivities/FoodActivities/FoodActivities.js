@@ -16,9 +16,10 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
         };
 
         console.log("DailyActivityData: ", updatedDailyActivityData);
-        console.log("Updated dailyActivityData: ", updatedDailyActivityData);
 
         try {
+            updatedDailyActivityData.dayId = await dailyActivityData._id;
+            updatedDailyActivityData.date = await dailyActivityData.date;
             await updateFitnessDayForProfile(updatedDailyActivityData)
             console.log("Updated dailyActivityData:", updatedDailyActivityData);
             // After a successful update, set the local state.
@@ -26,7 +27,6 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
         }
         catch (error) {
             console.log("Error updating dailyActivityData:", updatedDailyActivityData);
-            setDailyActivityData({ food: [], exercise: [] });
         }
     };
 
