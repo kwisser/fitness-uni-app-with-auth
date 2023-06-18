@@ -95,11 +95,12 @@ const FitnessDay = ({ userid, date = false }) => {
   };
 
   const handleExerciseSubmit = async () => {
+
     // Save selected exercise
     if (!newExercise || !exerciseDuration) {
       console.error("No exercise or duration selected!")
-      setShowExerciseOptions(false);
       setExerciseDuration('');
+      setShowExerciseOptions(false);
       return;
     }
 
@@ -118,28 +119,44 @@ const FitnessDay = ({ userid, date = false }) => {
     const updatedExerciseList = [...(dailyActivityData?.exercise || []), newExerciseData];
     const newDailyActivityData = { ...dailyActivityData, exercise: updatedExerciseList };
 
-    console.log("newDailyActivityData: ####### exercise ", newDailyActivityData);
-
-    setDailyActivityData(newDailyActivityData);
-
-
     try {
-      const operationSuccess = dailyActivityDataExisting
-        ? await updateFitnessDayForProfile(newDailyActivityData)
-        : await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, userId, date));
-
-      if (operationSuccess) {
-        console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);
+      if (dailyActivityDataExisting) {
+        console.log("dailyActivityDataExisting: ", dailyActivityDataExisting)
+        console.log("newDailyActivityData: ", newDailyActivityData)
+        // add dayId and date to newDailyActivityData
+        const dailyFetchData = await fetchActivityForDayForProfileId(userId, date);
+        console.log("dailyFetchData: ", dailyFetchData)
+        newDailyActivityData.dayId = dailyFetchData._id;
+        newDailyActivityData.date = dailyFetchData.date;
+        const updateResult = await updateFitnessDayForProfile(newDailyActivityData);
+        if (updateResult) {
+          console.log("Updated dailyActivityData: ", newDailyActivityData);
+          delete newDailyActivityData.dayId;
+          delete newDailyActivityData.date;
+          setDailyActivityData(newDailyActivityData);
+          setDailyActivityDataExisting(true);
+          setShowExerciseOptions(false);
+          setExerciseDuration('');
+        }
+        return updateResult;
       } else {
-        throw new Error(`${dailyActivityDataExisting ? "Updating" : "Inserting"} dailyActivityData failed`);
+        const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newExerciseData, false, profile._id, date));
+        if (insertResult) setDailyActivityData(newDailyActivityData)
+        console.log("Inserted dailyActivityData: ", newDailyActivityData);
+        setDailyActivityData(newDailyActivityData);
+        setDailyActivityDataExisting(true);
+        setShowExerciseOptions(false);
+        setExerciseDuration('');
+        return insertResult;
       }
     } catch (error) {
       console.log(`Error ${dailyActivityDataExisting ? "updating" : "inserting"} dailyActivityData: `, newDailyActivityData);
-      setDailyActivityData({ food: [], exercise: [] });
     }
     setShowExerciseOptions(false);
     setExerciseDuration('');
   };
+
+
 
 
   const handleFoodSubmit = async () => {
@@ -159,16 +176,24 @@ const FitnessDay = ({ userid, date = false }) => {
 
     try {
       if (dailyActivityDataExisting) {
+        console.log("dailyActivityDataExisting: ", dailyActivityDataExisting)
         const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
+        if (updateResult) {
+          console.log("Updated dailyActivityData: ", updatedDailyActivityData);
+          setDailyActivityDataExisting(true);
+        }
         return updateResult;
       }
-      const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFoodData, true, profile._id, date));
-      console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
-      return insertResult;
+      else {
+        const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFoodData, true, profile._id, date));
+        console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
+        setDailyActivityDataExisting(true);
+        return insertResult;
+      }
+
 
     } catch (error) {
       console.error("Error updating or inserting dailyActivityData: ", error);
-      setDailyActivityData({ food: [], exercise: [] });
     } finally {
       setShowFoodOptions(false);
       setFoodQuantity('');

@@ -15,8 +15,8 @@ export function createFitnessDayJSON(input, isFood, profileId, date) {
     } else {
         result.exercise = [
             {
-                "exerciseId": input._id,
-                "timeInMinutes": input.baseTime,
+                "exerciseId": input.exerciseId,
+                "timeInMinutes": input.timeInMinutes,
             },
         ];
     }
