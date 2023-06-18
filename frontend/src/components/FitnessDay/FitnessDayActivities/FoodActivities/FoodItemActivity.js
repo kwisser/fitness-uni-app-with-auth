@@ -42,8 +42,9 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
     };
 
     const displayAmount = (value) => {
-        return value * editedFood.amount;
+        return ((editedFood.amount / editedFood.baseAmount) * value).toFixed(2);
     };
+
 
 
     return (
@@ -55,37 +56,37 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faFire} className="fire-icon" />
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.carbohydrates)} Calories
+                        {displayAmount(fullFoodData.carbohydrates)} Carbs
                     </Box>
                 </Typography>
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faDumbbell} className="dumbbell-icon" /> 'Protein:
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.protein)}
+                        {displayAmount(fullFoodData.protein)} g
                     </Box>
                 </Typography>
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faBullseye} className="bullseye-icon" /> Carbs:
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.carbohydrates)}
+                        {displayAmount(fullFoodData.carbohydrates)} g
                     </Box>
                 </Typography>
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faUtensils} className="utensils-icon" /> Fat
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.fat)}
+                        {displayAmount(fullFoodData.fat)} g
                     </Box>
                 </Typography>
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faTint} className="tint-icon" /> Energy
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.energy)}
+                        {displayAmount(fullFoodData.energy)} g
                     </Box>
                 </Typography>
                 <Typography variant="body2">
                     <FontAwesomeIcon icon={faLeaf} className="leaf-icon" /> Salt
                     <Box component="span" sx={{ marginLeft: '0.5rem' }}>
-                        {displayAmount(fullFoodData.salt)}
+                        {displayAmount(fullFoodData.salt)} g
                     </Box>
                 </Typography>
 
@@ -102,7 +103,7 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
                             />
                         ) : (
                             editedFood.amount
-                        )}
+                        )} g
                     </Box>
                 </Typography>
             </CardContent>

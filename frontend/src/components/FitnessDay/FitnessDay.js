@@ -1,39 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import CaloriesPieChart from './FitnessDayActivities/CaloriesPieChart';
 import { Grid, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import FitnessActivityItemSelector from './FitnessDayActivities/FitnessActivityItemSelector/FitnessActivityItemSelector';
 import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
+import NutritionSummary from './NutritionSummary/NutritionSummary';
 
 import { fetchActivityForDayForProfileId, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein } from './utils/nutritionCalculations';
+import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/nutritionCalculations';
 import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
 
 
-import styled from '@emotion/styled';
-
-const Container = styled('div')`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.values.md}px) {
-    flex-direction: row;
-  }
-`;
-
-const Box = styled('div')`
-  margin-bottom: 2rem;
-`;
-
-
 const FitnessDay = ({ userid, date = false }) => {
-  const theme = useTheme();
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
@@ -42,10 +23,19 @@ const FitnessDay = ({ userid, date = false }) => {
   const [newFood, setNewFood] = useState('');
   const [showExerciseOptions, setShowExerciseOptions] = useState(false);
   const [showFoodOptions, setShowFoodOptions] = useState(false);
+
   const [caloriesNeeded, setCaloriesNeeded] = useState(0);
   const [caloriesReached, setCaloriesReached] = useState(0);
+
   const [proteinReached, setProteinReached] = useState(0);
   const [proteinNeeded, setProteinNeeded] = useState(0);
+
+  const [carbsNeeded, setCarbsNeeded] = useState(0);
+  const [carbsReached, setCarbsReached] = useState(0);
+
+  const [fatNeeded, setFatNeeded] = useState(0);
+  const [fatReached, setFatReached] = useState(0);
+
   const [dailyActivityDataExisting, setDailyActivityDataExisting] = useState(false);
   const [exerciseDuration, setExerciseDuration] = useState('');
   const [foodQuantity, setFoodQuantity] = useState('');
@@ -67,7 +57,7 @@ const FitnessDay = ({ userid, date = false }) => {
         setDailyActivityDataExisting(false);
       }
     }).catch(error => {
-      console.err("Error fetching dailyActivityData:", error);
+      console.error("Error fetching dailyActivityData:", error);
     });
 
   }, [dispatch, userId, date]);
@@ -75,17 +65,26 @@ const FitnessDay = ({ userid, date = false }) => {
 
   useEffect(() => {
     if (dailyActivityData?.exercise && dailyActivityData?.food) {
+
       setCaloriesNeeded(calculateBurnedExtraCaloriesTroughExercises({ ...profile }, dailyActivityData, availableExercises));
       setCaloriesReached(calculateReachedCalories(dailyActivityData, availableFood));
-      setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
+
       setProteinNeeded(calculateProtein(profile));
+      setProteinReached(calculateReachedProtein(dailyActivityData, availableFood));
+
+      setCarbsNeeded((caloriesNeeded / 2) / 4);
+      setCarbsReached(calculateReachedCarbs(dailyActivityData, availableFood));
+
+      setFatNeeded(caloriesNeeded * 0.03);
+      setFatReached(calculateReachedFat(dailyActivityData, availableFood));
+
     }
-  }, [dailyActivityData, profile, availableExercises, availableFood]);
+  }, [dailyActivityData, profile, availableExercises, availableFood, caloriesNeeded]);
 
 
   const handleAddExercise = () => {
-    setShowExerciseOptions(true);
     setShowFoodOptions(false); // Hide food options
+    setShowExerciseOptions(true);
     setNewExercise('');
   };
 
@@ -97,26 +96,32 @@ const FitnessDay = ({ userid, date = false }) => {
 
   const handleExerciseSubmit = async () => {
     // Save selected exercise
-    if (!newExercise || !exerciseDuration) return;
+    if (!newExercise || !exerciseDuration) {
+      console.error("No exercise or duration selected!")
+      return;
+    }
 
     const newExerciseData = extractExerciseData(newExercise, exerciseDuration);
+    newExerciseData.timeInMinutes = exerciseDuration;
+    console.log("newExerciseData: ", newExerciseData);
 
-    if (dailyActivityData?.exercise?.find(exercise => exercise.exerciseId === newExerciseData._id)) {
+    if (dailyActivityData?.exercise?.find(exercise => exercise._id === newExerciseData._id)) {
       alert("This exercise has already been added!");
       return;
     }
 
-    const newDailyActivityData = {
-      ...dailyActivityData,
-      exercise: [...(dailyActivityData?.exercise || []), newExerciseData],
-    };
+    const updatedExerciseList = [...(dailyActivityData?.exercise || []), newExerciseData];
+    const newDailyActivityData = { ...dailyActivityData, exercise: updatedExerciseList };
+
+    console.log("newDailyActivityData: ####### exercise ", newDailyActivityData);
 
     setDailyActivityData(newDailyActivityData);
+
 
     try {
       const operationSuccess = dailyActivityDataExisting
         ? await updateFitnessDayForProfile(newDailyActivityData)
-        : await insertFitnessDayForProfile(createFitnessDayJSON(newDailyActivityData), false, userId, date);
+        : await insertFitnessDayForProfile(createFitnessDayJSON(newExercise, false, userId, date));
 
       if (operationSuccess) {
         console.log(`${dailyActivityDataExisting ? "Updated" : "Inserted"} dailyActivityData: `, newDailyActivityData);
@@ -140,6 +145,8 @@ const FitnessDay = ({ userid, date = false }) => {
     const newFoodData = extractFoodIdAndAmount(newFood);
     newFoodData.amount = foodQuantity;
 
+    console.log("newFoodData: ", newFoodData);
+
     const updatedFoodList = [...(dailyActivityData?.food || []), newFoodData];
     const updatedDailyActivityData = { ...dailyActivityData, food: updatedFoodList };
 
@@ -150,7 +157,7 @@ const FitnessDay = ({ userid, date = false }) => {
         const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
         return updateResult;
       }
-      const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFood, true, profile._id, date));
+      const insertResult = await insertFitnessDayForProfile(createFitnessDayJSON(newFoodData, true, profile._id, date));
       console.log("Inserted dailyActivityData: ", updatedDailyActivityData);
       return insertResult;
 
@@ -185,22 +192,17 @@ const FitnessDay = ({ userid, date = false }) => {
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <div>
           <Typography variant="h4" style={{ marginBottom: '1rem' }}>Guten Tag, {profile.name}!</Typography>
-          <Container theme={theme}>
-            <Box>
-              <Typography variant="body1">Sie benötigen heute {caloriesNeeded} Kalorien.</Typography>
-              <Typography variant="body1">Bisher gegessene {caloriesReached} Kalorien.</Typography>
-              <div style={{ width: '200px', height: '200px' }}>
-                <CaloriesPieChart key={caloriesReached} consumed={caloriesReached} total={caloriesNeeded} />
-              </div>
-            </Box>
-            <Box>
-              <Typography variant="body1">Protein/Eiweiß benötigt: {proteinNeeded.toFixed(2)}g</Typography>
-              <Typography variant="body1">Protein/Eiweiß heute bisher gegessen: {proteinReached.toFixed(2)}g</Typography>
-              <div style={{ width: '200px', height: '200px' }}>
-                <CaloriesPieChart key={proteinReached} consumed={proteinReached} total={proteinNeeded} />
-              </div>
-            </Box>
-          </Container>
+          <NutritionSummary
+            caloriesNeeded={caloriesNeeded}
+            caloriesReached={caloriesReached}
+            proteinNeeded={proteinNeeded}
+            proteinReached={proteinReached}
+            fatNeeded={fatNeeded}
+            fatReached={fatReached}
+            carbsNeeded={carbsNeeded}
+            carbsReached={carbsReached}
+          />
+
           <Typography variant="h6">Heutige Aktivitäten:</Typography>
 
           <>
