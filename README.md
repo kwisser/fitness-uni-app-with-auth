@@ -4,7 +4,17 @@
 
 ### How to start
 
+#### Server
+
 `cd server`
+`npm install`
+`node app.js fitness`
+
+#### Frontend
+
+`cd frontend`
+`npm install`
+`npm start`
 
 ### To Dos
 
