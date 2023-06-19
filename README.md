@@ -6,18 +6,21 @@
 
 #### Server
 
-Switch into server folder
-`cd server`
-Install dependencys
-`npm install`
-Start fitness server
-`node app.js fitness`
+Switch into server folder \
+`cd server` \
+Install dependencys \
+`npm install` \
+Start fitness server \
+`node app.js fitness` \
 
 #### Frontend
 
-`cd frontend`
-`npm install`
-`npm start`
+Switch into frontend folder \
+`cd frontend` \
+Install dependencys \
+`npm install` \
+Start react app \
+`npm start` \
 
 ### To Dos
 
