@@ -6,8 +6,11 @@
 
 #### Server
 
+Switch into server folder
 `cd server`
+Install dependencys
 `npm install`
+Start fitness server
 `node app.js fitness`
 
 #### Frontend
