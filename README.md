@@ -9,7 +9,7 @@ Switch into server folder \
 Install dependencys \
 `npm install` \
 Start fitness server \
-`node app.js fitness` \
+`node app.js fitness`
 
 ### Frontend
 
