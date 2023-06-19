@@ -2,6 +2,10 @@
 
 ## React and Node
 
+### How to start
+
+`cd server`
+
 ### To Dos
 
 - [x] Essen hinzufügen
@@ -20,8 +24,8 @@
 - [x] Übungen für einen bestimmten Tag hinzufügen
 - [x] Menge / Zeit von Essen und Übungen anpassen
 - [x] Verbrannte, konsumierte Kalorien und Kaloriendefizit berechnen
-- [ ] Kalorien, Eiweiß, Kohlenhydrate und Fett für den Tag berechnen
-- [ ] Maximale Kalorien, Eiweiß, Kohlenhydrate und Fett berechnen
+- [x] Kalorien, Eiweiß, Kohlenhydrate und Fett für den Tag berechnen
+- [x] Maximale Kalorien, Eiweiß, Kohlenhydrate und Fett berechnen
 - [x] Einen Tag bearbeiten und Werte wie Essen und Übungen aktualisieren
 - [x] Essen/Übungen für einen Tag löschen
 - [x] Registrierungsfunktion hinzufügen
