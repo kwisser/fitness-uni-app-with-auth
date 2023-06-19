@@ -58,6 +58,9 @@ const App = () => {
                   {isLoggedIn ? (
                     <>
                       <ListItem>
+                        <MenuButton to="/" icon={faHome}>Home</MenuButton>
+                      </ListItem>
+                      <ListItem>
                         <MenuButton to="/food" icon={faUtensils}>Food</MenuButton>
                       </ListItem>
                       <ListItem>

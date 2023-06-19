@@ -20,7 +20,7 @@ const Day = () => {
 
     return (
         <div>
-            <Typography variant="h1">Day {date}</Typography>
+            <Typography variant="h1">Day {readableDate}</Typography>
             <ProfileSelector />
             {selectedProfile ? (
                 <div>
