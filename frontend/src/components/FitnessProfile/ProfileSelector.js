@@ -44,9 +44,6 @@ const ProfileSelector = () => {
         onChange={handleSelectChange}
         label="Profile"
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
         {profiles.map(profile => (
           <MenuItem key={profile._id} value={profile._id}>
             {profile.name}
