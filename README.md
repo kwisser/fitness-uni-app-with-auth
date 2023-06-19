@@ -20,7 +20,7 @@ Switch into frontend folder \
 Install dependencys \
 `npm install` \
 Start react app \
-`npm start` \
+`npm start`
 
 ### To Dos
 
