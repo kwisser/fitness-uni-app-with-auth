@@ -1,10 +1,8 @@
 # Fitness Uni App
 
-## React and Node
+## How to start
 
-### How to start
-
-#### Server
+### Server
 
 Switch into server folder \
 `cd server` \
@@ -13,7 +11,7 @@ Install dependencys \
 Start fitness server \
 `node app.js fitness` \
 
-#### Frontend
+### Frontend
 
 Switch into frontend folder \
 `cd frontend` \
@@ -22,7 +20,7 @@ Install dependencys \
 Start react app \
 `npm start`
 
-### To Dos
+## To Dos
 
 - [x] Essen hinzufügen
 - [x] Essen löschen
