@@ -16,12 +16,13 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
         };
 
         try {
-            await updateFitnessDayForProfile(updatedDailyActivityData);
-            setDailyActivityData(updatedDailyActivityData);
-            console.log("Updated dailyActivityData:", updatedDailyActivityData);
+            const response = await updateFitnessDayForProfile(updatedDailyActivityData);
+            if (response) {
+                setDailyActivityData(updatedDailyActivityData);
+                console.log("Updated dailyActivityData:", updatedDailyActivityData);
+            }
         } catch (error) {
             console.error("Error updating dailyActivityData:", updatedDailyActivityData);
-            setDailyActivityData({ food: [], exercise: [] });
         }
     }
 
@@ -34,11 +35,6 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
             exercise._id === exerciseId ? editedExercise : exercise
         );
 
-        console.log("Updated exercise #########: ", updatedExercises);
-
-        console.log("blaa dailiyActivityData: ", dailyActivityData)
-
-
         const updatedDailyActivityData = {
             ...dailyActivityData,
             exercise: updatedExercises,
@@ -50,11 +46,12 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
         try {
             // Then, update the daily activity in the backend using the API
             const response = await updateFitnessDayForProfile(updatedDailyActivityData);
+            if (response) {
+                // If successful, set the daily activity data in the local state
+                setDailyActivityData(updatedDailyActivityData);
+                console.log("Updated dailyActivityData:", updatedDailyActivityData);
+            }
             console.log(response);
-
-            // If successful, set the daily activity data in the local state
-            setDailyActivityData(updatedDailyActivityData);
-            console.log("Updated dailyActivityData:", updatedDailyActivityData);
         } catch (error) {
             console.log("Error updating daily activity data:", error);
         }
@@ -63,13 +60,10 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
     return (
         <div className="exercise-activities">
-
             <Typography variant="subtitle1">Übungen:</Typography>
             {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise) => (
-                <ExerciseItemActivity key={exercise._id} exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
+                < ExerciseItemActivity key={"exercise-activities-" + exercise._id} exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
             ))}
-
-
         </div>
     );
 }

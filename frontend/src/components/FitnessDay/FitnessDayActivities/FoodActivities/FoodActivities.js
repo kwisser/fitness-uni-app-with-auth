@@ -67,7 +67,7 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
             <Typography variant="subtitle1">Essen:</Typography>
             {dailyActivityData.food && dailyActivityData.food.map((food) => (
-                <FoodItemActivity key={food._id} food={food} onDelete={handleDeleteEatenFood} onEdit={handleEditEatenFood} />
+                <FoodItemActivity key={"food-activities-" + food._id} food={food} onDelete={handleDeleteEatenFood} onEdit={handleEditEatenFood} />
             ))}
 
         </div>
