@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';  
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import Profile from '../components/Profile/Profile';
+import Profile from '../components/FitnessProfile/Profile';
 import fetchProfileData from '../api/fitnessProfilesApi';
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -9,7 +9,6 @@ const Profiles = () => {
   const [profileData, setProfileData] = useState([]);
   const params = useParams();
   const navigate = useNavigate();
-  console.log(params.id)
 
   useEffect(() => {
     fetchProfileData().then(data => {
@@ -21,30 +20,29 @@ const Profiles = () => {
     setProfileData(profileData.filter(profile => profile._id !== deletedProfileId));
   };
 
-  console.log(profileData);
-
   let profileDataToDisplay = profileData;
 
-  if(params.id) {
+  if (params.id) {
     profileDataToDisplay = profileData.filter(profile => profile._id === params.id);
   }
 
   const handleAddProfile = () => {
-    navigate('/profiles/add'); // define this route in your router
+    navigate('/profiles/add');
   };
 
   return (
     <div>
-      <h2>Your Profiles</h2>
-      <button onClick={handleAddProfile}>
-      <FontAwesomeIcon icon={faPlus} /> Add Profile
-    </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2>Your Profiles</h2>
+        <button onClick={handleAddProfile}>
+          <FontAwesomeIcon icon={faPlus} /> Add Profile
+        </button>
+      </div>
       <ul>
-      {profileDataToDisplay.map((profile) => (
-        <Profile key={profile._id} profileData={profile} onDelete={handleDelete} />
-      ))}
+        {profileDataToDisplay.map((profile) => (
+          <Profile key={profile._id} profileData={profile} onDelete={handleDelete} />
+        ))}
       </ul>
-      
     </div>
   );
 };

@@ -1,9 +1,9 @@
 // actions/availableFoodActions.js
-import fetchFoodFromApi from '../api/fitnessFoodApi';
+import { fetchAvailableFitnessFood } from '../api/fitnessFoodApi';
 import { setAvailableFood } from '../reducers/availableFoodReducer';
 
 // Thunk action creator
 export const fetchAvailableFood = () => async dispatch => {
-  const food = await fetchFoodFromApi();
+  const food = await fetchAvailableFitnessFood();
   dispatch(setAvailableFood(food));
 };

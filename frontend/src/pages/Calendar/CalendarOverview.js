@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { useNavigate } from 'react-router-dom';
-import './Calendar.css';
+import { Typography } from '@mui/material';
+
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
+import './Calendar.css'
 
 const CalendarOverview = () => {
     const navigate = useNavigate();
@@ -21,17 +26,27 @@ const CalendarOverview = () => {
     };
 
     return (
-        <div>
-            <h1>Days</h1>
-            <div>
-                <Calendar onChange={onChange} value={value} onClickDay={handleDayClick} tileClassName={({date, view}) =>
-            date.getDate() === new Date().getDate() &&
-            date.getMonth() === new Date().getMonth() &&
-            date.getFullYear() === new Date().getFullYear() ? 'highlight' : null
-          }/>
-            </div>
-        </div>
-    )
-}
+        <Container>
+            <Box my={4}>
+                <Typography variant="h3" component="h1" gutterBottom>
+                    Kalender
+                </Typography>
+                <div>
+                    <Calendar
+                        onChange={onChange}
+                        value={value}
+                        onClickDay={handleDayClick}
+                        tileClassName={({ date, view }) =>
+                            date.getDate() === new Date().getDate() &&
+                                date.getMonth() === new Date().getMonth() &&
+                                date.getFullYear() === new Date().getFullYear() ? 'highlight' : null
+                        }
+                    />
+                </div>
+            </Box>
+        </Container>
+
+    );
+};
 
 export default CalendarOverview;
