@@ -20,10 +20,12 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
         try {
             updatedDailyActivityData.dayId = await dailyActivityData._id;
             updatedDailyActivityData.date = await dailyActivityData.date;
-            await updateFitnessDayForProfile(updatedDailyActivityData)
-            console.log("Updated dailyActivityData:", updatedDailyActivityData);
-            // After a successful update, set the local state.
-            setDailyActivityData(updatedDailyActivityData);
+            const response = await updateFitnessDayForProfile(updatedDailyActivityData)
+            if (response) {
+                console.log("Updated dailyActivityData:", updatedDailyActivityData);
+                // After a successful update, set the local state.
+                setDailyActivityData(updatedDailyActivityData);
+            }
         }
         catch (error) {
             console.log("Error updating dailyActivityData:", updatedDailyActivityData);
