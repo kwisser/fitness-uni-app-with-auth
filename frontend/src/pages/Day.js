@@ -1,7 +1,8 @@
 import React from 'react';
-import { Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
+import { Typography } from '@mui/material';
 
 import FitnessDay from '../components/FitnessDay/FitnessDay';
 import ProfileSelector from '../components/FitnessProfile/ProfileSelector';
