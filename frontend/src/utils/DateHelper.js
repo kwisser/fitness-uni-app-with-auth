@@ -16,3 +16,11 @@ export const formatDate = (date) => {
     const output = parts[2] + parts[1] + parts[0];
     return output;
 }
+
+
+export const isDateInActivityList = (date, activityList) => {
+    const dateObject = new Date(date);
+    const dateString = `${String(dateObject.getDate()).padStart(2, '0')}${String(dateObject.getMonth() + 1).padStart(2, '0')}${dateObject.getFullYear()}`;
+    const exists = activityList.includes(dateString);
+    return exists;
+}

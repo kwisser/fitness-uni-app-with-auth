@@ -49,9 +49,10 @@ export const fetchFitnessActivityForSpecificDayForProfile = async (profileId, da
 export const fetchAllActivitiesForProfile = async (profileId) => {
   try {
     const { data } = await axios.get(`${FITNESS_ALL_DAYS_URL}/${profileId}`);
+    console.log("data fetch: ", data);
     // Prüfen, ob Daten in der Antwort vorhanden sind
     if (data && data.length > 0) {
-      return data[0];
+      return data;
     }
     return null;
   } catch (error) {
