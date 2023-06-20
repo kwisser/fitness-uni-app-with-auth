@@ -61,8 +61,8 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
     return (
         <div className="exercise-activities">
             <Typography variant="subtitle1">Übungen:</Typography>
-            {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise) => (
-                < ExerciseItemActivity key={"exercise-activities-" + exercise._id} exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
+            {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise, index) => (
+                < ExerciseItemActivity key={"exercise-activitiy-" + index } exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
             ))}
         </div>
     );
