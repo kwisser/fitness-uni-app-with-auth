@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faFire, faPlus } from '@fortawesome/free-solid-svg-icons';
-import axios from '../../api/axios';
+import axios from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const AddExercise = () => {

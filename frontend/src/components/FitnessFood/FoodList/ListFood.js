@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchAvailableFitnessFood, deleteFoodItem } from '../../../api/fitnessFoodApi';
+import { fetchAvailableFitnessFood, deleteFoodItem } from '../../../api/fitness/foodApi';
 import './ListFood.css';
 
 const StyledRouterLink = styled(RouterLink)({

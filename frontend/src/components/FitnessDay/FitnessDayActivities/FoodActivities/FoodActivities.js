@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 
+import { updateFitnessDayForProfile } from '../../../../api/fitness/dayApi';
 
-import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
 import FoodItemActivity from './FoodItemActivity';
 
 const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {

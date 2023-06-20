@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faFire, faTrash, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import { updateFitnessExercise } from '../../api/fitnessExercisesApi';
+import { updateFitnessExercise } from '../../api/fitness/exerciseApi';
 
 const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);

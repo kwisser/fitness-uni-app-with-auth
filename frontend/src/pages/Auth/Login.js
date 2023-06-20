@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import axios from '../../api/axios';
+import axios from '../../api/axiosInstance';
 import isLoggedIn from '../../utils/auth';
 import { TextField, Button, Typography, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 // actions/availableFoodActions.js
-import { fetchAvailableFitnessFood } from '../api/fitnessFoodApi';
+import { fetchAvailableFitnessFood } from '../api/fitness/foodApi';
 import { setAvailableFood } from '../reducers/availableFoodReducer';
 
 // Thunk action creator

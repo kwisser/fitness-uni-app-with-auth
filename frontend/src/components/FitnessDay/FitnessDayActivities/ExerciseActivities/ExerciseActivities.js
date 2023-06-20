@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 
 import ExerciseItemActivity from './ExerciseItemActivity';
 
-import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
+import { updateFitnessDayForProfile } from '../../../../api/fitness/dayApi';
 
 const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 

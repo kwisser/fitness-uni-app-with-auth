@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../../api/axios';
-import {useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from '../../api/axiosInstance';
 
 const FoodEdit = () => {
   const { id } = useParams();
