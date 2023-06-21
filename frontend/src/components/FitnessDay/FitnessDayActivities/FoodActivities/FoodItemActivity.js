@@ -46,7 +46,6 @@ const FoodItemActivity = ({ food, onDelete, onEdit }) => {
     };
 
 
-
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>

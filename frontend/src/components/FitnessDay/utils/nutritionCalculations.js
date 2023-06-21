@@ -1,18 +1,17 @@
 const calculateBurnedCalories = (exercise, duration) => {
     const caloriesBurnedPerMinute = exercise.energyBurned / exercise.baseTime;
-    const totalBurnedCalories = caloriesBurnedPerMinute * duration;
-    return totalBurnedCalories;
+    return caloriesBurnedPerMinute * duration;
 };
 
-export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityData, listOfExecises) => {
+export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityData, listOfExercises) => {
     const { weight, height, age, sex } = profile;
     // Finden Sie die Gesamtkalorien für die konsumierten Lebensmittel
-    let extraCaloriesforExercises = 0;
+    let extraCaloriesForExercises = 0;
     for (let exerciseActivity of activityData.exercise) {
         // Finden Sie das entsprechende Lebensmittel im Store
-        const exerciseItem = listOfExecises.find(exercise => exercise._id === exerciseActivity._id || exerciseActivity.exerciseId);
+        const exerciseItem = listOfExercises.find(exercise => exercise._id === exerciseActivity._id || exerciseActivity.exerciseId);
         if (exerciseItem) {
-            extraCaloriesforExercises += calculateBurnedCalories(exerciseItem, exerciseActivity.timeInMinutes);
+            extraCaloriesForExercises += calculateBurnedCalories(exerciseItem, exerciseActivity.timeInMinutes);
         }
     }
 
@@ -25,9 +24,8 @@ export const calculateBurnedExtraCaloriesTroughExercises = (profile, activityDat
     }
 
     // Addieren Sie die Lebensmittelkalorien zu den Basiskalorien
-    const totalCalories = baseCalories + extraCaloriesforExercises;
 
-    return totalCalories;
+    return baseCalories + extraCaloriesForExercises;
 };
 
 export const calculateReachedCalories = (activityData, listOfFood) => {
@@ -38,14 +36,14 @@ export const calculateReachedCalories = (activityData, listOfFood) => {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            const amountOfFoodEeaten = foodActivity.amount;
+            const amountOfFoodEaten = foodActivity.amount;
             const energy = parseInt(foodItem.energy);
             const baseAmount = foodItem.baseAmount;
             const nutrientPer100g = calculateNutrientPer100g(energy, baseAmount);
-            energyEaten += (nutrientPer100g * amountOfFoodEeaten);
+            energyEaten += (nutrientPer100g * amountOfFoodEaten);
         }
     }
-    return energyEaten;
+    return energyEaten.toFixed(2);
 };
 
 export const calculateReachedProtein = (activityData, listOfFood) => {
@@ -56,11 +54,11 @@ export const calculateReachedProtein = (activityData, listOfFood) => {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            const amountOfFoodEeaten = foodActivity.amount;
+            const amountOfFoodEaten = foodActivity.amount;
             const protein = parseInt(foodItem.protein);
             const baseAmount = foodItem.baseAmount;
             const nutrientPer100g = calculateNutrientPer100g(protein, baseAmount);
-            proteinEaten += (nutrientPer100g * amountOfFoodEeaten);
+            proteinEaten += (nutrientPer100g * amountOfFoodEaten);
         }
     }
     return proteinEaten;
@@ -74,11 +72,11 @@ export const calculateReachedCarbs = (activityData, listOfFood) => {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            const amountOfFoodEeaten = foodActivity.amount;
+            const amountOfFoodEaten = foodActivity.amount;
             const carbohydrates = parseInt(foodItem.carbohydrates);
             const baseAmount = foodItem.baseAmount;
             const nutrientPer100g = calculateNutrientPer100g(carbohydrates, baseAmount);
-            carbsEaten += nutrientPer100g * amountOfFoodEeaten;
+            carbsEaten += nutrientPer100g * amountOfFoodEaten;
         }
     }
     return carbsEaten;
@@ -92,11 +90,11 @@ export const calculateReachedFat = (activityData, listOfFood) => {
         // Finden Sie das entsprechende Lebensmittel im Store
         const foodItem = listOfFood.find(food => food._id === foodActivity.foodId);
         if (foodItem) {
-            const amountOfFoodEeaten = foodActivity.amount;
+            const amountOfFoodEaten = foodActivity.amount;
             const fat = parseInt(foodItem.fat);
             const baseAmount = foodItem.baseAmount;
             const nutrientPer100g = calculateNutrientPer100g(fat, baseAmount);
-            fatEaten += nutrientPer100g * amountOfFoodEeaten;
+            fatEaten += nutrientPer100g * amountOfFoodEaten;
         }
     }
     return fatEaten;
