@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import axios from '../../api/axios';
+
 import { useNavigate } from 'react-router-dom';
+
+import axios from '../../api/axiosInstance';
 
 const LOGOUT_URL = '/logout';
 
@@ -25,7 +27,7 @@ const Logout = () => {
             }
         };
 
-        logout();
+        logout().then(() => console.log("Successful logged out"));
     }, [navigate]);
 
     return null;

@@ -1,21 +1,17 @@
 import { Typography } from '@mui/material';
 
+import { updateFitnessDayForProfile } from '../../../../api/fitness/dayApi';
 
-import { updateFitnessDayForProfile } from '../../../../api/fitnessDayApi';
 import FoodItemActivity from './FoodItemActivity';
 
 const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
     const handleDeleteEatenFood = async (foodId) => {
-        // Delete the food with the passed ID
-        console.log("handleDeleteEatenFood: ", foodId);
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
             food: dailyActivityData.food.filter(food => food.foodId !== foodId),
         };
-
-        console.log("DailyActivityData: ", updatedDailyActivityData);
 
         try {
             updatedDailyActivityData.dayId = await dailyActivityData._id;
@@ -66,8 +62,8 @@ const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
         <div className="food-activities">
 
             <Typography variant="subtitle1">Essen:</Typography>
-            {dailyActivityData.food && dailyActivityData.food.map((food) => (
-                <FoodItemActivity key={"food-activities-" + food._id} food={food} onDelete={handleDeleteEatenFood} onEdit={handleEditEatenFood} />
+            {dailyActivityData.food && dailyActivityData.food.map((food, index) => (
+                <FoodItemActivity key={"food-activities-" + index} food={food} onDelete={handleDeleteEatenFood} onEdit={handleEditEatenFood} />
             ))}
 
         </div>

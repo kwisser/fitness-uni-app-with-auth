@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 import { selectProfile } from '../../actions/profileActions';
-import fetchProfileData from '../../api/fitnessProfilesApi';
+import fetchProfileData from '../../api/fitness/profileApi';
 
 
 const ProfileSelector = () => {

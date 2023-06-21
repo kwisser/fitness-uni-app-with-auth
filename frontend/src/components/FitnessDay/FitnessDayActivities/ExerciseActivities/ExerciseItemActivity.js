@@ -24,8 +24,6 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
   }, [availableExercises, exercise]);
 
 
-  console.log("exercise: ", exercise);
-
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -33,7 +31,6 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
   const handleSave = () => {
     setIsEditing(false);
     onEdit(exercise._id, editedExercise); // Aufruf der onEdit-Funktion in der übergeordneten Komponente
-    console.log("editedExercise: ", editedExercise);
   };
 
   const handleDelete = () => {
@@ -46,7 +43,6 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
       ...prevExercise,
       [name]: value
     }));
-    console.log("editedExercise: ", editedExercise);
   };
 
   return (

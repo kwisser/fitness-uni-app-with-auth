@@ -78,7 +78,6 @@ const Register = () => {
         try {
             const response = postRegisterUser(email, pwd, firstname, lastname, phone, country, city, postcode, street);
             console.log(response?.data);
-            console.log(response?.accessToken);
             console.log(JSON.stringify(response));
             setSuccess(true);
             // Clear state and controlled inputs
@@ -111,7 +110,7 @@ const Register = () => {
                     <Typography
                         variant="body1"
                         ref={errRef}
-                        className={errMsg ? "errmsg" : "offscreen"}
+                        className={errMsg ? "error-message" : "offscreen"}
                         aria-live="assertive"
                     >
                         {errMsg}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Select, MenuItem, Button, IconButton, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faTrash, faRuler, faBirthdayCake, faVenusMars, faIdCard, faEdit, faSave, faWeight, faCopy } from '@fortawesome/free-solid-svg-icons';
-import { deleteFitnessProfile, updateFitnessProfile } from '../../api/fitnessProfilesApi';
+import { deleteFitnessProfile, updateFitnessProfile } from '../../api/fitness/profileApi';
 
 const Profile = ({ profileData, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -12,11 +12,13 @@ const Profile = ({ profileData, onDelete }) => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    updateFitnessProfile(editedProfileData);
+  const handleSave = async () => {
+    const result = await updateFitnessProfile(editedProfileData);
     setIsEditing(false);
-    // Update the `profileData` with the new data
-    setEditedProfileData(editedProfileData);
+    if(result){
+      // Update the `profileData` with the new data
+      setEditedProfileData(editedProfileData);
+    }
   };
 
   const handleInputChange = (e) => {

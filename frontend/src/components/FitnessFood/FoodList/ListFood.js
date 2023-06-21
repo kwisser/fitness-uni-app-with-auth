@@ -7,14 +7,14 @@ import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchAvailableFitnessFood, deleteFoodItem } from '../../../api/fitnessFoodApi';
+import { fetchAvailableFitnessFood, deleteFoodItem } from '../../../api/fitness/foodApi';
 import './ListFood.css';
 
 const StyledRouterLink = styled(RouterLink)({
   textDecoration: 'none',
 });
 
-const ListFood = (onDelete, onEdit) => {
+const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
   const [onlyDrinks, setOnlyDrinks] = useState(false);
   const [onlyFood, setOnlyFood] = useState(false);
@@ -30,7 +30,7 @@ const ListFood = (onDelete, onEdit) => {
         setFoodData(data);
       });
     } else {
-      fetchAvailableFitnessFood().then((data) => {
+      fetchAvailableFitnessFood("").then((data) => {
         setFoodData(data);
       });
     }

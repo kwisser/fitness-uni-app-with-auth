@@ -1,3 +1,7 @@
 .highlight {
-    background: rgb(93, 116, 58);
+    background: rgb(136, 219, 10);
   }
+
+  .activity-day {
+    background: rgba(188, 240, 110, 0.5); /* 0.5 ist die Transparenz, 0 ist vollständig transparent, 1 ist vollständig undurchsichtig */
+}

@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import axios from '../../api/axios';
+import axios from '../../api/axiosInstance';
 
 const AddProfile = () => {
   const [newProfileData, setNewProfileData] = useState({

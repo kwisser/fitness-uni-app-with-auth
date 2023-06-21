@@ -3,7 +3,3 @@ export const selectProfile = (profile) => ({
     payload: profile
   });
   
-  export const deselectProfile = () => ({
-    type: 'DESELECT_PROFILE'
-  });
-  

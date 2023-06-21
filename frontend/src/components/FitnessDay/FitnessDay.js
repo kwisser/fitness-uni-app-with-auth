@@ -7,14 +7,15 @@ import FitnessActivityItemSelector from './FitnessDayActivities/FitnessActivityI
 import FitnessDayActivities from './FitnessDayActivities/FitnessDayActivities';
 import NutritionSummary from './NutritionSummary/NutritionSummary';
 
-import { fetchActivityForDayForProfileId, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitnessDayApi';
+import { fetchFitnessActivityForSpecificDayForProfile, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitness/dayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/nutritionCalculations';
+import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/NutritionCalculations';
 import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
+import { getCurrentDate } from '../../utils/DateHelper';
 
 
-const FitnessDay = ({ userid, date = false }) => {
+const FitnessDay = ({ userid, date = getCurrentDate() }) => {
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
@@ -47,18 +48,16 @@ const FitnessDay = ({ userid, date = false }) => {
     dispatch(fetchAvailableExercises());
     dispatch(fetchAvailableFood());
 
-    fetchActivityForDayForProfileId(userId, date).then(data => {
+    const fetchFitnessActivityData = async () => {
+      
+      const result = await fetchFitnessActivityForSpecificDayForProfile(userId, date)
 
-      if (data && Object.keys(data).length > 0) {
-        setDailyActivityData(data);
+      if (result) {
+        setDailyActivityData(result);
         setDailyActivityDataExisting(true);
-      } else {
-        setDailyActivityData({ food: [], exercise: [] });
-        setDailyActivityDataExisting(false);
       }
-    }).catch(error => {
-      console.error("Error fetching dailyActivityData:", error);
-    });
+    }
+    fetchFitnessActivityData();
 
   }, [dispatch, userId, date, setNewExercise, setNewFood]);
 
@@ -121,18 +120,18 @@ const FitnessDay = ({ userid, date = false }) => {
 
     try {
       if (dailyActivityDataExisting) {
-        console.log("dailyActivityDataExisting: ", dailyActivityDataExisting)
-        console.log("newDailyActivityData: ", newDailyActivityData)
         // add dayId and date to newDailyActivityData
-        const dailyFetchData = await fetchActivityForDayForProfileId(userId, date);
+        const dailyFetchData = await fetchFitnessActivityForSpecificDayForProfile(userId, date);
         console.log("dailyFetchData: ", dailyFetchData)
-        newDailyActivityData.dayId = dailyFetchData._id;
-        newDailyActivityData.date = dailyFetchData.date;
+        if(dailyFetchData){
+          newDailyActivityData.dayId = dailyFetchData._id;
+          newDailyActivityData.date = dailyFetchData.date;
+        }
+
         const updateResult = await updateFitnessDayForProfile(newDailyActivityData);
         if (updateResult) {
-          console.log("Updated dailyActidvgdfge345345345345vityData: ", newDailyActivityData);
-          await delete newDailyActivityData.dayId;
-          await delete newDailyActivityData.date;
+          delete newDailyActivityData.dayId;
+          delete newDailyActivityData.date;
           setDailyActivityData(newDailyActivityData);
           setDailyActivityDataExisting(true);
           setShowExerciseOptions(false);

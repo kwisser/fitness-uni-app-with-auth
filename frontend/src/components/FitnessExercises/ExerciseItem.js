@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faFire, faTrash, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import { updateFitnessExercise } from '../../api/fitnessExercisesApi';
+import { updateFitnessExercise } from '../../api/fitness/exerciseApi';
 
 const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,7 +17,10 @@ const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
   };
 
   const handleSave = () => {
-    updateFitnessExercise(editedExercise);
+    const result = updateFitnessExercise(editedExercise);
+    if(result){
+      console.log("Successfully updated Fitness Exercise: "+result)
+    }
     setIsEditing(false);
     onEdit(exercise._id, editedExercise); // Aufruf der onEdit-Funktion in der übergeordneten Komponente
   };
