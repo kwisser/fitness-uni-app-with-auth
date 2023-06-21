@@ -7,15 +7,11 @@ import FoodItemActivity from './FoodItemActivity';
 const FoodActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
     const handleDeleteEatenFood = async (foodId) => {
-        // Delete the food with the passed ID
-        console.log("handleDeleteEatenFood: ", foodId);
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
             food: dailyActivityData.food.filter(food => food.foodId !== foodId),
         };
-
-        console.log("DailyActivityData: ", updatedDailyActivityData);
 
         try {
             updatedDailyActivityData.dayId = await dailyActivityData._id;

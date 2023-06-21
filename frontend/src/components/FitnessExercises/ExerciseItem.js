@@ -17,7 +17,10 @@ const ExerciseItem = ({ exercise, onDelete, onEdit }) => {
   };
 
   const handleSave = () => {
-    updateFitnessExercise(editedExercise);
+    const result = updateFitnessExercise(editedExercise);
+    if(result){
+      console.log("Successfully updated Fitness Exercise: "+result)
+    }
     setIsEditing(false);
     onEdit(exercise._id, editedExercise); // Aufruf der onEdit-Funktion in der übergeordneten Komponente
   };

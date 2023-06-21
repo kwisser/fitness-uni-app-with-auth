@@ -15,9 +15,11 @@ const fetchProfileData = async () => {
 
 export const deleteFitnessProfile = async (profileId) => {
   try{
-    const response = axios.delete(`${FITNESS_PROFILE_URL}/${profileId}`)
-    console.log("deletedFitnessProfile" + JSON.stringify(response.data));
-    return response.data;
+    const response = await axios.delete(`${FITNESS_PROFILE_URL}/${profileId}`)
+    if(response){
+      console.log("deletedFitnessProfile" + JSON.stringify(response.data));
+      return response.data;
+    }
   }catch (error) {
     console.error("Es gab einen Fehler beim Löschen eines Profils: ", error);
     throw error;

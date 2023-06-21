@@ -13,14 +13,12 @@ export const formatDate = (date) => {
     const parts = date.split("-");  // Teilt den String an den '-' Zeichen
 
     // parts[0] ist das Jahr, parts[1] ist der Monat, parts[2] ist der Tag
-    const output = parts[2] + parts[1] + parts[0];
-    return output;
+    return parts[2] + parts[1] + parts[0];
 }
 
 
 export const isDateInActivityList = (date, activityList) => {
     const dateObject = new Date(date);
     const dateString = `${String(dateObject.getDate()).padStart(2, '0')}${String(dateObject.getMonth() + 1).padStart(2, '0')}${dateObject.getFullYear()}`;
-    const exists = activityList.includes(dateString);
-    return exists;
+    return activityList.includes(dateString);
 }

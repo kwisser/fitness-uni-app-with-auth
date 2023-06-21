@@ -22,14 +22,18 @@ const FoodEdit = () => {
       }
     };
 
-    fetchFood();
+    fetchFood().then(result => console.log("Fetched Food, result: "+ result));
   }, [id]);
 
   const handleChange = (e) => {
-    setFood({
-      ...food,
-      [e.target.name]: e.target.value,
-    });
+      let { name, value } = e.target;
+      if (name === 'drink') {
+          value = value === 'true';
+      }
+      setFood({
+          ...food,
+          [name]: value,
+      });
   };
 
   const handleSubmit = async (e) => {
@@ -99,8 +103,8 @@ const FoodEdit = () => {
       <label>
         Drink:
         <select name="drink" value={food.drink} onChange={handleChange}>
-          <option value={false}>No</option>
-          <option value={true}>Yes</option>
+          <option value={"false"}>No</option>
+          <option value={"true"}>Yes</option>
         </select>
       </label>
       <button type="submit">Submit</button>

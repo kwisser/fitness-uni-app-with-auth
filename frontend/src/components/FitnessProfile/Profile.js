@@ -12,11 +12,13 @@ const Profile = ({ profileData, onDelete }) => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    updateFitnessProfile(editedProfileData);
+  const handleSave = async () => {
+    const result = await updateFitnessProfile(editedProfileData);
     setIsEditing(false);
-    // Update the `profileData` with the new data
-    setEditedProfileData(editedProfileData);
+    if(result){
+      // Update the `profileData` with the new data
+      setEditedProfileData(editedProfileData);
+    }
   };
 
   const handleInputChange = (e) => {

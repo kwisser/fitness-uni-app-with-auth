@@ -27,7 +27,7 @@ const Logout = () => {
             }
         };
 
-        logout();
+        logout().then(() => console.log("Successful logged out"));
     }, [navigate]);
 
     return null;

@@ -12,9 +12,10 @@ import { fetchAvailableExercises } from '../../actions/availableExercisesActions
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
 import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/nutritionCalculations';
 import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
+import { getCurrentDate } from '../../utils/DateHelper';
 
 
-const FitnessDay = ({ userid, date = false }) => {
+const FitnessDay = ({ userid, date = getCurrentDate() }) => {
   const profile = useSelector(state => state.profile);
   const [dailyActivityData, setDailyActivityData] = useState({ food: [], exercise: [] });
   const availableExercises = useSelector(state => state.availableExercises);
@@ -57,7 +58,7 @@ const FitnessDay = ({ userid, date = false }) => {
         setDailyActivityDataExisting(true);
       }
     }
-    fetchFitnessActivityData();
+    fetchFitnessActivityData().then(result => console.log("Fetched fetchFitnessActivityForSpecificDayForProfile, result: " + result) );
 
   }, [dispatch, userId, date, setNewExercise, setNewFood]);
 
@@ -120,18 +121,18 @@ const FitnessDay = ({ userid, date = false }) => {
 
     try {
       if (dailyActivityDataExisting) {
-        console.log("dailyActivityDataExisting: ", dailyActivityDataExisting)
-        console.log("newDailyActivityData: ", newDailyActivityData)
         // add dayId and date to newDailyActivityData
         const dailyFetchData = await fetchFitnessActivityForSpecificDayForProfile(userId, date);
         console.log("dailyFetchData: ", dailyFetchData)
-        newDailyActivityData.dayId = dailyFetchData._id;
-        newDailyActivityData.date = dailyFetchData.date;
+        if(dailyFetchData){
+          newDailyActivityData.dayId = dailyFetchData._id;
+          newDailyActivityData.date = dailyFetchData.date;
+        }
+
         const updateResult = await updateFitnessDayForProfile(newDailyActivityData);
         if (updateResult) {
-          console.log("Updated dailyActidvgdfge345345345345vityData: ", newDailyActivityData);
-          await delete newDailyActivityData.dayId;
-          await delete newDailyActivityData.date;
+          delete newDailyActivityData.dayId;
+          delete newDailyActivityData.date;
           setDailyActivityData(newDailyActivityData);
           setDailyActivityDataExisting(true);
           setShowExerciseOptions(false);

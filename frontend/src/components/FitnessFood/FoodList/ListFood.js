@@ -14,7 +14,7 @@ const StyledRouterLink = styled(RouterLink)({
   textDecoration: 'none',
 });
 
-const ListFood = (onDelete, onEdit) => {
+const ListFood = () => {
   const [foodData, setFoodData] = useState([]);
   const [onlyDrinks, setOnlyDrinks] = useState(false);
   const [onlyFood, setOnlyFood] = useState(false);
@@ -30,7 +30,7 @@ const ListFood = (onDelete, onEdit) => {
         setFoodData(data);
       });
     } else {
-      fetchAvailableFitnessFood().then((data) => {
+      fetchAvailableFitnessFood("").then((data) => {
         setFoodData(data);
       });
     }
