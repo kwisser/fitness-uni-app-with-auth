@@ -10,7 +10,7 @@ import NutritionSummary from './NutritionSummary/NutritionSummary';
 import { fetchFitnessActivityForSpecificDayForProfile, updateFitnessDayForProfile, insertFitnessDayForProfile } from '../../api/fitness/dayApi';
 import { fetchAvailableExercises } from '../../actions/availableExercisesActions';
 import { fetchAvailableFood } from '../../actions/availableFoodActions';
-import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/nutritionCalculations';
+import { calculateBurnedExtraCaloriesTroughExercises, calculateProtein, calculateReachedCalories, calculateReachedProtein, calculateReachedCarbs, calculateReachedFat } from './utils/NutritionCalculations';
 import { createFitnessDayJSON, extractExerciseData, extractFoodIdAndAmount } from './utils/FitnessDayHelper';
 import { getCurrentDate } from '../../utils/DateHelper';
 

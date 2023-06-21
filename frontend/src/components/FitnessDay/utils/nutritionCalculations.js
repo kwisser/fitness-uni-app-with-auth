@@ -43,7 +43,7 @@ export const calculateReachedCalories = (activityData, listOfFood) => {
             energyEaten += (nutrientPer100g * amountOfFoodEaten);
         }
     }
-    return energyEaten;
+    return energyEaten.toFixed(2);
 };
 
 export const calculateReachedProtein = (activityData, listOfFood) => {
