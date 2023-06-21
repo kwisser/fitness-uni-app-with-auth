@@ -51,14 +51,13 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
     const fetchFitnessActivityData = async () => {
       
       const result = await fetchFitnessActivityForSpecificDayForProfile(userId, date)
-      console.log("result: ", result)
 
       if (result) {
         setDailyActivityData(result);
         setDailyActivityDataExisting(true);
       }
     }
-    fetchFitnessActivityData().then(result => console.log("Fetched fetchFitnessActivityForSpecificDayForProfile, result: " + result) );
+    fetchFitnessActivityData();
 
   }, [dispatch, userId, date, setNewExercise, setNewFood]);
 
