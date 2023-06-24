@@ -22,7 +22,8 @@ const App = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const MenuButton = ({ to, icon, children }) => (
-    <Button component={RouterLink} to={to} startIcon={<FontAwesomeIcon icon={icon} className="icon" />}>
+    <Button component={RouterLink} to={to} startIcon={<FontAwesomeIcon icon={icon} color='black' className="icon" />}
+      style={{ color: 'black' }}>
       {children}
     </Button>
   );
