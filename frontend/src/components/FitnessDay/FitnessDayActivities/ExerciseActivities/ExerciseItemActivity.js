@@ -34,7 +34,7 @@ const ExerciseItemActivity = ({ exercise, onDelete, onEdit }) => {
   };
 
   const handleDelete = () => {
-    onDelete(exercise._id);
+    onDelete(exercise.exerciseId);
   };
 
   const handleInputChange = (e) => {

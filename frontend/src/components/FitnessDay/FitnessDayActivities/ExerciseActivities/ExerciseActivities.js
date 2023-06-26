@@ -10,7 +10,7 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
 
         const updatedDailyActivityData = {
             ...dailyActivityData,
-            exercise: dailyActivityData.exercise.filter(exercise => exercise._id !== exerciseId),
+            exercise: dailyActivityData.exercise.filter(exercise => exercise.exerciseId !== exerciseId),
         };
 
         try {
@@ -56,7 +56,7 @@ const ExerciseActivities = ({ dailyActivityData, setDailyActivityData }) => {
         <div className="exercise-activities">
             <Typography variant="subtitle1">Übungen:</Typography>
             {dailyActivityData.exercise && dailyActivityData.exercise.map((exercise, index) => (
-                < ExerciseItemActivity key={"exercise-activity-" + index } exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
+                < ExerciseItemActivity key={"exercise-activity-" + index} exercise={exercise} onDelete={handleDeleteExercise} onEdit={handleSaveExercise} />
             ))}
         </div>
     );
