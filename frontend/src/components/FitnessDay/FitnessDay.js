@@ -49,7 +49,7 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
     dispatch(fetchAvailableFood());
 
     const fetchFitnessActivityData = async () => {
-      
+
       const result = await fetchFitnessActivityForSpecificDayForProfile(userId, date)
 
       if (result) {
@@ -123,7 +123,7 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
         // add dayId and date to newDailyActivityData
         const dailyFetchData = await fetchFitnessActivityForSpecificDayForProfile(userId, date);
         console.log("dailyFetchData: ", dailyFetchData)
-        if(dailyFetchData){
+        if (dailyFetchData) {
           newDailyActivityData.dayId = dailyFetchData._id;
           newDailyActivityData.date = dailyFetchData.date;
         }
@@ -177,8 +177,16 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
     try {
       if (dailyActivityDataExisting) {
         console.log("dailyActivityDataExisting: ", dailyActivityDataExisting)
-        updatedDailyActivityData.dayId = dailyActivityData._id;
-        updatedDailyActivityData.date = dailyActivityData.date;
+
+        // add dayId and date to newDailyActivityData
+        const dailyFetchData = await fetchFitnessActivityForSpecificDayForProfile(userId, date);
+        console.log("dailyFetchData: ", dailyFetchData)
+        if (dailyFetchData) {
+          updatedDailyActivityData.dayId = dailyFetchData._id;
+          updatedDailyActivityData.date = dailyFetchData.date;
+        }
+
+        console.log("updatedDailyActivityData: ", updatedDailyActivityData)
         const updateResult = await updateFitnessDayForProfile(updatedDailyActivityData);
         if (updateResult) {
           console.log("Updated dailyActivityData: ", updatedDailyActivityData);
@@ -247,8 +255,8 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
               label='Essen auswählen'
               newItem={newFood}
               setNewItem={setNewFood}
-              quantity={foodQuantity}  // new prop
-              setQuantity={setFoodQuantity}  // new prop
+              quantity={foodQuantity}
+              setQuantity={setFoodQuantity}
               onSubmit={handleFoodSubmit}
               onAddItem={handleAddFood}
               showOptions={showFoodOptions}
@@ -259,8 +267,8 @@ const FitnessDay = ({ userid, date = getCurrentDate() }) => {
               label='Übung auswählen'
               newItem={newExercise}
               setNewItem={setNewExercise}
-              quantity={exerciseDuration}  // new prop
-              setQuantity={setExerciseDuration}  // new prop
+              quantity={exerciseDuration}
+              setQuantity={setExerciseDuration}
               onSubmit={handleExerciseSubmit}
               onAddItem={handleAddExercise}
               showOptions={showExerciseOptions}
